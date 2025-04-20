@@ -1,0 +1,660 @@
+:root {
+    --wf-red: #CD1309;
+    --wf-gold: #FFCD11;
+    --wf-black: #000000;
+    --wf-gray-dark: #333333;
+    --wf-gray-medium: #666666;
+    --wf-gray-light: #E2E3E4;
+    --wf-white: #FFFFFF;
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05);
+    --shadow-medium: 0 6px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Page layout */
+  .retir0211-retirement-calculator-page {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: var(--wf-gray-dark);
+    background-color: #f9f9f9;
+    line-height: 1.6;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 60px;
+  }
+  
+  /* Header styling */
+  .retir0211-account-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: var(--wf-white);
+    border-bottom: 1px solid var(--wf-gray-light);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: var(--shadow-soft);
+  }
+  
+  .retir0211-back-button {
+    display: flex;
+    align-items: center;
+    color: var(--wf-gray-medium);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    font-size: 14px;
+  }
+  
+  .retir0211-back-button:hover {
+    color: var(--wf-red);
+  }
+  
+  .retir0211-back-arrow {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+  
+  .retir0211-wells-fargo-branding {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+  }
+  
+  .retir0211-logo-container {
+    width: 120px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .retir0211-wf-logo {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Main calculator container */
+  .retir0211-calculator-container {
+    background-color: var(--wf-white);
+    border-radius: 8px;
+    box-shadow: var(--shadow-medium);
+    margin: 24px;
+    overflow: hidden;
+  }
+  
+  .retir0211-calculator-header {
+    padding: 24px 32px;
+    background: linear-gradient(135deg, var(--wf-red) 0%, #a50f07 100%);
+    color: var(--wf-white);
+  }
+  
+  .retir0211-calculator-header h1 {
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 600;
+  }
+  
+  .retir0211-calculator-header p {
+    margin: 0;
+    font-size: 16px;
+    opacity: 0.9;
+  }
+  
+  /* Tabs */
+  .retir0211-calculator-tabs {
+    display: flex;
+    background-color: #f5f5f5;
+    border-bottom: 1px solid var(--wf-gray-light);
+  }
+  
+  .retir0211-tab-button {
+    padding: 16px 24px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--wf-gray-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .retir0211-tab-button:hover:not(:disabled) {
+    color: var(--wf-red);
+  }
+  
+  .retir0211-tab-button.retir0211-active {
+    border-bottom-color: var(--wf-red);
+    color: var(--wf-red);
+    font-weight: 600;
+  }
+  
+  .retir0211-tab-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  /* Form styling */
+  .retir0211-calculator-form {
+    padding: 24px 32px;
+  }
+  
+  .retir0211-form-section {
+    margin-bottom: 32px;
+  }
+  
+  .retir0211-form-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--wf-gray-dark);
+    border-bottom: 1px solid var(--wf-gray-light);
+    padding-bottom: 8px;
+  }
+  
+  .retir0211-form-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -12px;
+  }
+  
+  .retir0211-form-group {
+    flex: 1;
+    min-width: 200px;
+    padding: 0 12px;
+    margin-bottom: 20px;
+  }
+  
+  .retir0211-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--wf-gray-dark);
+  }
+  
+  .retir0211-form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--wf-gray-light);
+    border-radius: 4px;
+    font-size: 16px;
+    color: var(--wf-gray-dark);
+    transition: border-color 0.2s ease;
+  }
+  
+  .retir0211-form-input:focus {
+    outline: none;
+    border-color: var(--wf-red);
+    box-shadow: 0 0 0 3px rgba(205, 19, 9, 0.1);
+  }
+  
+  .retir0211-input-help {
+    font-size: 12px;
+    color: var(--wf-gray-medium);
+    margin-top: 4px;
+  }
+  
+  /* Currency and percentage inputs */
+  .retir0211-currency-input,
+  .retir0211-percentage-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .retir0211-currency-symbol,
+  .retir0211-percentage-symbol {
+    position: absolute;
+    color: var(--wf-gray-medium);
+  }
+  
+  .retir0211-currency-symbol {
+    left: 12px;
+  }
+  
+  .retir0211-percentage-symbol {
+    right: 12px;
+  }
+  
+  .retir0211-currency-group .retir0211-form-input {
+    padding-left: 24px;
+  }
+  
+  .retir0211-percentage-group .retir0211-form-input {
+    padding-right: 24px;
+  }
+  
+  /* Buttons */
+  .retir0211-calculator-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  
+  .retir0211-button {
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+  
+  .retir0211-button.retir0211-primary {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    box-shadow: 0 2px 4px rgba(205, 19, 9, 0.2);
+  }
+  
+  .retir0211-button.retir0211-primary:hover {
+    background-color: #b51107;
+    box-shadow: 0 4px 8px rgba(205, 19, 9, 0.3);
+  }
+  
+  .retir0211-button.retir0211-secondary {
+    background-color: var(--wf-white);
+    color: var(--wf-gray-dark);
+    border: 1px solid var(--wf-gray-light);
+  }
+  
+  .retir0211-button.retir0211-secondary:hover {
+    background-color: #f5f5f5;
+    border-color: var(--wf-gray-medium);
+  }
+  
+  /* Results styling */
+  .retir0211-calculator-results {
+    padding: 24px 32px;
+  }
+  
+  .retir0211-results-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 24px;
+    margin-bottom: 40px;
+  }
+  
+  .retir0211-result-card {
+    background-color: var(--wf-white);
+    border-radius: 8px;
+    padding: 20px 24px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--wf-gray-light);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .retir0211-result-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-medium);
+  }
+  
+  .retir0211-result-card h3 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--wf-gray-dark);
+  }
+  
+  .retir0211-result-value {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: var(--wf-gray-dark);
+  }
+  
+  .retir0211-result-value.retir0211-large {
+    font-size: 32px;
+    color: var(--wf-red);
+  }
+  
+  .retir0211-result-label {
+    font-size: 14px;
+    color: var(--wf-gray-medium);
+    margin-bottom: 16px;
+  }
+  
+  .retir0211-result-details {
+    border-top: 1px solid var(--wf-gray-light);
+    padding-top: 12px;
+  }
+  
+  .retir0211-result-detail {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+  
+  .retir0211-result-detail span:first-child {
+    color: var(--wf-gray-medium);
+  }
+  
+  .retir0211-result-detail span:last-child {
+    font-weight: 500;
+  }
+  
+  .retir0211-result-card.retir0211-highlight {
+    background: linear-gradient(to bottom right, #f9f9f9, #f5f5f5);
+    border: 1px solid #e5e5e5;
+  }
+  
+  .retir0211-result-card.retir0211-warning {
+    border-left: 4px solid #ff9800;
+  }
+  
+  .retir0211-result-card.retir0211-success {
+    border-left: 4px solid #4caf50;
+  }
+  
+  .retir0211-result-positive {
+    color: #4caf50;
+  }
+  
+  .retir0211-result-negative {
+    color: #ff5722;
+  }
+  
+  /* Recommendations */
+  .retir0211-recommendations {
+    margin-bottom: 40px;
+  }
+  
+  .retir0211-recommendations h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--wf-gray-dark);
+  }
+  
+  .retir0211-recommendation-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+  }
+  
+  .retir0211-recommendation-card {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--wf-gray-light);
+    position: relative;
+    padding-top: 60px;
+  }
+  
+  .retir0211-recommendation-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--wf-red);
+    position: absolute;
+    top: -20px;
+    left: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(205, 19, 9, 0.2);
+  }
+  
+  .retir0211-savings-icon::before {
+    content: "$";
+    color: var(--wf-white);
+    font-size: 26px;
+    font-weight: bold;
+  }
+  
+  .retir0211-time-icon::before {
+    content: "⏱";
+    color: var(--wf-white);
+    font-size: 26px;
+  }
+  
+  .retir0211-lifestyle-icon::before {
+    content: "⚖️";
+    color: var(--wf-white);
+    font-size: 26px;
+  }
+  
+  .retir0211-recommendation-card h4 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--wf-gray-dark);
+  }
+  
+  .retir0211-recommendation-card p {
+    margin: 0;
+    color: var(--wf-gray-medium);
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  
+  /* Charts */
+  .retir0211-projection-charts {
+    margin-top: 40px;
+  }
+  
+  .retir0211-projection-charts h3 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--wf-gray-dark);
+  }
+  
+  .retir0211-projection-charts p {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--wf-gray-medium);
+  }
+  
+  .retir0211-chart-container {
+    display: flex;
+    margin-bottom: 40px;
+    height: 400px;
+  }
+  
+  .retir0211-chart-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100px;
+    height: 100%;
+    padding-top: 10px;
+    padding-bottom: 20px;
+  }
+  
+  .retir0211-chart-y-axis {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .retir0211-chart-y-label {
+    font-size: 12px;
+    color: var(--wf-gray-medium);
+    text-align: right;
+    padding-right: 10px;
+  }
+  
+  .retir0211-chart {
+    display: flex;
+    align-items: flex-end;
+    flex-grow: 1;
+    height: 100%;
+    border-left: 1px solid var(--wf-gray-light);
+    border-bottom: 1px solid var(--wf-gray-light);
+    padding-top: 10px;
+    position: relative;
+  }
+  
+  .retir0211-chart-bar {
+    position: relative;
+    transition: opacity 0.2s ease;
+  }
+  
+  .retir0211-chart-bar:hover {
+    opacity: 0.8;
+  }
+  
+  .retir0211-chart-bar.retir0211-accumulation {
+    background-color: var(--wf-red);
+  }
+  
+  .retir0211-chart-bar.retir0211-distribution {
+    background-color: var(--wf-gold);
+  }
+  
+  .retir0211-chart-x-label {
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: var(--wf-gray-medium);
+  }
+  
+  .retir0211-chart-legend {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    gap: 24px;
+  }
+  
+  .retir0211-legend-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .retir0211-legend-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    margin-right: 8px;
+  }
+  
+  .retir0211-legend-color.retir0211-accumulation {
+    background-color: var(--wf-red);
+  }
+  
+  .retir0211-legend-color.retir0211-distribution {
+    background-color: var(--wf-gold);
+  }
+  
+  /* Pie chart */
+  .retir0211-pie-chart-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+  }
+  
+  .retir0211-pie-chart {
+    width: 220px;
+    height: 220px;
+    margin-right: 40px;
+    margin-bottom: 20px;
+  }
+  
+  .retir0211-pie {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }
+  
+  .retir0211-pie-legend {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .retir0211-legend-total {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--wf-gray-light);
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .retir0211-results-summary {
+      grid-template-columns: 1fr;
+    }
+    
+    .retir0211-recommendation-cards {
+      grid-template-columns: 1fr;
+    }
+    
+    .retir0211-form-row {
+      flex-direction: column;
+    }
+    
+    .retir0211-form-group {
+      width: 100%;
+    }
+    
+    .retir0211-calculator-actions {
+      flex-direction: column;
+    }
+    
+    .retir0211-button {
+      width: 100%;
+    }
+    
+    .retir0211-pie-chart-container {
+      justify-content: center;
+    }
+    
+    .retir0211-pie-chart {
+      margin-right: 0;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .retir0211-calculator-container {
+      margin: 12px;
+    }
+    
+    .retir0211-calculator-header {
+      padding: 16px 24px;
+    }
+    
+    .retir0211-calculator-form,
+    .retir0211-calculator-results {
+      padding: 16px 20px;
+    }
+    
+    .retir0211-tab-button {
+      padding: 12px 16px;
+    }
+  }
+  
+  /* For printing */
+  @media print {
+    .retir0211-retirement-calculator-page {
+      background-color: white;
+    }
+    
+    .retir0211-account-page-header,
+    .retir0211-calculator-actions,
+    .retir0211-calculator-tabs {
+      display: none;
+    }
+    
+    .retir0211-calculator-container {
+      box-shadow: none;
+      margin: 0;
+    }
+    
+    .retir0211-result-card:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }

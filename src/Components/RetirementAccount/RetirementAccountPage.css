@@ -1,0 +1,714 @@
+/* Wells Fargo Retirement Account Page Styling */
+/* Base Variables */
+:root {
+  --wf-red: #D71E28;
+  --wf-dark-red: #B01722;
+  --wf-gold: #FFBC3C;
+  --wf-dark-gold: #E6A934;
+  --wf-black: #000000;
+  --wf-dark-gray: #333333;
+  --wf-medium-gray: #666666;
+  --wf-light-gray: #EEEEEE;
+  --wf-off-white: #F7F7F7;
+  --wf-white: #FFFFFF;
+  --wf-success: #148B45;
+  --wf-error: #D71E28;
+  --wf-info: #0077C8;
+  --wf-warning: #FFB612;
+  --border-radius: 4px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+  --font-family: 'Open Sans', Arial, sans-serif;
+}
+
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  color: var(--wf-dark-gray);
+  background-color: var(--wf-off-white);
+  line-height: 1.6;
+}
+
+/* Page Container */
+.ret010-account-page {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 0 20px 40px;
+}
+
+/* Header */
+.ret010-account-header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 20px 0;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--wf-light-gray);
+  position: relative;
+  background-color: var(--wf-white);
+}
+
+.ret010-account-header:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -1000px;
+  right: -1000px;
+  height: 100%;
+  background-color: var(--wf-white);
+  z-index: -1;
+}
+
+.ret010-account-header h1 {
+  color: var(--wf-red);
+  font-size: 28px;
+  font-weight: 600;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.ret010-account-header h1:before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="%23D71E28"><path d="M477.86 249.31c0-14.53-11.84-26.37-26.37-26.37H345.03v-60.89h106.46c14.53 0 26.37-11.84 26.37-26.37s-11.84-26.37-26.37-26.37H345.03V57.66c0-14.53-11.84-26.37-26.37-26.37-14.53 0-26.37 11.84-26.37 26.37v51.66H185.83V57.66c0-14.53-11.84-26.37-26.37-26.37-14.53 0-26.37 11.84-26.37 26.37v51.66H60.51c-14.53 0-26.37 11.84-26.37 26.37s11.84 26.37 26.37 26.37h72.58v60.89H60.51c-14.53 0-26.37 11.84-26.37 26.37s11.84 26.37 26.37 26.37h72.58v178.66c0 14.53 11.84 26.37 26.37 26.37 14.53 0 26.37-11.84 26.37-26.37V275.68h106.46v178.66c0 14.53 11.84 26.37 26.37 26.37 14.53 0 26.37-11.84 26.37-26.37V275.68h106.46c14.53 0 26.37-11.84 26.37-26.37zm-186.05 0H185.83v-60.89h106.46v60.89h-.48z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.ret010-back-button {
+  display: inline-flex;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wf-medium-gray);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px 0;
+}
+
+.ret010-back-button:hover {
+  color: var(--wf-red);
+}
+
+/* Account Summary Card */
+.ret010-account-summary {
+  margin-bottom: 30px;
+}
+
+.ret010-summary-card {
+  background-color: var(--wf-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.ret010-summary-card h2 {
+  color: var(--wf-dark-gray);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--wf-gold);
+  padding-bottom: 8px;
+}
+
+.ret010-account-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 16px;
+}
+
+.ret010-info-row {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 0;
+}
+
+.ret010-info-label {
+  font-size: 14px;
+  color: var(--wf-medium-gray);
+  margin-bottom: 4px;
+}
+
+.ret010-info-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--wf-dark-gray);
+}
+
+.ret010-info-value.ret010-balance {
+  font-size: 24px;
+  color: var(--wf-dark-gray);
+  font-weight: 700;
+}
+
+/* Quick Actions */
+.ret010-quick-actions {
+  background-color: var(--wf-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 24px;
+  margin-bottom: 30px;
+}
+
+.ret010-quick-actions h2 {
+  color: var(--wf-dark-gray);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--wf-gold);
+  padding-bottom: 8px;
+}
+
+.ret010-action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-gap: 16px;
+}
+
+.ret010-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 20px;
+  background-color: var(--wf-white);
+  color: var(--wf-dark-gray);
+  border: 1px solid var(--wf-light-gray);
+  border-left: 4px solid var(--wf-red);
+  border-radius: var(--border-radius);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.ret010-action-button:hover {
+  background-color: var(--wf-light-gray);
+  border-left-color: var(--wf-gold);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Transactions Section */
+.ret010-transactions-section {
+  background-color: var(--wf-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 24px;
+  margin-bottom: 30px;
+}
+
+.ret010-transactions-section h2 {
+  color: var(--wf-dark-gray);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--wf-gold);
+  padding-bottom: 8px;
+}
+
+.ret010-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.ret010-filter-group {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ret010-filter-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-medium-gray);
+}
+
+.ret010-select {
+  padding: 8px 12px;
+  border: 1px solid var(--wf-light-gray);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  color: var(--wf-dark-gray);
+  background-color: var(--wf-white);
+  min-width: 180px;
+  outline: none;
+  transition: var(--transition);
+}
+
+.ret010-select:focus {
+  border-color: var(--wf-gold);
+  box-shadow: 0 0 0 2px rgba(255, 188, 60, 0.2);
+}
+
+/* Transactions Table */
+.ret010-transactions {
+  overflow-x: auto;
+}
+
+.ret010-transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.ret010-transactions-table th {
+  text-align: left;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: var(--wf-medium-gray);
+  border-bottom: 2px solid var(--wf-light-gray);
+}
+
+.ret010-transactions-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--wf-light-gray);
+}
+
+.ret010-transaction-row:hover {
+  background-color: var(--wf-off-white);
+}
+
+.ret010-transaction-type {
+  text-align: center;
+}
+
+.ret010-type-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.ret010-type-badge.ret010-deposit {
+  background-color: rgba(20, 139, 69, 0.1);
+  color: var(--wf-success);
+}
+
+.ret010-type-badge.ret010-withdrawal {
+  background-color: rgba(215, 30, 40, 0.1);
+  color: var(--wf-error);
+}
+
+.ret010-type-badge.ret010-fee {
+  background-color: rgba(102, 102, 102, 0.1);
+  color: var(--wf-medium-gray);
+}
+
+.ret010-type-badge.ret010-interest {
+  background-color: rgba(0, 119, 200, 0.1);
+  color: var(--wf-info);
+}
+
+.ret010-type-badge.ret010-info {
+  background-color: rgba(255, 182, 18, 0.1);
+  color: var(--wf-warning);
+}
+
+.ret010-amount {
+  font-weight: 600;
+}
+
+.ret010-amount.ret010-positive {
+  color: var(--wf-success);
+}
+
+.ret010-amount.ret010-negative {
+  color: var(--wf-error);
+}
+
+.ret010-no-transactions {
+  text-align: center;
+  padding: 30px;
+  color: var(--wf-medium-gray);
+  font-style: italic;
+}
+
+/* Modal */
+.ret010-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.ret010-modal-content {
+  background-color: var(--wf-white);
+  border-radius: var(--border-radius);
+  padding: 24px;
+  width: 90%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.ret010-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  font-size: 24px;
+  color: var(--wf-medium-gray);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.ret010-close:hover {
+  color: var(--wf-red);
+}
+
+.ret010-modal-content h2 {
+  color: var(--wf-red);
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--wf-gold);
+}
+
+.ret010-form-group {
+  margin-bottom: 20px;
+}
+
+.ret010-form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--wf-medium-gray);
+  margin-bottom: 8px;
+}
+
+.ret010-input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--wf-light-gray);
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  color: var(--wf-dark-gray);
+  transition: var(--transition);
+}
+
+.ret010-input:focus {
+  border-color: var(--wf-gold);
+  box-shadow: 0 0 0 2px rgba(255, 188, 60, 0.2);
+  outline: none;
+}
+
+.ret010-form-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.ret010-button {
+  padding: 10px 16px;
+  border-radius: var(--border-radius);
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  text-align: center;
+  border: none;
+}
+
+.ret010-button.ret010-primary {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+}
+
+.ret010-button.ret010-primary:hover {
+  background-color: var(--wf-dark-red);
+}
+
+.ret010-button.ret010-primary:disabled {
+  background-color: var(--wf-light-gray);
+  color: var(--wf-medium-gray);
+  cursor: not-allowed;
+}
+
+.ret010-button.ret010-secondary {
+  background-color: var(--wf-white);
+  color: var(--wf-dark-gray);
+  border: 1px solid var(--wf-light-gray);
+}
+
+.ret010-button.ret010-secondary:hover {
+  background-color: var(--wf-light-gray);
+}
+
+/* Contribution Info Panel */
+.ret010-contribution-info {
+  background-color: var(--wf-off-white);
+  border-radius: var(--border-radius);
+  padding: 16px;
+  margin-top: 16px;
+  margin-bottom: 16px;
+  border-left: 4px solid var(--wf-gold);
+}
+
+.ret010-contribution-info p {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--wf-dark-gray);
+}
+
+.ret010-contribution-info p:last-child {
+  margin-bottom: 0;
+  font-weight: 600;
+}
+
+/* Error and Loading States */
+.ret010-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.ret010-loader {
+  border: 4px solid var(--wf-light-gray);
+  border-radius: 50%;
+  border-top: 4px solid var(--wf-red);
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ret010-error-container {
+  max-width: 600px;
+  margin: 60px auto;
+  padding: 30px;
+  text-align: center;
+  background-color: var(--wf-white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+}
+
+.ret010-error-container h2 {
+  color: var(--wf-red);
+  margin-bottom: 16px;
+}
+
+.ret010-error-container p {
+  margin-bottom: 24px;
+  color: var(--wf-medium-gray);
+}
+
+/* Footer */
+.ret010-account-footer {
+  text-align: center;
+  color: var(--wf-medium-gray);
+  font-size: 14px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--wf-light-gray);
+}
+
+.ret010-account-footer p {
+  margin-bottom: 8px;
+}
+
+/* Media Queries for Responsive Design */
+@media screen and (max-width: 991px) {
+  .ret010-account-info {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ret010-action-buttons {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .ret010-account-header h1 {
+    font-size: 24px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .ret010-account-header {
+    padding: 16px 0;
+  }
+
+  .ret010-account-header h1 {
+    font-size: 22px;
+  }
+
+  .ret010-account-info {
+    grid-template-columns: 1fr;
+  }
+
+  .ret010-filters {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ret010-filter-group {
+    width: 100%;
+  }
+
+  .ret010-select {
+    width: 100%;
+  }
+
+  .ret010-transactions-table {
+    font-size: 13px;
+  }
+
+  .ret010-transactions-table th, 
+  .ret010-transactions-table td {
+    padding: 10px 8px;
+  }
+
+  .ret010-action-buttons {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .ret010-account-page {
+    padding: 0 10px 30px;
+  }
+
+  .ret010-account-header {
+    margin-bottom: 16px;
+  }
+
+  .ret010-summary-card, 
+  .ret010-quick-actions, 
+  .ret010-transactions-section {
+    padding: 16px;
+  }
+
+  .ret010-account-header h1 {
+    font-size: 20px;
+  }
+
+  .ret010-account-header h1:before {
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+  }
+
+  .ret010-info-value.ret010-balance {
+    font-size: 20px;
+  }
+
+  .ret010-summary-card h2,
+  .ret010-quick-actions h2,
+  .ret010-transactions-section h2 {
+    font-size: 18px;
+  }
+
+  .ret010-modal-content {
+    padding: 16px;
+  }
+
+  .ret010-modal-content h2 {
+    font-size: 18px;
+  }
+
+  /* Enhance mobile view for transactions */
+  .ret010-transactions-table {
+    display: block;
+  }
+
+  .ret010-transactions-table thead {
+    display: none;
+  }
+
+  .ret010-transactions-table tbody {
+    display: block;
+  }
+
+  .ret010-transactions-table tr {
+    display: block;
+    margin-bottom: 16px;
+    padding: 12px;
+    border: 1px solid var(--wf-light-gray);
+    border-radius: var(--border-radius);
+  }
+
+  .ret010-transactions-table td {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    border: none;
+    text-align: right;
+  }
+
+  .ret010-transactions-table td:before {
+    content: attr(data-label);
+    font-weight: 600;
+    text-align: left;
+    color: var(--wf-medium-gray);
+  }
+
+  /* Add data attributes for the table cells for mobile view */
+  .ret010-transactions-table td:nth-child(1):before {
+    content: "Date";
+  }
+  
+  .ret010-transactions-table td:nth-child(2):before {
+    content: "Description";
+  }
+  
+  .ret010-transactions-table td:nth-child(3):before {
+    content: "Type";
+  }
+  
+  .ret010-transactions-table td:nth-child(4):before {
+    content: "Amount";
+  }
+  
+  .ret010-transactions-table td:nth-child(5):before {
+    content: "Balance";
+  }
+
+  .ret010-transaction-type {
+    text-align: right;
+  }
+  
+  .ret010-type-badge {
+    min-width: 100px;
+    text-align: center;
+  }
+
+  /* Fix the back button appearance */
+  .ret010-back-button {
+    font-size: 14px;
+    padding: 4px 0;
+  }
+}

@@ -1,0 +1,797 @@
+:root {
+    /* Primary Brand Colors */
+    --wf-red: #D71E28;
+    --wf-gold: #FFBF3F; 
+    --wf-black: #000000;
+    
+    /* Secondary Colors */
+    --wf-blue: #004C97;
+    --wf-green: #006940;
+    --wf-teal: #0082BA;
+    --wf-purple: #5D3B7C;
+    
+    /* Neutral Colors */
+    --wf-dark-gray: #333333;
+    --wf-medium-gray: #666666;
+    --wf-light-gray: #EFEFEF;
+    --wf-lighter-gray: #F8F8F8;
+    --wf-off-white: #FBFBFB;
+    --wf-white: #FFFFFF;
+    
+    /* Semantic Colors */
+    --wf-success: #008A20;
+    --wf-warning: #FF7000;
+    --wf-info: #0082BA;
+    --wf-error: #D71E28;
+    
+    /* Theme Elements */
+    --wf-border-radius: 4px;
+    --wf-box-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.08);
+    --wf-box-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.12);
+    --wf-box-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.12);
+    --wf-transition-fast: all 0.2s ease;
+    --wf-transition-normal: all 0.3s ease;
+    --wf-container-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Base styling and typography */
+  .credit-limit-container {
+    font-family: 'Wells Fargo Sans', 'Open Sans', Helvetica, Arial, sans-serif;
+    max-width: 1140px;
+    margin: -6rem auto;
+    padding: 2.5rem;
+    color: var(--wf-dark-gray);
+    background-color: var(--wf-white);
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+  }
+  
+  .credit-limit-container * {
+    box-sizing: border-box;
+  }
+  
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Wells Fargo Serif', Georgia, 'Times New Roman', serif;
+    margin-top: 0;
+    line-height: 1.3;
+    color: var(--wf-black);
+  }
+  
+  /* Enhanced header with logo */
+  .credit-limit-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 3rem;
+    text-align: center;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .credit-limit-header::before {
+    content: '';
+    background-image: url('https://www.wellsfargo.com/assets/images/logos/wells-fargo-logo.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    width: 220px;
+    height: 50px;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+  
+  .credit-limit-header h1 {
+    font-size: 2.25rem;
+    font-weight: 700;
+    margin: 0.75rem 0 0.5rem;
+    color: var(--wf-black);
+  }
+  
+  .credit-limit-header p {
+    font-size: 1.125rem;
+    color: var(--wf-medium-gray);
+    margin: 0;
+    max-width: 600px;
+  }
+  
+  /* Overview section with card styling */
+  .credit-limit-overview {
+    background-color: var(--wf-white);
+    border-radius: var(--wf-border-radius);
+    box-shadow: var(--wf-container-shadow);
+    padding: 2rem;
+    margin-bottom: 2.5rem;
+    border: 1px solid var(--wf-light-gray);
+    position: relative;
+  }
+  
+  .credit-limit-overview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, var(--wf-red) 15%, var(--wf-gold) 15%);
+    border-radius: var(--wf-border-radius) var(--wf-border-radius) 0 0;
+  }
+  
+  .credit-limit-overview h2 {
+    color: var(--wf-black);
+    font-size: 1.75rem;
+    margin-bottom: 1.75rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+    position: relative;
+  }
+  
+  .credit-limit-overview h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--wf-red);
+  }
+  
+  /* Enhanced credit info cards */
+  .credit-info-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .credit-info-item {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--wf-lighter-gray);
+    padding: 1.5rem;
+    border-radius: var(--wf-border-radius);
+    border: 1px solid var(--wf-light-gray);
+    transition: var(--wf-transition-normal);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .credit-info-item::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background-color: var(--wf-red);
+  }
+  
+  .credit-info-item:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--wf-box-shadow-sm);
+  }
+  
+  .credit-info-item span {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--wf-medium-gray);
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+  }
+  
+  .credit-info-item strong {
+    font-size: 1.5rem;
+    color: var(--wf-black);
+    font-weight: 600;
+  }
+  
+  /* Available credit item styling */
+  .credit-info-item:nth-child(2) strong {
+    color: var(--wf-success);
+  }
+  
+  /* Account status styling */
+  .credit-info-item:nth-child(5)::before {
+    background-color: var(--wf-success);
+  }
+  
+  /* Enhanced buttons styling */
+  .credit-limit-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem;
+    margin-bottom: 2rem;
+  }
+  
+  .primary-button, .secondary-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border: none;
+    border-radius: var(--wf-border-radius);
+    cursor: pointer;
+    transition: var(--wf-transition-normal);
+    min-width: 220px;
+    text-align: center;
+    letter-spacing: 0.3px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .primary-button {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    box-shadow: 0 2px 4px rgba(215, 30, 40, 0.2);
+  }
+  
+  .primary-button:hover, .primary-button:focus {
+    background-color: #BC1926;
+    box-shadow: 0 4px 8px rgba(215, 30, 40, 0.3);
+    transform: translateY(-2px);
+  }
+  
+  .primary-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(215, 30, 40, 0.2);
+  }
+  
+  .primary-button::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .primary-button:hover::after {
+    left: 100%;
+  }
+  
+  .primary-button:disabled {
+    background-color: var(--wf-medium-gray);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+  
+  .secondary-button {
+    background-color: var(--wf-white);
+    color: var(--wf-dark-gray);
+    border: 1px solid var(--wf-medium-gray);
+  }
+  
+  .secondary-button:hover, .secondary-button:focus {
+    background-color: var(--wf-lighter-gray);
+    border-color: var(--wf-dark-gray);
+    transform: translateY(-2px);
+    box-shadow: var(--wf-box-shadow-sm);
+  }
+  
+  .secondary-button:active {
+    transform: translateY(0);
+    box-shadow: none;
+  }
+  
+  .secondary-button:disabled {
+    color: var(--wf-medium-gray);
+    border-color: var(--wf-light-gray);
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  /* Enhanced limit history section styling */
+  .limit-history-section {
+    margin-top: 2.5rem;
+    padding-top: 2rem;
+    position: relative;
+  }
+  
+  .limit-history-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(to right, var(--wf-light-gray) 0%, var(--wf-medium-gray) 50%, var(--wf-light-gray) 100%);
+  }
+  
+  .limit-history-section h3 {
+    font-size: 1.35rem;
+    margin-top: 0;
+    margin-bottom: 1.25rem;
+    color: var(--wf-black);
+    display: flex;
+    align-items: center;
+  }
+  
+  .limit-history-section h3::before {
+    content: '';
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D71E28'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  
+  .history-table-container {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    border-radius: var(--wf-border-radius);
+    box-shadow: var(--wf-box-shadow-sm);
+    border: 1px solid var(--wf-light-gray);
+  }
+  
+  .history-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background-color: var(--wf-white);
+  }
+  
+  .history-table thead {
+    background-color: var(--wf-lighter-gray);
+  }
+  
+  .history-table th {
+    text-align: left;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    color: var(--wf-black);
+    border-bottom: 2px solid var(--wf-red);
+    position: relative;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .history-table td {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--wf-light-gray);
+    vertical-align: middle;
+  }
+  
+  .history-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .history-table tr:hover {
+    background-color: rgba(0, 76, 151, 0.03);
+  }
+  
+  /* Enhanced status indicators */
+  .status-approved, .status-declined, .status-pending-review {
+    font-weight: 600;
+    padding: 0.35rem 0.75rem;
+    border-radius: 12px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.85rem;
+    line-height: 1;
+    position: relative;
+    padding-left: 1.75rem;
+  }
+  
+  .status-approved::before, .status-declined::before, .status-pending-review::before {
+    content: '';
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  
+  .status-approved {
+    color: var(--wf-success);
+    background-color: rgba(0, 138, 32, 0.08);
+  }
+  
+  .status-approved::before {
+    background-color: var(--wf-success);
+  }
+  
+  .status-declined {
+    color: var(--wf-error);
+    background-color: rgba(215, 30, 40, 0.08);
+  }
+  
+  .status-declined::before {
+    background-color: var(--wf-error);
+  }
+  
+  .status-pending-review {
+    color: var(--wf-warning);
+    background-color: rgba(255, 112, 0, 0.08);
+  }
+  
+  .status-pending-review::before {
+    background-color: var(--wf-warning);
+  }
+  
+  /* Enhanced request increase form styling */
+  .request-increase-section {
+    background-color: var(--wf-white);
+    border-radius: var(--wf-border-radius);
+    box-shadow: var(--wf-container-shadow);
+    padding: 2rem;
+    border: 1px solid var(--wf-light-gray);
+    position: relative;
+  }
+  
+  .request-increase-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(to right, var(--wf-red) 15%, var(--wf-gold) 15%);
+    border-radius: var(--wf-border-radius) var(--wf-border-radius) 0 0;
+  }
+  
+  .request-increase-section h2 {
+    color: var(--wf-black);
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    padding-bottom: 1rem;
+    position: relative;
+  }
+  
+  .request-increase-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background-color: var(--wf-red);
+  }
+  
+  .form-intro {
+    margin-bottom: 2rem;
+    color: var(--wf-medium-gray);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    max-width: 700px;
+  }
+  
+  .form-group {
+    margin-bottom: 1.75rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-weight: 600;
+    color: var(--wf-dark-gray);
+    font-size: 1rem;
+    position: relative;
+    padding-left: 0.5rem;
+  }
+  
+  .form-group label::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 16px;
+    background-color: var(--wf-red);
+    border-radius: 2px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: var(--wf-border-radius);
+    font-size: 1rem;
+    color: var(--wf-dark-gray);
+    transition: var(--wf-transition-normal);
+    background-color: var(--wf-white);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .form-group input:hover,
+  .form-group select:hover {
+    border-color: var(--wf-medium-gray);
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--wf-blue);
+    box-shadow: 0 0 0 3px rgba(0, 76, 151, 0.1), inset 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .form-group small {
+    display: block;
+    margin-top: 0.6rem;
+    font-size: 0.85rem;
+    color: var(--wf-medium-gray);
+    padding-left: 0.25rem;
+  }
+  
+  .form-disclaimer {
+    margin: 2rem 0;
+    padding: 1.25rem;
+    background-color: var(--wf-lighter-gray);
+    border-radius: var(--wf-border-radius);
+    font-size: 0.95rem;
+    color: var(--wf-medium-gray);
+    border-left: 4px solid var(--wf-gold);
+  }
+  
+  .form-actions {
+    display: flex;
+    gap: 1.25rem;
+    margin-top: 2.5rem;
+  }
+  
+  /* Enhanced notification styling */
+  .notification {
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--wf-border-radius);
+    margin-bottom: 2rem;
+    font-weight: 500;
+    position: relative;
+    box-shadow: var(--wf-box-shadow-sm);
+    display: flex;
+    align-items: center;
+  }
+  
+  .notification::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  
+  .notification-success {
+    background-color: rgba(0, 138, 32, 0.08);
+    color: var(--wf-success);
+    border-left: 4px solid var(--wf-success);
+  }
+  
+  .notification-success::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23008A20'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
+  }
+  
+  .notification-error {
+    background-color: rgba(215, 30, 40, 0.08);
+    color: var(--wf-error);
+    border-left: 4px solid var(--wf-error);
+  }
+  
+  .notification-error::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23D71E28'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z'/%3E%3C/svg%3E");
+  }
+  
+  .notification-warning {
+    background-color: rgba(255, 112, 0, 0.08);
+    color: var(--wf-warning);
+    border-left: 4px solid var(--wf-warning);
+  }
+  
+  .notification-warning::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FF7000'%3E%3Cpath d='M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z'/%3E%3C/svg%3E");
+  }
+  
+  /* Custom credit utilization visual indicator */
+  .credit-info-item:nth-child(2) {
+    position: relative;
+    padding-bottom: 2.5rem;
+  }
+  
+  .credit-info-item:nth-child(2)::after {
+    content: '';
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 8px;
+    background-color: #E0E0E0;
+    border-radius: 4px;
+  }
+  
+  .credit-info-item:nth-child(2)::before {
+    content: '';
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    width: calc((var(--available-credit) / var(--current-limit)) * 100%);
+    height: 8px;
+    background-color: var(--wf-success);
+    border-radius: 4px;
+    z-index: 1;
+  }
+  
+  /* Enhanced responsive adjustments */
+  @media (max-width: 1024px) {
+    .credit-info-container {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .credit-limit-container {
+      padding: 1.5rem;
+    }
+    
+    .credit-limit-header::before {
+      width: 180px;
+      height: 40px;
+    }
+    
+    .credit-limit-header h1 {
+      font-size: 1.875rem;
+    }
+    
+    .credit-info-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .credit-limit-actions {
+      flex-direction: column;
+    }
+    
+    .primary-button, .secondary-button {
+      width: 100%;
+    }
+    
+    .form-actions {
+      flex-direction: column;
+    }
+    
+    .history-table th, .history-table td {
+      padding: 0.75rem 1rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .credit-limit-header::before {
+      width: 150px;
+      height: 35px;
+    }
+    
+    .credit-limit-header h1 {
+      font-size: 1.75rem;
+    }
+    
+    .credit-limit-header p {
+      font-size: 1rem;
+    }
+    
+    .credit-limit-overview, .request-increase-section {
+      padding: 1.5rem;
+    }
+  }
+  
+  /* Wells Fargo branded loading indicator */
+  @keyframes wfPulse {
+    0% { opacity: 0.6; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.6; transform: scale(0.8); }
+  }
+  
+  .primary-button.isSubmitting {
+    position: relative;
+    text-indent: -9999px;
+    pointer-events: none;
+  }
+  
+  .primary-button.isSubmitting::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--wf-gold);
+    animation: wfPulse 1.5s infinite ease-in-out;
+    text-indent: 0;
+  }
+  
+  /* Custom credit score indicator */
+  .credit-info-item:nth-child(5) {
+    position: relative;
+    padding-bottom: 2.75rem;
+  }
+  
+  .credit-score-indicator {
+    position: absolute;
+    bottom: 1rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    height: 8px;
+    background: linear-gradient(to right, 
+      #D71E28 0%, 
+      #FF7000 20%, 
+      #FFBF3F 40%, 
+      #BCD35F 60%, 
+      #008A20 80%);
+    border-radius: 4px;
+  }
+  
+  .credit-score-indicator::after {
+    content: '';
+    position: absolute;
+    left: calc(var(--credit-score) / 850 * 100%);
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px;
+    height: 12px;
+    background-color: var(--wf-white);
+    border: 2px solid var(--wf-black);
+    border-radius: 50%;
+  }
+  
+  /* Animation for content transitions */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  .credit-limit-overview, .request-increase-section {
+    animation: fadeIn 0.4s ease-out;
+  }
+  
+  .notification {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  /* Custom card animations */
+  .credit-info-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  /* JavaScript to add these dynamic properties */
+  /* 
+  document.addEventListener('DOMContentLoaded', function() {
+    const creditInfoItems = document.querySelectorAll('.credit-info-item');
+    const creditInfo = {
+      currentLimit: 5000,
+      availableCredit: 3250,
+      creditScore: 725
+    };
+  
+    // Set credit utilization indicator
+    if (creditInfoItems[1]) {
+      creditInfoItems[1].style.setProperty('--current-limit', creditInfo.currentLimit);
+      creditInfoItems[1].style.setProperty('--available-credit', creditInfo.availableCredit);
+    }
+  
+    // Set credit score indicator
+    if (creditInfoItems[4]) {
+      creditInfoItems[4].style.setProperty('--credit-score', creditInfo.creditScore);
+      
+      // Add credit score indicator element
+      const scoreIndicator = document.createElement('div');
+      scoreIndicator.className = 'credit-score-indicator';
+      creditInfoItems[4].appendChild(scoreIndicator);
+    }
+  });
+  */

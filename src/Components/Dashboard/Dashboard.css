@@ -1,0 +1,792 @@
+:root {
+  --wf-red: #D71E28;
+  --wf-gold: #FFBC0D;
+  --wf-dark-gold: #FFA401;
+  --wf-black: #000000;
+  --wf-light-gray: #F5F5F5;
+  --wf-gray: #E6E6E6;
+  --wf-dark-gray: #666666;
+  --wf-white: #FFFFFF;
+  --wf-success: #00844A;
+  --wf-warning: #FFA400;
+  --wf-error: #D71E28;
+  --wf-info: #0077C8;
+}
+
+/* Global Styles */
+.dash002.dashboard-container {
+  font-family: 'Verdana', 'Arial', sans-serif;
+  color: #333;
+  background-color: var(--wf-light-gray);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Header Styles */
+.dash002.dashboard-header {
+  background-color: var(--wf-white);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  /* position: sticky; */
+  margin: 0 auto;
+  top: 0;
+  z-index: 100;
+  width: 100%;
+}
+
+.dash002.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.dash002.logo {
+  height: 45px;
+  width: auto;
+  transition: transform 0.2s;
+}
+
+.dash002.logo:hover {
+  transform: scale(1.02);
+}
+
+/* Navigation */
+.dash002.main-navigation {
+  background-color: var(--wf-red);
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  width: 100%;
+}
+
+.dash002.main-navigation a {
+  color: var(--wf-white);
+  text-decoration: none;
+  padding: 16px 24px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  position: relative;
+  min-width: 100px;
+  text-align: center;
+}
+
+.dash002.main-navigation a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 -3px 0 var(--wf-gold);
+}
+
+.dash002.main-navigation a:active {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* User Profile */
+.dash002.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.dash002.profile-picture {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--wf-gray);
+}
+
+.dash002.placeholder-profile {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.dash002.user-details {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.dash002.user-details p {
+  margin: 0;
+}
+
+.dash002.user-details p:first-child {
+  font-weight: bold;
+}
+
+/* Main Content */
+.dash002.dashboard-content {
+  flex: 1;
+  padding: 30px 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Section Headers */
+.dash002.dashboard-content h2 {
+  color: var(--wf-black);
+  font-size: 24px;
+  margin-bottom: 20px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.dash002.dashboard-content h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: var(--wf-red);
+}
+
+/* Loading & Error States */
+.dash002.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: var(--wf-dark-gray);
+  font-size: 18px;
+}
+
+.dash002.error-message {
+  background-color: #ffeeee;
+  border-left: 4px solid var(--wf-error);
+  padding: 15px;
+  margin: 20px 0;
+  color: var(--wf-error);
+}
+
+/* New User Welcome */
+.dash002.new-user-welcome {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 30px;
+}
+
+.dash002.welcome-message {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 20px 0;
+}
+
+.dash002.new-user-actions {
+  margin-top: 30px;
+}
+
+.dash002.primary-action-btn {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.dash002.primary-action-btn:hover {
+  background-color: #b51a22;
+}
+
+/* Accounts Grid */
+.dash002.accounts-overview {
+  margin-bottom: 40px;
+}
+
+.dash002.account-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.dash002.account-card {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+}
+
+.dash002.account-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.dash002.account-card-header {
+  position: relative;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid var(--wf-gray);
+}
+
+.dash002.account-card-header h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.dash002.account-type-badge {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 12px;
+  position: absolute;
+  right: 15px;
+  top: 15px;
+}
+
+.dash002.account-icon {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 50%;
+}
+
+.dash002.account-card-content {
+  padding: 15px;
+  color: #D71E28;
+}
+
+.dash002.account-number {
+  color: var(--wf-dark-gray);
+  font-size: 14px;
+  margin: 0 0 15px;
+}
+
+.dash002.account-balance-container {
+  margin-top: 10px;
+}
+
+.dash002.account-balance-label {
+  margin: 0;
+  font-size: 13px;
+  color: var(--wf-dark-gray);
+}
+
+.dash002.account-balance {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 5px 0 15px;
+  color: var(--wf-black);
+}
+.dash002.account-card-footer {
+  padding: 15px;
+  border-top: 1px solid var(--wf-gray);
+  display: flex;
+  color: #D71E28;
+  gap: 10px;
+}
+
+/* Account Type-specific Styles */
+.dash002.checking-icon,
+.dash002.savings-icon,
+.dash002.credit-icon,
+.dash002.retirement-icon,
+.dash002.investment-icon,
+.dash002.certificate-of-deposit-icon,
+.dash002.money-market-icon,
+.dash002.student-icon,
+.dash002.loan-icon,
+.dash002.mortgage-icon {
+  background-color: rgba(215, 30, 40, 0.1);
+  color: var(--wf-red);
+}
+
+/* Credit Account Specifics */
+.dash002.credit-limit-progress {
+  height: 6px;
+  background-color: var(--wf-gray);
+  border-radius: 3px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.dash002.credit-limit-bar {
+  height: 100%;
+  background-color: var(--wf-info);
+  border-radius: 3px;
+}
+
+.dash002.credit-details,
+.dash002.student-details,
+.dash002.investment-details,
+.dash002.cd-details,
+.dash002.money-market-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--wf-dark-gray);
+  margin-top: 10px;
+}
+
+/* Account Action Buttons */
+.dash002.details-btn,
+.dash002.payment-btn {
+  background-color: var(--wf-red);
+  border: 1px solid var(--wf-gray);
+  border-radius: 4px;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  flex: 1;
+  text-align: center;
+}
+
+.dash002.details-btn:hover,
+.dash002.payment-btn:hover {
+  background-color: var(--wf-gray);
+}
+
+.dash002.payment-btn {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+}
+
+.dash002.payment-btn:hover {
+  background-color: #b51a22;
+}
+
+/* Quick Actions Section */
+.dash002.quick-actions {
+  margin-bottom: 40px;
+}
+
+.dash002.action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.dash002.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--wf-white);
+  border: 1px solid var(--wf-gray);
+  border-radius: 8px;
+  padding: 15px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  text-align: left;
+}
+
+.dash002.action-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.dash002.action-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dash002.action-btn-icon {
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(215, 30, 40, 0.1);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dash002.action-btn-content {
+  flex: 1;
+}
+
+.dash002.action-btn-title {
+  font-weight: 600;
+  margin: 0 0 5px;
+  font-size: 15px;
+}
+
+.dash002.action-btn-description {
+  margin: 0;
+  color: var(--wf-dark-gray);
+  font-size: 13px;
+}
+
+/* Wells Fargo Branded Buttons */
+.dash002.add-account .action-btn-icon {
+  background-color: rgba(255, 188, 13, 0.2);
+  color: var(--wf-gold);
+}
+
+.dash002.transfer .action-btn-icon {
+  background-color: rgba(0, 119, 200, 0.1);
+  color: var(--wf-info);
+}
+
+.dash002.pay-bill .action-btn-icon {
+  background-color: rgba(0, 132, 74, 0.1);
+  color: var(--wf-success);
+}
+
+/* Account Management */
+.dash002.account-management {
+  margin-bottom: 40px;
+}
+
+.dash002.management-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.dash002.management-option {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  padding: 20px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dash002.management-option:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.dash002.option-icon {
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background-color: rgba(215, 30, 40, 0.1);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.dash002.option-content {
+  flex: 1;
+}
+
+.dash002.option-content h3 {
+  margin: 0 0 5px;
+  font-size: 16px;
+}
+
+.dash002.option-content p {
+  margin: 0;
+  color: var(--wf-dark-gray);
+  font-size: 13px;
+}
+
+/* Account Type Selection for New Accounts */
+.dash002.new-account-types {
+  margin-top: 30px;
+}
+
+.dash002.account-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.dash002.account-type-card {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dash002.account-type-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+}
+
+.dash002.account-type-icon {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+.dash002.account-type-card h4 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.dash002.account-type-card p {
+  margin: 0;
+  color: var(--wf-dark-gray);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+/* Footer Styles */
+.dash002.dashboard-footer {
+  background-color: var(--wf-black);
+  color: var(--wf-white);
+  padding: 20px 24px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.dash002.dashboard-footer p {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+
+.dash002.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.dash002.link-button {
+  background: none;
+  border: none;
+  color: var(--wf-white);
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+  padding: 0;
+}
+
+.dash002.link-button:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* Security Verification Modal */
+.dash002.security-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 20px;
+}
+
+.dash002.security-modal {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dash002.security-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid var(--wf-gray);
+}
+
+.dash002.security-modal-header h3 {
+  margin: 0;
+  color: var(--wf-red);
+  font-size: 18px;
+}
+
+.dash002.close-modal {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--wf-dark-gray);
+  padding: 0;
+}
+
+.dash002.security-modal-body {
+  padding: 20px;
+}
+
+.dash002.form-group {
+  margin-bottom: 20px;
+}
+
+.dash002.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.dash002.verification-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--wf-gray);
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.dash002.verification-input:focus {
+  border-color: var(--wf-info);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 119, 200, 0.2);
+}
+
+.dash002.error-text {
+  color: var(--wf-error);
+  font-size: 13px;
+  margin: 5px 0 0;
+}
+
+.dash002.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.dash002.cancel-btn {
+  background-color: var(--wf-white);
+  border: 1px solid var(--wf-gray);
+  color: var(--wf-dark-gray);
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+.dash002.cancel-btn:hover {
+  background-color: var(--wf-gray);
+}
+
+.dash002.verify-btn {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.dash002.verify-btn:hover {
+  background-color: #b51a22;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .dash002.header-content {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+  
+  .dash002.main-navigation {
+    overflow-x: auto;
+    justify-content: flex-start;
+    padding: 0 10px;
+  }
+  
+  .dash002.main-navigation a {
+    padding: 15px 15px;
+    white-space: nowrap;
+  }
+  
+  .dash002.account-grid,
+  .dash002.action-buttons,
+  .dash002.management-options,
+  .dash002.account-type-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .dash002.dashboard-content {
+    padding: 20px 15px;
+  }
+  
+  .dash002.security-modal {
+    width: 95%;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .dash002.account-grid,
+  .dash002.action-buttons,
+  .dash002.management-options {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Print styles */
+@media print {
+  .dash002.dashboard-header,
+  .dash002.quick-actions,
+  .dash002.account-management,
+  .dash002.dashboard-footer,
+  .dash002.security-modal-overlay {
+    display: none !important;
+  }
+  
+  .dash002.dashboard-content {
+    padding: 0;
+  }
+  
+  .dash002.account-card {
+    break-inside: avoid;
+    border: 1px solid #ddd;
+    box-shadow: none;
+    margin-bottom: 15px;
+  }
+}

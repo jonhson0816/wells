@@ -1,0 +1,494 @@
+:root {
+    --wf-red: #D71E28;
+    --wf-yellow: #FFCD11;
+    --wf-black: #000000;
+    --wf-dark-gray: #333333;
+    --wf-gray: #666666;
+    --wf-light-gray: #EEEEEE;
+    --wf-lightest-gray: #F7F7F7;
+    --wf-white: #FFFFFF;
+    --wf-blue: #0077B6;
+    --wf-light-blue: #E5F1F8;
+    --wf-green: #008852;
+    --wf-shadow: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Container styles */
+  .wfr-withdraw-retirement-container {
+    font-family: 'Open Sans', Arial, sans-serif;
+    color: var(--wf-dark-gray);
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: var(--wf-white);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Header styles - Using your specified header markup */
+  .che004-account-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--wf-white);
+    border-bottom: 1px solid var(--wf-light-gray);
+    box-shadow: 0 2px 4px var(--wf-shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .che004-back-button {
+    display: flex;
+    align-items: center;
+    color: var(--wf-red);
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .che004-back-button:hover {
+    color: #b01821;
+  }
+  
+  .che004-back-arrow {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  .che004-wells-fargo-branding {
+    display: flex;
+    align-items: center;
+  }
+  
+  .che004-logo-container {
+    height: 40px;
+    width: auto;
+  }
+  
+  .che004-wf-logo {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+  
+  /* Main content styles */
+  .wfr-main-content {
+    flex: 1;
+    padding: 30px 20px;
+    max-width: 960px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  /* Page title styles */
+  .wfr-page-title {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .wfr-page-title h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--wf-black);
+    margin-bottom: 8px;
+  }
+  
+  .wfr-subtitle {
+    font-size: 16px;
+    color: var(--wf-gray);
+    font-weight: 400;
+  }
+  
+  /* Information banner */
+  .wfr-info-banner {
+    background-color: var(--wf-light-blue);
+    border-left: 4px solid var(--wf-blue);
+    padding: 15px;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+  }
+  
+  .wfr-info-icon {
+    background-color: var(--wf-blue);
+    color: var(--wf-white);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+  
+  .wfr-info-banner p {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+  
+  /* Form section styles */
+  .wfr-form-section {
+    background-color: var(--wf-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--wf-shadow);
+    padding: 25px;
+    margin-bottom: 30px;
+  }
+  
+  .wfr-form-section h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--wf-black);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  /* Account selector styles */
+  .wfr-account-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .wfr-account-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    border: 2px solid var(--wf-light-gray);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+  
+  .wfr-account-option:hover {
+    border-color: var(--wf-red);
+    background-color: var(--wf-lightest-gray);
+  }
+  
+  .wfr-account-option.wfr-selected {
+    border-color: var(--wf-red);
+    background-color: rgba(215, 30, 40, 0.05);
+  }
+  
+  .wfr-account-info h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 5px 0;
+  }
+  
+  .wfr-account-number {
+    font-size: 14px;
+    color: var(--wf-gray);
+    margin: 0;
+  }
+  
+  .wfr-account-balance {
+    text-align: right;
+  }
+  
+  .wfr-balance-label {
+    font-size: 14px;
+    color: var(--wf-gray);
+    margin: 0 0 3px 0;
+  }
+  
+  .wfr-balance-amount {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--wf-black);
+    margin: 0;
+  }
+  
+  .wfr-checkmark {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 22px;
+    height: 22px;
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  
+  /* Form group styles */
+  .wfr-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .wfr-form-group label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--wf-dark-gray);
+  }
+  
+  .wfr-form-group input[type="text"],
+  .wfr-form-group select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--wf-light-gray);
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.2s ease;
+  }
+  
+  .wfr-form-group input[type="text"]:focus,
+  .wfr-form-group select:focus {
+    border-color: var(--wf-red);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.2);
+  }
+  
+  .wfr-form-group input.wfr-error,
+  .wfr-form-group select.wfr-error {
+    border-color: var(--wf-red);
+  }
+  
+  .wfr-error-message {
+    color: var(--wf-red);
+    font-size: 13px;
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+  
+  /* Radio group styles */
+  .wfr-radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .wfr-radio-label {
+    display: flex;
+    align-items: center;
+    font-weight: normal;
+    cursor: pointer;
+  }
+  
+  .wfr-radio-label input[type="radio"] {
+    margin-right: 10px;
+    accent-color: var(--wf-red);
+  }
+  
+  /* Disclaimer styles */
+  .wfr-disclaimer {
+    background-color: var(--wf-lightest-gray);
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+  }
+  
+  .wfr-disclaimer p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+    color: var(--wf-gray);
+  }
+  
+  /* Button styles */
+  .wfr-form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+  }
+  
+  .wfr-primary-button,
+  .wfr-secondary-button {
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 150px;
+    text-align: center;
+  }
+  
+  .wfr-primary-button {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    border: none;
+  }
+  
+  .wfr-primary-button:hover {
+    background-color: #b01821;
+  }
+  
+  .wfr-primary-button:disabled {
+    background-color: var(--wf-gray);
+    cursor: not-allowed;
+  }
+  
+  .wfr-secondary-button {
+    background-color: var(--wf-white);
+    color: var(--wf-red);
+    border: 2px solid var(--wf-red);
+  }
+  
+  .wfr-secondary-button:hover {
+    background-color: rgba(215, 30, 40, 0.05);
+  }
+  
+  /* Confirmation page styles */
+  .wfr-confirmation {
+    background-color: var(--wf-white);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px var(--wf-shadow);
+    padding: 30px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+  
+  .wfr-confirmation-icon {
+    background-color: var(--wf-green);
+    color: var(--wf-white);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  
+  .wfr-confirmation h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 15px;
+    color: var(--wf-black);
+  }
+  
+  .wfr-confirmation p {
+    font-size: 16px;
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+  
+  .wfr-confirmation-details {
+    background-color: var(--wf-lightest-gray);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    text-align: left;
+  }
+  
+  .wfr-confirmation-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .wfr-confirmation-row:last-child {
+    border-bottom: none;
+  }
+  
+  .wfr-confirmation-row span:first-child {
+    font-weight: 600;
+    color: var(--wf-dark-gray);
+  }
+  
+  .wfr-follow-up {
+    font-size: 15px;
+    color: var(--wf-gray);
+    margin-bottom: 30px;
+  }
+  
+  .wfr-confirmation-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+  }
+  
+  /* Footer styles */
+  .wfr-footer {
+    background-color: var(--wf-lightest-gray);
+    padding: 20px;
+    border-top: 1px solid var(--wf-light-gray);
+    text-align: center;
+    font-size: 14px;
+    color: var(--wf-gray);
+  }
+  
+  .wfr-footer p {
+    margin-bottom: 10px;
+    margin-top: 0;
+  }
+  
+  .wfr-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .wfr-footer-links a {
+    color: var(--wf-gray);
+    text-decoration: none;
+  }
+  
+  .wfr-footer-links a:hover {
+    color: var(--wf-red);
+    text-decoration: underline;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .wfr-main-content {
+      padding: 20px 15px;
+    }
+    
+    .wfr-form-section {
+      padding: 20px;
+    }
+    
+    .wfr-account-option {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .wfr-account-balance {
+      margin-top: 10px;
+      text-align: left;
+    }
+    
+    .wfr-form-actions {
+      flex-direction: column;
+    }
+    
+    .wfr-primary-button,
+    .wfr-secondary-button {
+      width: 100%;
+    }
+    
+    .che004-account-page-header {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+    }
+    
+    .che004-wells-fargo-branding {
+      align-self: center;
+    }
+  }

@@ -1,0 +1,707 @@
+/* Wells Fargo Credit Account Page CSS */
+:root {
+  --wf-red: #D71E28;
+  --wf-red-dark: #B01B24;
+  --wf-yellow: #FFBC0B;
+  --wf-black: #000000;
+  --wf-dark-gray: #333333;
+  --wf-medium-gray: #666666;
+  --wf-light-gray: #EEEEEE;
+  --wf-white: #FFFFFF;
+  --wf-blue: #003A63;
+  --wf-blue-light: #006EAA;
+  --wf-green: #006633;
+  --wf-success: #28a745;
+  --shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --border-radius: 4px;
+  --transition: all 0.2s ease-in-out;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Open Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+body {
+  background-color: #f9f9f9;
+  color: var(--wf-dark-gray);
+  line-height: 1.6;
+}
+
+/* Credit Account Page Layout */
+.cre014-account-page {
+  max-width: 1200px;
+  margin: 4rem auto;
+  padding: 20px;
+}
+
+/* Header Styling */
+.cre014-account-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--wf-red);
+  margin-bottom: 25px;
+  position: relative;
+}
+
+.cre014-account-header h1 {
+  color: var(--wf-red);
+  font-size: 28px;
+  font-weight: 700;
+  position: relative;
+  padding-left: 50px;
+}
+
+.cre014-account-header h1::before {
+  content: '';
+  background-image: url('https://www.wellsfargo.com/assets/images/icons/wellsfargo-logo.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+}
+
+.cre014-back-button {
+  background-color: transparent;
+  color: var(--wf-blue);
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  transition: var(--transition);
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.cre014-back-button:hover {
+  color: var(--wf-red);
+  text-decoration: underline;
+}
+
+/* Account Overview Styling */
+.cre014-account-overview {
+  margin-bottom: 30px;
+}
+
+.cre014-account-card {
+  background: linear-gradient(to right, var(--wf-red), #e04046);
+  color: var(--wf-white);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(215, 30, 40, 0.2);
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cre014-account-info {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+  position: relative;
+}
+
+.cre014-account-info::after {
+  content: '';
+  background-image: url('https://www.wellsfargo.com/assets/images/icons/wellsfargo-logomark-white.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  opacity: 0.15;
+  position: absolute;
+  right: 25px;
+  top: 25px;
+  width: 80px;
+  height: 80px;
+}
+
+.cre014-account-name-number {
+  margin-bottom: 20px;
+}
+
+.cre014-account-name-number h2 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.cre014-account-number {
+  font-size: 16px;
+  letter-spacing: 1px;
+  opacity: 0.9;
+}
+
+.cre014-credit-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.cre014-balance-box {
+  flex: 1;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.cre014-label {
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+
+.cre014-amount {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.cre014-credit-balance {
+  color: var(--wf-white);
+}
+
+.cre014-credit-status {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  grid-gap: 15px;
+  background-color: var(--wf-white);
+  padding: 25px;
+  color: var(--wf-dark-gray);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.cre014-status-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.cre014-status-item .cre014-label {
+  color: var(--wf-medium-gray);
+}
+
+.cre014-status-item .cre014-amount {
+  color: var(--wf-dark-gray);
+  font-size: 18px;
+}
+
+/* Credit Utilization Styling */
+.cre014-credit-utilization {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+}
+
+.cre014-credit-utilization h3 {
+  color: var(--wf-blue);
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.cre014-utilization-bar-container {
+  height: 14px;
+  background-color: var(--wf-light-gray);
+  border-radius: 7px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.cre014-utilization-bar {
+  height: 100%;
+  background: linear-gradient(to right, var(--wf-green), var(--wf-yellow), var(--wf-red));
+  border-radius: 7px;
+  transition: width 0.5s ease-in-out;
+}
+
+.cre014-utilization-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--wf-medium-gray);
+  margin-bottom: 10px;
+}
+
+.cre014-utilization-percent {
+  text-align: right;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--wf-blue);
+}
+
+/* Quick Actions Styling */
+.cre014-quick-actions {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+}
+
+.cre014-quick-actions h3 {
+  color: var(--wf-blue);
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.cre014-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.cre014-action-button {
+  background-color: var(--wf-blue-light);
+  color: var(--wf-white);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition);
+  flex: 1;
+  min-width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 110, 170, 0.3);
+}
+
+.cre014-action-button:hover {
+  background-color: var(--wf-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 110, 170, 0.4);
+}
+
+.cre014-action-button:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 110, 170, 0.4);
+}
+
+/* Transactions Section Styling */
+.cre014-transactions-section {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 30px;
+}
+
+.cre014-transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.cre014-transactions-header h3 {
+  color: var(--wf-blue);
+  font-size: 18px;
+}
+
+.cre014-transaction-filters {
+  display: flex;
+  gap: 10px;
+}
+
+.cre014-transactions-header select {
+  padding: 8px 12px;
+  border: 1px solid var(--wf-light-gray);
+  border-radius: 4px;
+  font-size: 14px;
+  color: var(--wf-dark-gray);
+  background-color: var(--wf-white);
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cre014-transactions-header select:focus {
+  outline: none;
+  border-color: var(--wf-blue-light);
+  box-shadow: 0 0 0 2px rgba(0, 110, 170, 0.2);
+}
+
+.cre014-transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.cre014-transaction-header {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px 120px;
+  gap: 10px;
+  padding: 12px 15px;
+  background-color: #f0f5fa;
+  border-radius: 4px 4px 0 0;
+  font-weight: 600;
+  color: var(--wf-blue);
+  border-bottom: 2px solid var(--wf-light-gray);
+}
+
+.cre014-transaction-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 120px 120px;
+  gap: 10px;
+  padding: 15px;
+  border-bottom: 1px solid var(--wf-light-gray);
+  transition: var(--transition);
+}
+
+.cre014-transaction-row:hover {
+  background-color: rgba(0, 110, 170, 0.05);
+}
+
+.cre014-transaction-date {
+  font-size: 14px;
+  color: var(--wf-medium-gray);
+}
+
+.cre014-transaction-description {
+  font-weight: 500;
+}
+
+.cre014-transaction-status {
+  font-size: 14px;
+  color: var(--wf-medium-gray);
+}
+
+.cre014-transaction-amount {
+  font-weight: 600;
+  text-align: right;
+}
+
+.cre014-positive {
+  color: var(--wf-green);
+}
+
+.cre014-negative {
+  color: var(--wf-red);
+}
+
+.cre014-purchase .cre014-transaction-description::before {
+  content: '🛒';
+  margin-right: 5px;
+}
+
+.cre014-payment .cre014-transaction-description::before {
+  content: '💵';
+  margin-right: 5px;
+}
+
+.cre014-fee .cre014-transaction-description::before {
+  content: '📝';
+  margin-right: 5px;
+}
+
+.cre014-refund .cre014-transaction-description::before {
+  content: '↩️';
+  margin-right: 5px;
+}
+
+.cre014-no-transactions {
+  text-align: center;
+  padding: 30px;
+  color: var(--wf-medium-gray);
+}
+
+/* Modal Styling */
+.cre014-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(3px);
+}
+
+.cre014-modal {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  animation: modalFadeIn 0.3s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.cre014-modal-header {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.cre014-modal-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 20px;
+}
+
+.cre014-modal-header::before {
+  content: '';
+  background-image: url('https://www.wellsfargo.com/assets/images/icons/wellsfargo-logomark-white.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  opacity: 0.8;
+}
+
+.cre014-modal-header h3 {
+  padding-left: 30px;
+}
+
+.cre014-close-button {
+  background: none;
+  border: none;
+  color: var(--wf-white);
+  font-size: 24px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.cre014-close-button:hover {
+  transform: scale(1.1);
+}
+
+.cre014-modal-body {
+  padding: 20px;
+}
+
+.cre014-form-group {
+  margin-bottom: 20px;
+}
+
+.cre014-form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--wf-dark-gray);
+}
+
+.cre014-input,
+.cre014-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--wf-light-gray);
+  border-radius: 4px;
+  font-size: 16px;
+  transition: var(--transition);
+}
+
+.cre014-input:focus,
+.cre014-select:focus {
+  outline: none;
+  border-color: var(--wf-blue-light);
+  box-shadow: 0 0 0 2px rgba(0, 110, 170, 0.2);
+}
+
+.cre014-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.cre014-button {
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  border: none;
+}
+
+.cre014-primary {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+}
+
+.cre014-primary:hover {
+  background-color: var(--wf-red-dark);
+}
+
+.cre014-secondary {
+  background-color: var(--wf-light-gray);
+  color: var(--wf-dark-gray);
+}
+
+.cre014-secondary:hover {
+  background-color: #e0e0e0;
+}
+
+/* Footer Styling */
+.cre014-account-footer {
+  text-align: center;
+  padding: 20px 0;
+  border-top: 1px solid var(--wf-light-gray);
+  margin-top: 30px;
+}
+
+.cre014-account-footer a {
+  color: var(--wf-blue);
+  text-decoration: none;
+  margin: 0 10px;
+  transition: var(--transition);
+}
+
+.cre014-account-footer a:hover {
+  color: var(--wf-red);
+  text-decoration: underline;
+}
+
+.cre014-disclaimer {
+  margin-top: 15px;
+  font-size: 12px;
+  color: var(--wf-medium-gray);
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Loading and Error Styling */
+.cre004-loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 50vh;
+  text-align: center;
+}
+
+.cre004-loader {
+  border: 5px solid var(--wf-light-gray);
+  border-top: 5px solid var(--wf-red);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.cre004-error-container {
+  max-width: 600px;
+  margin: 50px auto;
+  text-align: center;
+  padding: 30px;
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.cre004-error-container h2 {
+  color: var(--wf-red);
+  margin-bottom: 15px;
+}
+
+.cre004-error-container p {
+  margin-bottom: 20px;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .cre014-account-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 15px;
+  }
+  
+  .cre014-credit-stats {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .cre014-credit-status {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+  
+  .cre014-transactions-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .cre014-transaction-header,
+  .cre014-transaction-row {
+    grid-template-columns: 100px 1fr 80px;
+  }
+  
+  .cre014-transaction-status {
+    display: none;
+  }
+  
+  .cre014-action-button {
+    min-width: calc(50% - 8px);
+  }
+}
+
+@media (max-width: 480px) {
+  .cre014-account-page {
+    padding: 10px;
+  }
+  
+  .cre014-transaction-header,
+  .cre014-transaction-row {
+    grid-template-columns: 85px 1fr 80px;
+    font-size: 14px;
+    padding: 10px;
+  }
+  
+  .cre014-action-button {
+    min-width: 100%;
+  }
+  
+  .cre014-transaction-filters {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .cre014-transactions-header select {
+    width: 100%;
+  }
+  
+  .cre014-modal {
+    width: calc(100% - 20px);
+    max-width: none;
+  }
+}

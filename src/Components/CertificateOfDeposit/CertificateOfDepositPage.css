@@ -1,0 +1,692 @@
+/* CertificateOfDepositPage.css */
+/* Wells Fargo Certificate of Deposit Page Styling */
+/* Colors */
+:root {
+    --wf-red: #D71E28;
+    --wf-dark-red: #B01722;
+    --wf-gold: #FFBC38;
+    --wf-light-gold: #FFD686;
+    --wf-black: #1F1F1F;
+    --wf-dark-gray: #333333;
+    --wf-gray: #666666;
+    --wf-light-gray: #EEEEEE;
+    --wf-lighter-gray: #F6F6F6;
+    --wf-white: #FFFFFF;
+    --wf-border-color: #D8D8D8;
+    --positive-green: #008A20;
+    --negative-red: #D71E28;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Base Styles */
+  .cd-container {
+    font-family: 'Wells Fargo Sans', 'Helvetica Neue', Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    color: var(--wf-dark-gray);
+    background-color: var(--wf-white);
+  }
+  
+  /* Header Styles */
+  .cd-account-header {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    padding: 16px 24px;
+    border-radius: 4px 4px 0 0;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+  
+  .cd-return-nav {
+    margin-bottom: 12px;
+  }
+  
+  .cd-back-button {
+    background: none;
+    border: none;
+    color: var(--wf-white);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding: 0;
+  }
+  
+  .cd-back-button:hover {
+    text-decoration: underline;
+  }
+  
+  .cd-account-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .cd-account-title h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  
+  .cd-account-number {
+    font-size: 14px;
+    margin: 0;
+    font-weight: 500;
+  }
+  
+  /* Logo styles */
+  .cd-logo {
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    height: 28px;
+  }
+  
+  /* Account Overview Styles */
+  .cd-account-overview {
+    background-color: var(--wf-white);
+    padding: 24px;
+    border: 1px solid var(--wf-border-color);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+  
+  .cd-balance-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .cd-balance-card {
+    background-color: var(--wf-lighter-gray);
+    padding: 16px;
+    border-radius: 4px;
+    border-left: 4px solid var(--wf-red);
+  }
+  
+  .cd-balance-card h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--wf-gray);
+  }
+  
+  .cd-amount {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+    color: var(--wf-black);
+  }
+  
+  .cd-maturity-countdown {
+    margin: 4px 0 0 0;
+    font-size: 14px;
+    color: var(--wf-gray);
+  }
+  
+  /* Progress Bar Styles */
+  .cd-maturity-progress {
+    margin-bottom: 24px;
+    padding: 16px;
+    background-color: var(--wf-lighter-gray);
+    border-radius: 4px;
+  }
+  
+  .cd-maturity-progress h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .cd-progress-bar-container {
+    height: 12px;
+    background-color: var(--wf-light-gray);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+  }
+  
+  .cd-progress-bar {
+    height: 100%;
+    background-color: var(--wf-red);
+    border-radius: 6px;
+  }
+  
+  .cd-progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--wf-gray);
+  }
+  
+  /* Quick Actions Styles */
+  .cd-quick-actions {
+    padding: 16px;
+    background-color: var(--wf-white);
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+  }
+  
+  .cd-quick-actions h3 {
+    margin: 0 0 16px 0;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .cd-action-buttons {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+  
+  .cd-action-button {
+    background-color: var(--wf-white);
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    padding: 12px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.2s ease;
+  }
+  
+  .cd-action-button:hover {
+    background-color: var(--wf-lighter-gray);
+    border-color: var(--wf-gray);
+  }
+  
+  .cd-action-icon {
+    font-size: 24px;
+    margin-bottom: 8px;
+  }
+  
+  /* Account Details Styles */
+  .cd-account-details {
+    background-color: var(--wf-white);
+    padding: 24px;
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+  
+  .cd-account-info h3 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--wf-black);
+  }
+  
+  .cd-info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 12px 24px;
+  }
+  
+  .cd-info-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 8px;
+  }
+  
+  .cd-info-label {
+    font-size: 14px;
+    color: var(--wf-gray);
+    margin-bottom: 4px;
+  }
+  
+  .cd-info-value {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--wf-black);
+  }
+  
+  /* Transactions Styles */
+  .cd-transactions {
+    background-color: var(--wf-white);
+    padding: 24px;
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 4px var(--shadow-color);
+  }
+  
+  .cd-transactions-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .cd-transactions-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--wf-black);
+  }
+  
+  .cd-transactions-filters {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  
+  .cd-filter-select {
+    padding: 8px 12px;
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 14px;
+    background-color: var(--wf-white);
+    color: var(--wf-dark-gray);
+    cursor: pointer;
+  }
+  
+  .cd-transactions-list {
+    width: 100%;
+    overflow-x: auto;
+  }
+  
+  .cd-transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 600px;
+  }
+  
+  .cd-transactions-table th {
+    background-color: var(--wf-lighter-gray);
+    padding: 12px 16px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--wf-gray);
+    border-bottom: 2px solid var(--wf-border-color);
+  }
+  
+  .cd-transaction-row {
+    border-bottom: 1px solid var(--wf-border-color);
+  }
+  
+  .cd-transaction-row:last-child {
+    border-bottom: none;
+  }
+  
+  .cd-transaction-row td {
+    padding: 12px 16px;
+    font-size: 14px;
+  }
+  
+  .cd-transaction-type {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+  }
+  
+  .cd-type-deposit {
+    background-color: rgba(0, 138, 32, 0.1);
+    color: var(--positive-green);
+  }
+  
+  .cd-type-interest {
+    background-color: rgba(255, 188, 56, 0.2);
+    color: #a06800;
+  }
+  
+  .cd-type-withdrawal {
+    background-color: rgba(215, 30, 40, 0.1);
+    color: var(--negative-red);
+  }
+  
+  .cd-type-fee {
+    background-color: rgba(102, 102, 102, 0.1);
+    color: var(--wf-gray);
+  }
+  
+  .cd-amount-cell {
+    font-weight: 600;
+  }
+  
+  .cd-positive {
+    color: var(--positive-green);
+  }
+  
+  .cd-negative {
+    color: var(--negative-red);
+  }
+  
+  .cd-no-transactions {
+    text-align: center;
+    padding: 24px;
+    color: var(--wf-gray);
+  }
+  
+  /* Modal Styles */
+  .cd-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .cd-modal-content {
+    background-color: var(--wf-white);
+    border-radius: 4px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .cd-modal-header {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .cd-modal-header h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .cd-modal-close {
+    background: none;
+    border: none;
+    color: var(--wf-white);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .cd-modal-body {
+    padding: 24px;
+  }
+  
+  .cd-warning-message {
+    background-color: rgba(215, 30, 40, 0.1);
+    color: var(--negative-red);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    font-size: 14px;
+  }
+  
+  .cd-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .cd-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 14px;
+  }
+  
+  .cd-form-group input[type="number"],
+  .cd-form-group select {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 16px;
+  }
+  
+  .cd-form-group input[type="number"]:focus,
+  .cd-form-group select:focus {
+    outline: none;
+    border-color: var(--wf-gold);
+    box-shadow: 0 0 0 2px rgba(255, 188, 56, 0.2);
+  }
+  
+  .cd-form-hint {
+    margin: 4px 0 0 0;
+    font-size: 12px;
+    color: var(--wf-gray);
+  }
+  
+  .cd-radio-group {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .cd-radio-group label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+  }
+  
+  .cd-radio-group input[type="radio"] {
+    margin-right: 8px;
+  }
+  
+  .cd-form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+  }
+  
+  .cd-penalty-preview {
+    background-color: var(--wf-lighter-gray);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+  }
+  
+  .cd-penalty-preview p {
+    margin: 4px 0;
+    font-size: 14px;
+  }
+  
+  /* Button Styles */
+  .cd-button {
+    padding: 10px 16px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+  
+  .cd-primary {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+  }
+  
+  .cd-primary:hover {
+    background-color: var(--wf-dark-red);
+  }
+  
+  .cd-secondary {
+    background-color: var(--wf-white);
+    color: var(--wf-red);
+    border: 1px solid var(--wf-red);
+  }
+  
+  .cd-secondary:hover {
+    background-color: rgba(215, 30, 40, 0.05);
+  }
+  
+  /* Loading & Error States */
+  .cd-loading-container,
+  .cd-error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+  }
+  
+  .cd-loader {
+    border: 4px solid var(--wf-light-gray);
+    border-top: 4px solid var(--wf-red);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  .cd-error-container h2 {
+    color: var(--wf-red);
+    margin: 0 0 16px 0;
+  }
+  
+  .cd-error-container button {
+    margin-top: 16px;
+  }
+  
+  /* Footer Styles */
+  .cd-footer {
+    text-align: center;
+    padding: 24px 0;
+    font-size: 12px;
+    color: var(--wf-gray);
+    border-top: 1px solid var(--wf-border-color);
+    margin-top: 24px;
+  }
+  
+  .cd-footer p {
+    margin: 4px 0;
+  }
+  
+  .cd-footer a {
+    color: var(--wf-red);
+    text-decoration: none;
+    margin: 0 8px;
+  }
+  
+  .cd-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Add Wells Fargo logo to header */
+  .cd-account-header::before {
+    content: '';
+    position: absolute;
+    top: 16px;
+    right: 24px;
+    width: 36px;
+    height: 36px;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzNiAzNiI+PHBhdGggZmlsbD0iI2ZmZmZmZiIgZD0iTTE4IDM2YzktLjAxNCAxOC05LjAxMiAxOC0xOEMzNSA5LjAxMiAyNy4wMTIgMCAxOCAwIDguOTg4IDAgMCA4Ljk4OCAwIDE4YzAgOS4wMTIgOS4wMTIgMTguMDI4IDE4IDE4em0wLTMzLjZjOC41OTggMCAxNS42IDcuMDAyIDE1LjYgMTUuNlMyNi41OTggMzMuNiAxOCAzMy42IDIuNCAyNi41OTggMi40IDE4IDkuNDAyIDIuNCAxOCAyLjRabS0uNzUgMTAuMmgtNy41VjI0aDEuOHYtOS42aDUuN1YyNC42aC0uNnYxLjJoOC43di0xLjJoLS42di0xMi4yaDUuN1YyNGgxLjhWMTIuNmgtNy41djEuMzVoLTcuNVYxMi42Wm0wIDIuNTVoNy41VjI0aC03LjV2LTguNjVaIi8+PC9zdmc+');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .cd-account-header {
+      padding: 12px 16px;
+    }
+    
+    .cd-account-header::before {
+      width: 30px;
+      height: 30px;
+      top: 12px;
+      right: 16px;
+    }
+    
+    .cd-account-title h1 {
+      font-size: 20px;
+      max-width: 70%;
+    }
+    
+    .cd-balance-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .cd-transactions-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .cd-info-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .cd-action-buttons {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .cd-container {
+      padding: 0 12px;
+    }
+    
+    .cd-account-overview,
+    .cd-account-details,
+    .cd-transactions {
+      padding: 16px;
+    }
+    
+    .cd-action-buttons {
+      grid-template-columns: 1fr;
+    }
+    
+    .cd-transactions-filters {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    .cd-filter-select {
+      width: 100%;
+    }
+    
+    .cd-modal-content {
+      width: 95%;
+    }
+    
+    .cd-form-actions {
+      flex-direction: column;
+    }
+    
+    .cd-button {
+      width: 100%;
+    }
+    
+    .cd-radio-group {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }

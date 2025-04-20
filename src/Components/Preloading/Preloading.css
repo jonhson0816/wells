@@ -1,0 +1,126 @@
+/* WellsFargoPreloader.css */
+.preloader-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #D71E28; /* Wells Fargo red */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease-out;
+}
+
+.preloader-container.visible {
+  opacity: 1;
+}
+
+.preloader-container.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Wrapper for loader and logo */
+.loader-wrapper {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  margin-bottom: 20px;
+}
+
+/* Track for circular loader */
+.circular-track {
+  position: absolute;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+}
+
+/* The actual moving loader */
+.circular-loader {
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border-radius: 50%;
+  border: 4px solid transparent;
+  border-top-color: #FFFFFF;
+  animation: spin 2s linear infinite;
+}
+
+/* Logo circle in the center */
+.logo-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100px;
+  height: 100px;
+  background-color: #FFFFFF;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden; /* Ensures the image stays within the circle */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Wells Fargo logo image */
+.wells-fargo-logo {
+  width: 80%;
+  height: 80%;
+  object-fit: contain; /* Maintains aspect ratio */
+}
+
+.wf-title {
+  color: #FFFFFF;
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  font-family: Arial, sans-serif;
+}
+
+.loading-text {
+  color: #FFFFFF;
+  font-size: 16px;
+  opacity: 0.9;
+  font-family: Arial, sans-serif;
+}
+
+/* Animations */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* For mobile devices */
+@media (max-width: 768px) {
+  .loader-wrapper {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .circular-track {
+    width: 140px;
+    height: 140px;
+  }
+  
+  .logo-circle {
+    width: 85px;
+    height: 85px;
+  }
+  
+  .wf-title {
+    font-size: 24px;
+  }
+}

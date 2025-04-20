@@ -1,0 +1,1073 @@
+:root {
+  --wf-red: #d71e28;
+  --wf-red-dark: #b01a23;
+  --wf-yellow: #ffb81c;
+  --wf-yellow-dark: #e6a619;
+  --wf-gray-light: #f5f5f5;
+  --wf-gray: #e6e6e6;
+  --wf-gray-medium: #d8d8d8;
+  --wf-gray-dark: #666666;
+  --wf-black: #333333;
+  --wf-white: #ffffff;
+  --wf-success: #198754;
+  --wf-error: #dc3545;
+  --wf-warning: #ffc107;
+  --wf-shadow: rgba(0, 0, 0, 0.1);
+  --font-primary: 'Open Sans', Helvetica, Arial, sans-serif;
+  --border-radius: 4px;
+  --transition-speed: 0.3s;
+}
+
+/* General styles */
+.dispute-transaction-page {
+  font-family: var(--font-primary);
+  color: var(--wf-black);
+  background-color: var(--wf-white);
+  line-height: 1.5;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Header */
+.dis010-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--wf-gray);
+  margin-bottom: 24px;
+}
+
+.dis010-back-button {
+  display: flex;
+  align-items: center;
+  color: var(--wf-gray-dark);
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--transition-speed);
+}
+
+.dis010-back-button:hover {
+  color: var(--wf-red);
+}
+
+.dis010-back-arrow {
+  margin-right: 8px;
+  font-size: 18px;
+}
+
+.dis010-wells-fargo-branding {
+  display: flex;
+  align-items: center;
+}
+
+.dis010-logo-container {
+  height: 48px;
+  display: flex;
+  align-items: center;
+}
+
+.dis010-wf-logo {
+  height: 36px;
+  max-width: 200px;
+  object-fit: contain;
+}
+
+.dis010-help-button {
+  background-color: transparent;
+  border: 1px solid var(--wf-gray-dark);
+  color: var(--wf-gray-dark);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  font-family: var(--font-primary);
+  transition: all var(--transition-speed);
+}
+
+.dis010-help-button:hover {
+  background-color: var(--wf-gray-dark);
+  color: var(--wf-white);
+}
+
+.dis010-help-button:focus {
+  outline: none;
+  border-color: var(--wf-red);
+}
+
+/* Page title section */
+.page-title-section {
+  margin-bottom: 32px;
+}
+
+.page-title-section h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--wf-black);
+  margin-bottom: 8px;
+}
+
+.page-description {
+  color: var(--wf-gray-dark);
+  font-size: 16px;
+}
+
+/* Progress tracker */
+.progress-tracker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 36px;
+  padding: 0 10px;
+}
+
+.progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+}
+
+.step-number {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--wf-gray);
+  color: var(--wf-gray-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  margin-bottom: 8px;
+  transition: all var(--transition-speed);
+}
+
+.step-label {
+  font-size: 14px;
+  color: var(--wf-gray-dark);
+  text-align: center;
+  font-weight: 600;
+  transition: color var(--transition-speed);
+  white-space: nowrap;
+}
+
+.progress-line {
+  flex: 1;
+  height: 3px;
+  background-color: var(--wf-gray);
+  margin: 0 8px;
+  margin-bottom: 40px;
+  position: relative;
+  z-index: 0;
+  transition: background-color var(--transition-speed);
+}
+
+.progress-step.active .step-number {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+}
+
+.progress-step.active .step-label {
+  color: var(--wf-black);
+}
+
+.progress-step.completed .step-number {
+  background-color: var(--wf-success);
+  color: var(--wf-white);
+}
+
+.progress-step.completed + .progress-line {
+  background-color: var(--wf-success);
+}
+
+/* Dispute content container */
+.dispute-content {
+  background-color: var(--wf-white);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 10px var(--wf-shadow);
+  padding: 32px;
+  margin-bottom: 32px;
+}
+
+.dispute-transaction-step {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.dispute-transaction-step h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--wf-black);
+}
+
+.step-description {
+  color: var(--wf-gray-dark);
+  margin-bottom: 24px;
+}
+
+/* Transaction filters */
+.transaction-filters {
+  margin-bottom: 24px;
+  background-color: var(--wf-gray-light);
+  padding: 16px;
+  border-radius: var(--border-radius);
+}
+
+.search-bar {
+  margin-bottom: 16px;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 10px 16px;
+  border: 1px solid var(--wf-gray-medium);
+  border-radius: var(--border-radius);
+  font-size: 15px;
+  transition: border-color var(--transition-speed);
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--wf-red);
+}
+
+.filter-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.date-filter, .amount-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.date-filter label, .amount-filter label {
+  font-weight: 600;
+  margin-right: 8px;
+}
+
+.date-filter input, .amount-filter input {
+  padding: 8px 12px;
+  border: 1px solid var(--wf-gray-medium);
+  border-radius: var(--border-radius);
+  font-size: 14px;
+}
+
+.date-filter input:focus, .amount-filter input:focus {
+  outline: none;
+  border-color: var(--wf-red);
+}
+
+.clear-filters-button {
+  background-color: transparent;
+  border: 1px solid var(--wf-gray-dark);
+  color: var(--wf-gray-dark);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-speed);
+}
+
+.clear-filters-button:hover {
+  background-color: var(--wf-gray-dark);
+  color: var(--wf-white);
+}
+
+/* Transactions table */
+.transactions-table-container {
+  margin-bottom: 24px;
+  border: 1px solid var(--wf-gray);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table th {
+  background-color: var(--wf-gray-light);
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: var(--wf-black);
+  border-bottom: 2px solid var(--wf-gray);
+}
+
+.transactions-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--wf-gray-light);
+  vertical-align: middle;
+}
+
+.transactions-table tr:last-child td {
+  border-bottom: none;
+}
+
+.transactions-table tr:hover {
+  background-color: var(--wf-gray-light);
+}
+
+.transactions-table .negative-amount {
+  color: var(--wf-error);
+  font-weight: 600;
+}
+
+.select-transaction-button {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color var(--transition-speed);
+}
+
+.select-transaction-button:hover {
+  background-color: var(--wf-red-dark);
+}
+
+.select-transaction-button:disabled {
+  background-color: var(--wf-gray);
+  color: var(--wf-gray-dark);
+  cursor: not-allowed;
+}
+
+.dispute-status {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--wf-gray-dark);
+}
+
+.already-disputed {
+  opacity: 0.7;
+}
+
+/* Pagination controls */
+.pagination-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background-color: var(--wf-gray-light);
+  border-top: 1px solid var(--wf-gray);
+}
+
+.pagination-controls button {
+  background-color: var(--wf-white);
+  border: 1px solid var(--wf-gray-dark);
+  color: var(--wf-gray-dark);
+  padding: 6px 12px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all var(--transition-speed);
+}
+
+.pagination-controls button:hover {
+  background-color: var(--wf-gray-dark);
+  color: var(--wf-white);
+}
+
+.pagination-controls button:disabled {
+  background-color: var(--wf-gray-light);
+  border-color: var(--wf-gray);
+  color: var(--wf-gray);
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-weight: 600;
+}
+
+/* No transactions message */
+.no-transactions {
+  text-align: center;
+  padding: 32px;
+  color: var(--wf-gray-dark);
+}
+
+.no-transactions button {
+  background: none;
+  border: none;
+  color: var(--wf-red);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+/* Loading and error states */
+.loading-indicator {
+  text-align: center;
+  padding: 32px;
+  color: var(--wf-gray-dark);
+  font-weight: 600;
+}
+
+.error-message {
+  text-align: center;
+  padding: 32px;
+  color: var(--wf-error);
+}
+
+.error-message button {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  margin-top: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color var(--transition-speed);
+}
+
+/* Help info section */
+.disputes-help-info {
+  background-color: var(--wf-gray-light);
+  padding: 24px;
+  border-radius: var(--border-radius);
+  margin-top: 24px;
+}
+
+.disputes-help-info h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--wf-black);
+}
+
+.disputes-help-info ul {
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+
+.disputes-help-info li {
+  margin-bottom: 8px;
+}
+
+/* Step 2 - Dispute Details */
+.selected-transaction {
+  background-color: var(--wf-gray-light);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-bottom: 24px;
+}
+
+.selected-transaction h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--wf-black);
+}
+
+.transaction-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+
+.transaction-detail {
+  display: flex;
+  justify-content: space-between;
+}
+
+.transaction-detail span:first-child {
+  font-weight: 600;
+  margin-right: 12px;
+}
+
+.dispute-form {
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.form-select, .form-textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid var(--wf-gray-medium);
+  border-radius: var(--border-radius);
+  font-size: 15px;
+  transition: border-color var(--transition-speed);
+}
+
+.form-select:focus, .form-textarea:focus {
+  outline: none;
+  border-color: var(--wf-red);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.radio-label input {
+  margin-right: 8px;
+}
+
+/* Fraud questions section */
+.fraud-questions {
+  background-color: var(--wf-gray-light);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-bottom: 24px;
+}
+
+.fraud-questions h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--wf-black);
+}
+
+/* File upload */
+.attachment-instructions {
+  margin-bottom: 12px;
+  font-size: 14px;
+  color: var(--wf-gray-dark);
+}
+
+.file-upload-area {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.file-upload-button {
+  background-color: var(--wf-gray-dark);
+  color: var(--wf-white);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color var(--transition-speed);
+}
+
+.file-upload-button:hover {
+  background-color: var(--wf-black);
+}
+
+.file-upload-button:disabled {
+  background-color: var(--wf-gray);
+  cursor: not-allowed;
+}
+
+.file-upload-info {
+  margin-left: 12px;
+  color: var(--wf-gray-dark);
+}
+
+.attachment-list {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+}
+
+.attachment-item {
+  display: flex;
+  align-items: center;
+  background-color: var(--wf-gray-light);
+  padding: 8px 12px;
+  border-radius: var(--border-radius);
+  margin-bottom: 8px;
+}
+
+.attachment-name {
+  font-weight: 600;
+  margin-right: 8px;
+  flex: 1;
+}
+
+.attachment-size {
+  color: var(--wf-gray-dark);
+  margin-right: 12px;
+}
+
+.remove-attachment-button {
+  background-color: transparent;
+  border: none;
+  color: var(--wf-error);
+  cursor: pointer;
+  transition: opacity var(--transition-speed);
+}
+
+.remove-attachment-button:hover {
+  opacity: 0.8;
+}
+
+/* Checkbox styles */
+.checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+}
+
+.checkbox-label input {
+  margin-right: 10px;
+  margin-top: 4px;
+}
+
+.help-text {
+  font-size: 14px;
+  color: var(--wf-gray-dark);
+  margin-top: 8px;
+  margin-left: 24px;
+}
+
+/* Step actions */
+.step-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--wf-gray);
+}
+
+.primary-button, .secondary-button {
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.primary-button {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+}
+
+.primary-button:hover {
+  background-color: var(--wf-red-dark);
+}
+
+.secondary-button {
+  background-color: transparent;
+  border: 1px solid var(--wf-gray-dark);
+  color: var(--wf-gray-dark);
+}
+
+.secondary-button:hover {
+  background-color: var(--wf-gray-dark);
+  color: var(--wf-white);
+}
+
+/* Step 3 - Review and Confirm */
+.dispute-summary {
+  margin-bottom: 24px;
+}
+
+.dispute-summary h3 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--wf-black);
+}
+
+.summary-section {
+  background-color: var(--wf-gray-light);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-bottom: 24px;
+}
+
+.summary-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--wf-black);
+}
+
+.summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.summary-item:last-child {
+  margin-bottom: 0;
+}
+
+.summary-item span:first-child {
+  font-weight: 600;
+}
+
+.fraud-summary {
+  background-color: var(--wf-white);
+  padding: 16px;
+  border-radius: var(--border-radius);
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+
+.dispute-disclaimer {
+  border: 1px solid var(--wf-yellow);
+  background-color: rgba(255, 184, 28, 0.1);
+  padding: 20px;
+  border-radius: var(--border-radius);
+  margin-bottom: 24px;
+}
+
+.dispute-disclaimer h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: var(--wf-black);
+}
+
+.dispute-disclaimer ul {
+  margin-left: 24px;
+  margin-bottom: 16px;
+}
+
+.dispute-disclaimer li {
+  margin-bottom: 8px;
+}
+
+.confirmation-checkbox {
+  margin-top: 24px;
+}
+
+.confirmation-checkbox label {
+  display: flex;
+  align-items: flex-start;
+  font-weight: 600;
+}
+
+.confirmation-checkbox input {
+  margin-right: 10px;
+  margin-top: 4px;
+}
+
+/* Step 4 - Confirmation */
+.submission-step, .error-step, .success-step {
+  text-align: center;
+  padding: 24px;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(215, 30, 40, 0.2);
+  border-radius: 50%;
+  border-top: 4px solid var(--wf-red);
+  animation: spin 1s linear infinite;
+  margin-bottom: 24px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background-color: var(--wf-error);
+  color: var(--wf-white);
+  border-radius: 50%;
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.success-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background-color: var(--wf-success);
+  color: var(--wf-white);
+  border-radius: 50%;
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 24px;
+}
+
+.processing-message, .error-message, .success-message {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.case-details, .status-history, .next-steps, .dispute-actions {
+  text-align: left;
+  margin-bottom: 36px;
+}
+
+.case-details h3, .status-history h3, .next-steps h3, .dispute-actions h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: var(--wf-black);
+}
+
+.case-detail {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 8px 16px;
+  background-color: var(--wf-gray-light);
+  border-radius: var(--border-radius);
+}
+
+.case-detail span:first-child {
+  font-weight: 600;
+}
+
+.status-timeline {
+  margin-left: 20px;
+}
+
+.timeline-item {
+  position: relative;
+  padding-left: 30px;
+  margin-bottom: 24px;
+}
+
+.timeline-item:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  background-color: var(--wf-success);
+  border-radius: 50%;
+}
+
+.timeline-item:after {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 16px;
+  width: 2px;
+  height: calc(100% + 8px);
+  background-color: var(--wf-gray-medium);
+}
+
+.timeline-item:last-child:after {
+  display: none;
+}
+
+.timeline-date {
+  font-size: 14px;
+  color: var(--wf-gray-dark);
+  margin-bottom: 4px;
+}
+
+.timeline-status {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.timeline-description {
+  color: var(--wf-gray-dark);
+}
+
+.dispute-action-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.dispute-action-buttons button {
+  background-color: var(--wf-gray-dark);
+  color: var(--wf-white);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color var(--transition-speed);
+}
+
+.dispute-action-buttons button:hover {
+  background-color: var(--wf-black);
+}
+
+/* Modal styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--wf-white);
+  border-radius: var(--border-radius);
+  max-width: 600px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.help-modal {
+  max-width: 700px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--wf-gray);
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--wf-gray-dark);
+  transition: color var(--transition-speed);
+}
+
+.close-button:hover {
+  color: var(--wf-black);
+}
+
+.modal-body {
+  padding: 24px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--wf-gray);
+}
+
+.modal-button {
+  padding: 10px 20px;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed);
+}
+
+.modal-button.primary {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+}
+
+.modal-button.primary:hover {
+  background-color: var(--wf-red-dark);
+}
+
+.modal-button.secondary {
+  background-color: transparent;
+  border: 1px solid var(--wf-gray-dark);
+  color: var(--wf-gray-dark);
+}
+
+.modal-button.secondary:hover {
+  background-color: var(--wf-gray-dark);
+  color: var(--wf-white);
+}
+
+.warning-text {
+  color: var(--wf-error);
+  font-weight: 600;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .wells-fargo-branding {
+    margin-top: 16px;
+  }
+  
+  .progress-tracker {
+    overflow-x: auto;
+    padding-bottom: 12px;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+  }
+  
+  .date-filter, .amount-filter {
+    width: 100%;
+  }
+  
+  .step-actions {
+    flex-direction: column-reverse;
+    gap: 16px;
+  }
+  
+  .step-actions button {
+    width: 100%;
+  }
+  
+  .dispute-action-buttons {
+    flex-direction: column;
+  }
+  
+  .transaction-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .transactions-table {
+    display: block;
+    overflow-x: auto;
+  }
+}

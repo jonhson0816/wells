@@ -1,0 +1,295 @@
+:root {
+  --wf-red: #D71E28;
+  --wf-gold: #FFCD11;
+  --wf-blue: #003C7F; /* Secondary color */
+  --wf-gray: #F0F0F0;
+  --wf-dark-gray: #666666;
+  --wf-light-gray: #F8F8F8;
+  --wf-error: #D71E28;
+  --wf-success: #007856;
+  --border-radius: 6px;
+  --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --transition: all 0.2s ease-in-out;
+}
+
+.transfer-page-container {
+  font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  /* padding: 2rem; */
+  color: #333;
+  background-color: white;
+}
+
+.transfer-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--wf-gray);
+  margin-bottom: 2rem;
+}
+
+.transfer-header::before {
+  content: '';
+  background-image: url('https://www.wellsfargo.com/assets/images/logos/wells-fargo-logo.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 180px;
+  height: 40px;
+  margin-bottom: 1rem;
+}
+
+.transfer-header h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  margin: 0.5rem 0;
+  color: var(--wf-blue);
+}
+
+.transfer-header p {
+  font-size: 1rem;
+  color: var(--wf-dark-gray);
+  margin: 0;
+}
+
+.transfer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 2rem;
+}
+
+@media (max-width: 768px) {
+  .transfer-content {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Transfer Form Styling */
+.transfer-form {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 2rem;
+}
+
+.transfer-type-selector {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.transfer-type-selector button {
+  background-color: var(--wf-light-gray);
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--transition);
+  flex: 1;
+  min-width: 120px;
+  color: var(--wf-dark-gray);
+}
+
+.transfer-type-selector button:hover {
+  background-color: #e8e8e8;
+}
+
+.transfer-type-selector button.selected {
+  background-color: var(--wf-red);
+  color: white;
+  border-color: var(--wf-red);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #444;
+}
+
+select, input[type="text"], input[type="number"] {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: var(--transition);
+}
+
+select:focus, input:focus {
+  outline: none;
+  border-color: var(--wf-blue);
+  box-shadow: 0 0 0 2px rgba(0, 60, 127, 0.2);
+}
+
+.account-selection {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.account-selection.two-columns {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 600px) {
+  .account-selection.two-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.radio-group {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 0.5rem;
+  cursor: pointer;
+}
+
+.amount-input {
+  margin-bottom: 1.5rem;
+}
+
+.amount-input input {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.transfer-submit-btn {
+  background-color: var(--wf-red);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  width: 100%;
+  transition: var(--transition);
+  margin-top: 1rem;
+}
+
+.transfer-submit-btn:hover {
+  background-color: #b71c24;
+}
+
+.error-message {
+  color: var(--wf-error);
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* External Bank Form */
+.external-bank-details {
+  background-color: var(--wf-light-gray);
+  padding: 1.5rem;
+  border-radius: var(--border-radius);
+  margin: 0 0 1.5rem;
+  border-left: 3px solid var(--wf-gold);
+}
+
+/* Transfer History Styling */
+.transfer-history {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
+  padding: 1.5rem;
+}
+
+.transfer-history h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--wf-blue);
+  margin-top: 0;
+  margin-bottom: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--wf-gold);
+}
+
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transfer-item {
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background-color: var(--wf-light-gray);
+  transition: var(--transition);
+}
+
+.transfer-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--box-shadow);
+}
+
+.transfer-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.transfer-amount {
+  color: var(--wf-red);
+  font-weight: 600;
+}
+
+.transfer-meta {
+  font-size: 0.8rem;
+  color: var(--wf-dark-gray);
+}
+
+/* Success Message Styling (for alert replacement) */
+.success-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: var(--wf-success);
+  color: white;
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  z-index: 1000;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Wells Fargo Logo - add using a span with this class */
+.wf-logo {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  background-color: var(--wf-red);
+  mask-image: url('https://www.wellsfargo.com/assets/images/logos/wells-fargo-icon.svg');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  margin-right: 0.5rem;
+}

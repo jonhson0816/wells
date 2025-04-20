@@ -1,0 +1,416 @@
+:root {
+    --wells-fargo-red: #CD1309;
+    --wells-fargo-gold: #FFCD00;
+    --wells-fargo-yellow: #E2A400;
+    --wells-fargo-beige: #D4B78F;
+    --wells-fargo-light-gray: #F5F5F5;
+    --wells-fargo-medium-gray: #E0E0E0;
+    --wells-fargo-dark-gray: #666666;
+    --wells-fargo-black: #333333;
+    --wells-fargo-white: #FFFFFF;
+  }
+  
+  /* Base Styles */
+  .reb0100-container {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    color: var(--wells-fargo-black);
+    background-color: var(--wells-fargo-white);
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    line-height: 1.5;
+  }
+  
+  /* Header Styles */
+  .reb0100-account-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--wells-fargo-medium-gray);
+    background-color: var(--wells-fargo-white);
+  }
+  
+  .reb0100-back-button {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-weight: 500;
+    color: var(--wells-fargo-red);
+    transition: color 0.2s ease;
+  }
+  
+  .reb0100-back-button:hover {
+    color: #a50f07;
+  }
+  
+  .reb0100-back-arrow {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  .reb0100-wells-fargo-branding {
+    display: flex;
+    align-items: center;
+  }
+  
+  .reb0100-logo-container {
+    height: 40px;
+  }
+  
+  .reb0100-wf-logo {
+    height: 100%;
+    object-fit: contain;
+  }
+  
+  /* Main Content Styles */
+  .reb0100-main-content {
+    padding: 24px;
+  }
+  
+  .reb0100-page-title {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 32px;
+    color: var(--wells-fargo-black);
+    text-align: center;
+  }
+  
+  /* Portfolio Summary Styles */
+  .reb0100-portfolio-summary {
+    background-color: var(--wells-fargo-light-gray);
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .reb0100-summary-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--wells-fargo-medium-gray);
+    padding-bottom: 16px;
+  }
+  
+  .reb0100-summary-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+    flex-basis: 100%;
+    margin-bottom: 12px;
+  }
+  
+  .reb0100-total-value, .reb0100-last-rebalanced {
+    font-size: 16px;
+  }
+  
+  .reb0100-total-value span, .reb0100-last-rebalanced span {
+    font-weight: 600;
+  }
+  
+  .reb0100-allocation-comparison {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+  }
+  
+  .reb0100-current-allocation, .reb0100-target-allocation {
+    flex: 1;
+    min-width: 280px;
+  }
+  
+  .reb0100-current-allocation h3, .reb0100-target-allocation h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  
+  .reb0100-allocation-chart {
+    display: flex;
+    height: 24px;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  
+  .reb0100-allocation-bar {
+    height: 100%;
+    transition: width 0.3s ease;
+  }
+  
+  .reb0100-allocation-details {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .reb0100-asset-item {
+    display: flex;
+    align-items: center;
+  }
+  
+  .reb0100-asset-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    margin-right: 12px;
+  }
+  
+  .reb0100-asset-info {
+    display: flex;
+    justify-content: space-between;
+    flex-grow: 1;
+  }
+  
+  .reb0100-asset-name {
+    font-weight: 500;
+  }
+  
+  .reb0100-asset-value {
+    color: var(--wells-fargo-dark-gray);
+  }
+  
+  /* Rebalance Section Styles */
+  .reb0100-rebalance-section {
+    background-color: var(--wells-fargo-white);
+    border-radius: 8px;
+    padding: 24px;
+    border: 1px solid var(--wells-fargo-medium-gray);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .reb0100-rebalance-section h2 {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  
+  .reb0100-rebalance-info {
+    margin-bottom: 24px;
+    color: var(--wells-fargo-dark-gray);
+  }
+  
+  .reb0100-total-percentage {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    font-weight: 600;
+  }
+  
+  .reb0100-total-valid {
+    color: green;
+    margin-left: 8px;
+  }
+  
+  .reb0100-total-invalid {
+    color: var(--wells-fargo-red);
+    margin-left: 8px;
+  }
+  
+  .reb0100-sliders-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+  
+  .reb0100-slider-group {
+    width: 100%;
+  }
+  
+  .reb0100-slider-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  
+  .reb0100-slider-header label {
+    font-weight: 500;
+  }
+  
+  .reb0100-slider-value {
+    font-weight: 600;
+  }
+  
+  .reb0100-slider {
+    width: 100%;
+    height: 6px;
+    -webkit-appearance: none;
+    appearance: none;
+    background: var(--wells-fargo-medium-gray);
+    border-radius: 3px;
+    outline: none;
+  }
+  
+  .reb0100-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wells-fargo-red);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .reb0100-slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--wells-fargo-red);
+    cursor: pointer;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .reb0100-actions {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .reb0100-rebalance-button {
+    background-color: var(--wells-fargo-red);
+    color: var(--wells-fargo-white);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .reb0100-rebalance-button:hover {
+    background-color: #a50f07;
+  }
+  
+  .reb0100-rebalance-button:disabled {
+    background-color: var(--wells-fargo-dark-gray);
+    cursor: not-allowed;
+  }
+  
+  /* Confirmation Modal Styles */
+  .reb0100-confirmation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .reb0100-confirmation-modal {
+    background-color: var(--wells-fargo-white);
+    border-radius: 8px;
+    padding: 24px;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .reb0100-confirmation-modal h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .reb0100-confirmation-details {
+    margin: 24px 0;
+    background-color: var(--wells-fargo-light-gray);
+    padding: 16px;
+    border-radius: 4px;
+  }
+  
+  .reb0100-confirm-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  
+  .reb0100-confirm-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .reb0100-confirmation-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+  }
+  
+  .reb0100-cancel-button, .reb0100-confirm-button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .reb0100-cancel-button {
+    background-color: var(--wells-fargo-white);
+    color: var(--wells-fargo-black);
+    border: 1px solid var(--wells-fargo-medium-gray);
+  }
+  
+  .reb0100-cancel-button:hover {
+    background-color: var(--wells-fargo-light-gray);
+  }
+  
+  .reb0100-confirm-button {
+    background-color: var(--wells-fargo-red);
+    color: var(--wells-fargo-white);
+    border: none;
+  }
+  
+  .reb0100-confirm-button:hover {
+    background-color: #a50f07;
+  }
+  
+  /* Footer Styles */
+  .reb0100-footer {
+    padding: 24px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--wells-fargo-dark-gray);
+    border-top: 1px solid var(--wells-fargo-medium-gray);
+    margin-top: 40px;
+  }
+  
+  .reb0100-footer p {
+    margin: 4px 0;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .reb0100-account-page-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .reb0100-wells-fargo-branding {
+      margin-top: 16px;
+      align-self: center;
+    }
+    
+    .reb0100-allocation-comparison {
+      flex-direction: column;
+      gap: 32px;
+    }
+    
+    .reb0100-summary-header {
+      flex-direction: column;
+    }
+    
+    .reb0100-total-value, .reb0100-last-rebalanced {
+      margin-top: 8px;
+    }
+  }

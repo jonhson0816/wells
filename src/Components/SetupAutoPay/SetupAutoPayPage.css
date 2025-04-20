@@ -1,0 +1,796 @@
+/* Wells Fargo AutoPay Page Styling */
+
+/* CSS Variables for Wells Fargo Brand Colors */
+:root {
+  --wf-red: #D71E28;
+  --wf-black: #000000;
+  --wf-gold: #FFCD00;
+  --wf-dark-gold: #E6B800;
+  --wf-gray: #666666;
+  --wf-light-gray: #F5F5F5;
+  --wf-border-gray: #DDDDDD;
+  --wf-text: #333333;
+  --wf-success: #006633;
+  --wf-warning: #FF8800;
+  --wf-error: #CC0000;
+  --shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  --border-radius: 4px;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: #fff;
+  color: var(--wf-text);
+  line-height: 1.5;
+  font-size: 16px;
+}
+
+/* Container */
+.autopay-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header Styling */
+.autopay-header {
+  background-color: white;
+  border-bottom: 1px solid var(--wf-border-gray);
+  padding: 16px 24px;
+  box-shadow: var(--shadow);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.header-content .logo {
+  height: 36px;
+  width: auto;
+  margin-right: 16px;
+  cursor: pointer;
+}
+
+.header-content h1 {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--wf-text);
+}
+
+.main-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.main-navigation a {
+  color: var(--wf-text);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 4px 0;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.main-navigation a:hover {
+  color: var(--wf-red);
+}
+
+.main-navigation a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--wf-red);
+  transform: scaleX(0);
+  transition: transform 0.2s ease;
+}
+
+.main-navigation a:hover::after,
+.main-navigation a.active::after {
+  transform: scaleX(1);
+}
+
+/* Main Content */
+.autopay-content {
+  flex: 1;
+  padding: 24px;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* Error Message */
+.error-message {
+  background-color: #FEE;
+  border: 1px solid var(--wf-error);
+  color: var(--wf-error);
+  padding: 12px 16px;
+  border-radius: var(--border-radius);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.error-message button {
+  background: none;
+  border: none;
+  color: var(--wf-error);
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* AutoPay Overview Section */
+.autopay-overview {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.autopay-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.autopay-header-actions h2 {
+  font-size: 22px;
+  font-weight: 500;
+  color: var(--wf-text);
+}
+
+/* Tabs */
+.autopay-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--wf-border-gray);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tab-button {
+  background: none;
+  border: none;
+  padding: 12px 24px;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--wf-gray);
+  position: relative;
+  white-space: nowrap;
+}
+
+.tab-button:hover {
+  color: var(--wf-red);
+}
+
+.tab-button.active {
+  color: var(--wf-red);
+}
+
+.tab-button.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background-color: var(--wf-red);
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 40px 0;
+  color: var(--wf-gray);
+}
+
+/* No AutoPays */
+.no-autopays {
+  padding: 40px 0;
+  text-align: center;
+}
+
+.no-autopays p {
+  margin-bottom: 24px;
+  color: var(--wf-gray);
+}
+
+/* AutoPay List */
+.autopay-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.autopay-item {
+  background-color: white;
+  border: 1px solid var(--wf-border-gray);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.autopay-item.status-active {
+  border-left: 4px solid var(--wf-success);
+}
+
+.autopay-item.status-paused {
+  border-left: 4px solid var(--wf-warning);
+}
+
+.autopay-item.status-completed {
+  border-left: 4px solid var(--wf-gray);
+}
+
+.autopay-item.status-cancelled {
+  border-left: 4px solid var(--wf-error);
+}
+
+.autopay-item-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--wf-light-gray);
+  border-bottom: 1px solid var(--wf-border-gray);
+}
+
+.autopay-payee h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.autopay-account {
+  color: var(--wf-gray);
+  font-size: 14px;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.status-badge.active {
+  background-color: #E6F5ED;
+  color: var(--wf-success);
+}
+
+.status-badge.paused {
+  background-color: #FFF5E6;
+  color: var(--wf-warning);
+}
+
+.status-badge.completed {
+  background-color: var(--wf-light-gray);
+  color: var(--wf-gray);
+}
+
+.status-badge.cancelled {
+  background-color: #FFE6E6;
+  color: var(--wf-error);
+}
+
+.autopay-item-details {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.detail-column {
+  flex: 1;
+  min-width: 200px;
+}
+
+.detail-item {
+  margin-bottom: 12px;
+}
+
+.detail-label {
+  display: block;
+  color: var(--wf-gray);
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  font-weight: 500;
+}
+
+.autopay-actions {
+  padding: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-top: 1px solid var(--wf-border-gray);
+}
+
+/* Buttons */
+.primary-button {
+  background-color: var(--wf-red);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.primary-button:hover {
+  background-color: #B91822;
+}
+
+.primary-button:disabled {
+  background-color: var(--wf-gray);
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  background-color: white;
+  color: var(--wf-text);
+  border: 1px solid var(--wf-border-gray);
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.secondary-button:hover {
+  background-color: var(--wf-light-gray);
+}
+
+.danger-button {
+  background-color: var(--wf-error);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.danger-button:hover {
+  background-color: #A60000;
+}
+
+.action-button {
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--wf-border-gray);
+  background-color: white;
+}
+
+.action-button.pause {
+  color: var(--wf-warning);
+  border-color: var(--wf-warning);
+}
+
+.action-button.pause:hover {
+  background-color: #FFF5E6;
+}
+
+.action-button.resume {
+  color: var(--wf-success);
+  border-color: var(--wf-success);
+}
+
+.action-button.resume:hover {
+  background-color: #E6F5ED;
+}
+
+.action-button.cancel {
+  color: var(--wf-error);
+  border-color: var(--wf-error);
+}
+
+.action-button.cancel:hover {
+  background-color: #FFE6E6;
+}
+
+.action-button.modify {
+  color: var(--wf-gray);
+}
+
+.action-button.modify:hover {
+  background-color: var(--wf-light-gray);
+}
+
+.action-button.details {
+  color: var(--wf-text);
+}
+
+.action-button.details:hover {
+  background-color: var(--wf-light-gray);
+}
+
+/* Modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 800px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-content.confirm-modal {
+  max-width: 500px;
+}
+
+.modal-header {
+  padding: 16px;
+  border-bottom: 1px solid var(--wf-border-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  background-color: white;
+  z-index: 10;
+}
+
+.modal-header h2 {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.close-button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: var(--wf-gray);
+}
+
+.modal-body {
+  padding: 24px 16px;
+}
+
+.modal-body p {
+  margin-bottom: 16px;
+}
+
+.modal-actions {
+  padding: 16px;
+  border-top: 1px solid var(--wf-border-gray);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* Form Styling */
+.autopay-form {
+  padding: 16px;
+}
+
+.form-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--wf-border-gray);
+}
+
+.form-section:last-child {
+  border-bottom: none;
+}
+
+.form-section h3 {
+  margin-bottom: 16px;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group.error label {
+  color: var(--wf-error);
+}
+
+.form-group.error input,
+.form-group.error select {
+  border-color: var(--wf-error);
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--wf-border-gray);
+  border-radius: var(--border-radius);
+  font-size: 16px;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--wf-gold);
+  box-shadow: 0 0 0 2px rgba(255, 205, 0, 0.2);
+}
+
+.form-group .error-message {
+  color: var(--wf-error);
+  font-size: 14px;
+  margin-top: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.checkbox-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+/* Footer */
+.autopay-footer {
+  background-color: var(--wf-light-gray);
+  padding: 24px;
+  border-top: 1px solid var(--wf-border-gray);
+  text-align: center;
+  display: flex;
+}
+
+.f001-footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.f001-footer-links {
+  color: var(--wf-text);
+  text-decoration: none;
+}
+
+.f001-footer-links a:hover {
+  text-decoration: underline;
+}
+
+.c001-copyright {
+  margin-left: 29rem;
+  color: var(--wf-success);
+  font-size: 14px;
+}
+
+/* Responsive Design for Tablets */
+@media (max-width: 1024px) {
+  .autopay-header {
+    padding: 12px 16px;
+  }
+  
+  .header-content {
+    margin-bottom: 12px;
+  }
+  
+  .header-content .logo {
+    height: 32px;
+  }
+  
+  .header-content h1 {
+    font-size: 20px;
+  }
+  
+  .main-navigation {
+    gap: 16px;
+  }
+  
+  .autopay-content {
+    padding: 16px;
+  }
+  
+  .autopay-overview {
+    padding: 16px;
+  }
+  
+  .autopay-header-actions h2 {
+    font-size: 20px;
+  }
+  
+  .autopay-item-details {
+    flex-direction: column;
+  }
+  
+  .detail-column {
+    width: 100%;
+  }
+}
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+  .autopay-header {
+    padding: 12px;
+  }
+  
+  .header-content {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .header-content .logo {
+    height: 28px;
+  }
+  
+  .header-content h1 {
+    font-size: 18px;
+  }
+  
+  .main-navigation {
+    width: 100%;
+    justify-content: space-between;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 6px;
+  }
+  
+  .main-navigation a {
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  
+  .autopay-content {
+    padding: 12px;
+  }
+  
+  .autopay-overview {
+    padding: 12px;
+  }
+  
+  .autopay-header-actions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .autopay-tabs {
+    padding-bottom: 0;
+  }
+  
+  .tab-button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+  
+  .autopay-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .autopay-status {
+    align-self: flex-start;
+  }
+  
+  .autopay-actions {
+    justify-content: center;
+  }
+  
+  .modal-content {
+    max-height: 95vh;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions button {
+    width: 100%;
+  }
+  
+  .footer-links {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+/* Additional Mobile Optimizations */
+@media (max-width: 480px) {
+  .autopay-header {
+    position: relative;
+  }
+  
+  .header-content .logo {
+    height: 24px;
+  }
+  
+  .main-navigation a {
+    padding: 8px 0;
+    font-size: 13px;
+  }
+  
+  .autopay-header-actions h2 {
+    font-size: 18px;
+  }
+  
+  .tab-button {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+  
+  .radio-group,
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .radio-group .radio-option {
+    width: 100%;
+  }
+}

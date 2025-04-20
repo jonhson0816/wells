@@ -1,0 +1,909 @@
+/* WellsFargoPage.css */
+/* Base styles and variables */
+:root {
+  --wells-red: #d71e28;
+  --wells-red-dark: #b71c1c;
+  --wells-red-light: #e74c3c;
+  --wells-gold: #ffcd11;
+  --wells-gold-dark: #e6b800;
+  --wells-black: #000000;
+  --wells-gray-dark: #333333;
+  --wells-gray: #666666;
+  --wells-gray-light: #cccccc;
+  --wells-gray-lighter: #f4f4f4;
+  --wells-white: #ffffff;
+  --wells-success: #2e7d32;
+  --wells-error: #d32f2f;
+  --wells-warning: #f57c00;
+  --font-family: "Gotham", "Helvetica Neue", Arial, sans-serif;
+  --modal-z-index: 1000;
+  --modal-overlay-z-index: 999;
+  --header-z-index: 100;
+  --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Global styles for the Wells Fargo page */
+.reg001-wells-fargo-landing * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-family);
+}
+
+.reg001-wells-fargo-landing {
+  width: 100%;
+  min-height: 100vh;
+  position: relative;
+  background-color: var(--wells-white);
+  color: var(--wells-gray-dark);
+  overflow-x: hidden;
+}
+
+/* Background styles */
+.reg001-background-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  background: linear-gradient(rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.92)),
+              url('/Images/banking-background.jpg') center/cover no-repeat;
+}
+
+.reg001-background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.85);
+  z-index: 1;
+}
+
+/* Container for the page content */
+.reg001-landing-container {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header styles */
+.reg001-landing-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--wells-gray-light);
+  position: relative;
+  z-index: var(--header-z-index);
+  background-color: var(--wells-white);
+}
+
+.reg001-logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.reg001-wells-fargo-logo {
+  height: 50px;
+  max-width: 180px;
+  object-fit: contain;
+}
+
+.reg001-user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.reg001-user-menu span {
+  font-weight: 500;
+  color: var(--wells-gray-dark);
+}
+
+.reg001-logout-btn {
+  background-color: var(--wells-red);
+  color: var(--wells-white);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reg001-logout-btn:hover {
+  background-color: var(--wells-red-dark);
+}
+
+/* Main content styles */
+.reg001-landing-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.reg001-welcome-section {
+  margin-bottom: 30px;
+}
+
+.reg001-welcome-section h1 {
+  font-size: 32px;
+  color: var(--wells-red);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.reg001-welcome-section p {
+  font-size: 18px;
+  color: var(--wells-gray);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Security features section */
+.reg001-security-features {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.reg001-feature {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.reg001-icon-lock,
+.reg001-icon-shield,
+.reg001-icon-mobile {
+  width: 40px;
+  height: 40px;
+  background-color: var(--wells-gold);
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--wells-black);
+  position: relative;
+}
+
+.reg001-icon-lock:before {
+  content: "🔒";
+  font-size: 20px;
+}
+
+.reg001-icon-shield:before {
+  content: "🛡️";
+  font-size: 20px;
+}
+
+.reg001-icon-mobile:before {
+  content: "📱";
+  font-size: 20px;
+}
+
+.reg001-feature span {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--wells-gray-dark);
+}
+
+/* CTA buttons */
+.reg001-cta-buttons {
+  display: flex;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.reg001-login-btn,
+.reg001-register-btn {
+  padding: 12px 30px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.reg001-login-btn {
+  background-color: var(--wells-red);
+  color: var(--wells-white);
+  border: none;
+}
+
+.reg001-login-btn:hover {
+  background-color: var(--wells-red-dark);
+}
+
+.reg001-register-btn {
+  background-color: var(--wells-white);
+  color: var(--wells-red);
+  border: 2px solid var(--wells-red);
+}
+
+.reg001-register-btn:hover {
+  background-color: rgba(215, 30, 40, 0.05);
+}
+
+.reg001-login-btn:disabled,
+.reg001-register-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Footer styles */
+.reg001-landing-footer {
+  padding: 20px 0;
+  border-top: 1px solid var(--wells-gray-light);
+  text-align: center;
+  font-size: 12px;
+  color: var(--wells-gray);
+  background-color: var(--wells-white);
+}
+
+.reg001-footer-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 10px;
+}
+
+.reg001-footer-links a {
+  color: var(--wells-gray);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.reg001-footer-links a:hover {
+  color: var(--wells-red);
+  text-decoration: underline;
+}
+
+/* Modal overlay */
+.reg001-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: var(--modal-overlay-z-index);
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Modal content */
+.reg001-modal-content {
+  background-color: var(--wells-white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  z-index: var(--modal-z-index);
+}
+
+.reg001-close-modal {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--wells-gray);
+  cursor: pointer;
+  transition: color 0.2s ease;
+  z-index: 2;
+}
+
+.reg001-close-modal:hover {
+  color: var(--wells-black);
+}
+
+.reg001-modal-header {
+  text-align: center;
+  margin-bottom: 25px;
+  padding-top: 10px;
+}
+
+.reg001-modal-logo {
+  height: 35px;
+  margin-bottom: 15px;
+}
+
+.reg001-modal-header h2 {
+  font-size: 20px;
+  color: var(--wells-gray-dark);
+  font-weight: 600;
+}
+
+/* Form styles */
+.reg001-login-form,
+.reg001-register-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.reg001-input-group {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.reg001-input-row {
+  display: flex;
+  gap: 15px;
+}
+
+.reg001-input-row .reg001-input-group {
+  flex: 1;
+}
+
+.reg001-input-group label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 500;
+  color: var(--wells-gray-dark);
+}
+
+.reg001-modal-input {
+  padding: 12px;
+  border: 1px solid var(--wells-gray-light);
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.reg001-modal-input:focus {
+  border-color: var(--wells-red);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.1);
+}
+
+.reg001-modal-input:disabled {
+  background-color: var(--wells-gray-lighter);
+  cursor: not-allowed;
+}
+
+.reg001-modal-submit,
+.reg001-register-submit,
+.reg001-next-btn,
+.reg001-back-btn,
+.reg001-verify-btn,
+.reg001-cancel-btn {
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.reg001-modal-submit,
+.reg001-register-submit,
+.reg001-next-btn,
+.reg001-verify-btn {
+  background-color: var(--wells-red);
+  color: var(--wells-white);
+}
+
+.reg001-modal-submit:hover,
+.reg001-register-submit:hover,
+.reg001-next-btn:hover,
+.reg001-verify-btn:hover {
+  background-color: var(--wells-red-dark);
+}
+
+.reg001-back-btn,
+.reg001-cancel-btn {
+  background-color: var(--wells-gray-light);
+  color: var(--wells-gray-dark);
+}
+
+.reg001-back-btn:hover,
+.reg001-cancel-btn:hover {
+  background-color: var(--wells-gray);
+  color: var(--wells-white);
+}
+
+.reg001-modal-submit:disabled,
+.reg001-register-submit:disabled,
+.reg001-next-btn:disabled,
+.reg001-back-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Remember me checkbox */
+.reg001-remember-me {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.reg001-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.reg001-checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--wells-red);
+}
+
+.reg001-checkbox-label span {
+  font-size: 14px;
+  color: var(--wells-gray-dark);
+}
+
+.reg001-checkbox-help {
+  font-size: 12px;
+  color: var(--wells-gray);
+  margin-left: 24px;
+}
+
+/* Password input with toggle */
+.reg001-password-group {
+  position: relative;
+}
+
+.reg001-password-input-wrapper {
+  position: relative;
+}
+
+.reg001-password-toggle {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--wells-gray);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.reg001-password-toggle:hover {
+  color: var(--wells-gray-dark);
+}
+
+/* Error messages */
+.reg001-error-message,
+.reg001-error-text {
+  color: var(--wells-error);
+  font-size: 14px;
+  margin-top: 5px;
+  background-color: rgba(211, 47, 47, 0.05);
+  padding: 8px;
+  border-radius: 4px;
+  border-left: 3px solid var(--wells-error);
+}
+
+/* Modal extra links */
+.reg001-modal-extra-links {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 10px;
+}
+
+.reg001-modal-extra-links a {
+  color: var(--wells-red);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s ease;
+}
+
+.reg001-modal-extra-links a:hover {
+  text-decoration: underline;
+}
+
+.reg001-modal-extra-links a:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Login specific security features */
+.reg001-login-security {
+  margin: 10px 0;
+}
+
+/* Registration form styles */
+.reg001-register-form {
+  max-width: 100%;
+}
+
+.reg001-form-progress {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.reg001-progress-step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--wells-gray-light);
+  color: var(--wells-gray-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.reg001-progress-step.active {
+  background-color: var(--wells-red);
+  color: var(--wells-white);
+}
+
+.reg001-progress-step.completed {
+  background-color: var(--wells-success);
+  color: var(--wells-white);
+}
+
+.reg001-progress-line {
+  flex: 1;
+  height: 2px;
+  background-color: var(--wells-gray-light);
+  margin: 0 10px;
+}
+
+.reg001-form-step {
+  width: 100%;
+}
+
+.reg001-form-step h3 {
+  font-size: 18px;
+  color: var(--wells-gray-dark);
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.reg001-form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.reg001-form-actions button {
+  min-width: 120px;
+}
+
+/* Input hints */
+.reg001-input-hint {
+  font-size: 12px;
+  color: var(--wells-gray);
+  margin-top: 5px;
+}
+
+/* Password strength indicator */
+.reg001-password-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 5px;
+}
+
+.reg001-strength-meter {
+  height: 6px;
+  flex: 1;
+  border-radius: 3px;
+}
+
+.reg001-strength-weak .reg001-strength-meter {
+  background-color: var(--wells-error);
+  width: 30%;
+}
+
+.reg001-strength-medium .reg001-strength-meter {
+  background-color: var(--wells-warning);
+  width: 60%;
+}
+
+.reg001-strength-strong .reg001-strength-meter {
+  background-color: var(--wells-success);
+  width: 100%;
+}
+
+.reg001-strength-text {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.reg001-strength-weak .reg001-strength-text {
+  color: var(--wells-error);
+}
+
+.reg001-strength-medium .reg001-strength-text {
+  color: var(--wells-warning);
+}
+
+.reg001-strength-strong .reg001-strength-text {
+  color: var(--wells-success);
+}
+
+/* Terms and conditions */
+.reg001-terms {
+  margin-top: 10px;
+}
+
+.reg001-terms a {
+  color: var(--wells-red);
+  text-decoration: none;
+}
+
+.reg001-terms a:hover {
+  text-decoration: underline;
+}
+
+/* Saved username display */
+.reg001-saved-username {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px;
+  border: 1px solid var(--wells-gray-light);
+  border-radius: 4px;
+  background-color: var(--wells-gray-lighter);
+}
+
+.reg001-saved-username span {
+  font-weight: 500;
+}
+
+.reg001-change-username {
+  background: none;
+  border: none;
+  color: var(--wells-red);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.reg001-change-username:hover {
+  text-decoration: underline;
+}
+
+/* Dashboard styles */
+.reg001-dashboard {
+  width: 100%;
+  max-width: 900px;
+  padding: 20px;
+}
+
+.reg001-account-summary,
+.reg001-quick-actions {
+  background-color: var(--wells-white);
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: var(--box-shadow);
+  text-align: left;
+}
+
+.reg001-account-summary h2,
+.reg001-quick-actions h2 {
+  color: var(--wells-red);
+  margin-bottom: 15px;
+  font-size: 20px;
+}
+
+.reg001-account-summary p {
+  margin-bottom: 20px;
+  color: var(--wells-gray);
+}
+
+.reg001-dashboard-btn {
+  background-color: var(--wells-red);
+  color: var(--wells-white);
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.reg001-dashboard-btn:hover {
+  background-color: var(--wells-red-dark);
+}
+
+.reg001-action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.reg001-action-btn {
+  background-color: var(--wells-white);
+  color: var(--wells-red);
+  border: 1px solid var(--wells-red);
+  border-radius: 4px;
+  padding: 15px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reg001-action-btn:hover {
+  background-color: var(--wells-red);
+  color: var(--wells-white);
+}
+
+/* Security verification modal */
+.reg001-security-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: calc(var(--modal-overlay-z-index) + 10);
+  padding: 20px;
+}
+
+.reg001-security-modal {
+  background-color: var(--wells-white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 450px;
+  position: relative;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  z-index: calc(var(--modal-z-index) + 10);
+}
+
+.reg001-security-modal-header {
+  background-color: var(--wells-red);
+  color: var(--wells-white);
+  padding: 15px 20px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reg001-security-modal-header h3 {
+  font-size: 18px;
+  margin: 0;
+}
+
+.reg001-security-modal-body {
+  padding: 20px;
+}
+
+.reg001-security-modal-body p {
+  margin-bottom: 20px;
+  color: var(--wells-gray-dark);
+  line-height: 1.5;
+}
+
+.reg001-form-group {
+  margin-bottom: 20px;
+}
+
+.reg001-verification-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--wells-gray-light);
+  border-radius: 4px;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.reg001-verification-input:focus {
+  border-color: var(--wells-red);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.1);
+}
+
+.reg001-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .reg001-security-features {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .reg001-cta-buttons {
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .reg001-input-row {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .reg001-modal-content {
+    max-width: 90%;
+  }
+
+  .reg001-footer-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .reg001-landing-header {
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px 0;
+  }
+
+  .reg001-welcome-section h1 {
+    font-size: 24px;
+  }
+
+  .reg001-welcome-section p {
+    font-size: 16px;
+  }
+
+  .reg001-modal-extra-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .reg001-form-actions {
+    flex-direction: column-reverse;
+    gap: 10px;
+  }
+
+  .reg001-form-actions button {
+    width: 100%;
+  }
+}

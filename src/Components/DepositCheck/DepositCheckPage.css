@@ -1,0 +1,857 @@
+:root {
+  --wf-red: #CD1309;
+  --wf-gold: #FFBC3B;
+  --wf-yellow: #FBE122;
+  --wf-blue: #00698C;
+  --wf-dark-blue: #004C6C;
+  --wf-light-gray: #F5F5F5;
+  --wf-medium-gray: #E0E0E0;
+  --wf-dark-gray: #666666;
+  --wf-black: #333333;
+  --wf-white: #FFFFFF;
+  --wf-success: #008555;
+  --wf-warning: #FFA500;
+  --wf-error: #CC0000;
+}
+
+/* Reset and Base Styles */
+.deposit-check-page * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.deposit-check-page {
+  background-color: var(--wf-white);
+  color: var(--wf-black);
+  line-height: 1.5;
+  max-width: 100%;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page Header */
+.dep0011-page-header {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: var(--wf-white);
+  border-bottom: 1px solid var(--wf-medium-gray);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dep0011-back-button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  /* color: var(--wf-blue); */
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.dep0011-back-button:hover {
+  background-color: rgba(0, 105, 140, 0.1);
+}
+
+.dep0011-wells-fargo-branding {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.dep0011-logo-container {
+  width: 140px;
+  height: 35px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dep0011-wf-logo {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Page Content */
+.page-content {
+  flex: 1;
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-title-container {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.page-title-container h1 {
+  color: var(--wf-blue);
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: var(--wf-dark-gray);
+  font-size: 16px;
+}
+
+/* Steps Indicator */
+.steps-indicator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 30px 0;
+  position: relative;
+}
+
+.step-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+  position: relative;
+  flex: 1;
+}
+
+.step-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--wf-medium-gray);
+  color: var(--wf-dark-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.step-label {
+  font-size: 14px;
+  color: var(--wf-dark-gray);
+  text-align: center;
+  transition: color 0.3s ease;
+}
+
+.step-item.active .step-number {
+  background-color: var(--wf-blue);
+  color: var(--wf-white);
+}
+
+.step-item.active .step-label {
+  color: var(--wf-blue);
+  font-weight: 600;
+}
+
+.step-connector {
+  flex: 1;
+  height: 2px;
+  background-color: var(--wf-medium-gray);
+  position: relative;
+  margin: 0 5px;
+  top: -20px;
+  z-index: 0;
+}
+
+/* Step Container */
+.step-container {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.step-container h2 {
+  color: var(--wf-blue);
+  font-size: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--wf-medium-gray);
+  padding-bottom: 10px;
+}
+
+/* Deposit Limits Info */
+.deposit-limits-info {
+  background-color: var(--wf-light-gray);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.deposit-limits-info h3 {
+  color: var(--wf-blue);
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.limits-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.limit-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: var(--wf-white);
+  border-left: 3px solid var(--wf-blue);
+}
+
+.limit-label {
+  font-weight: 600;
+  color: var(--wf-dark-gray);
+}
+
+.limit-value {
+  font-weight: 600;
+  color: var(--wf-blue);
+}
+
+/* Form Styles */
+.deposit-form {
+  margin-bottom: 24px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--wf-black);
+}
+
+.form-select,
+.amount-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--wf-medium-gray);
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+
+.form-select:focus,
+.amount-input:focus {
+  border-color: var(--wf-blue);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 105, 140, 0.2);
+}
+
+.amount-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 12px;
+  font-weight: 600;
+  color: var(--wf-dark-gray);
+}
+
+.amount-input {
+  padding-left: 28px;
+}
+
+.checkbox-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.checkbox-group input[type="checkbox"] {
+  margin-right: 10px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--wf-blue);
+}
+
+.checkbox-group label {
+  margin-bottom: 0;
+  font-weight: normal;
+}
+
+.receipt-options {
+  margin-top: 20px;
+}
+
+/* Button Styles */
+.button {
+  font-weight: 600;
+  font-size: 16px;
+  padding: 12px 24px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.button.primary {
+  background-color: var(--wf-blue);
+  color: var(--wf-white);
+}
+
+.button.primary:hover {
+  background-color: var(--wf-dark-blue);
+}
+
+.button.secondary {
+  background-color: var(--wf-white);
+  color: var(--wf-blue);
+  border: 1px solid var(--wf-blue);
+}
+
+.button.secondary:hover {
+  background-color: rgba(0, 105, 140, 0.1);
+}
+
+.button:disabled {
+  background-color: var(--wf-medium-gray);
+  border-color: var(--wf-medium-gray);
+  color: var(--wf-dark-gray);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--wf-blue);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 4px;
+  font-size: 14px;
+  text-decoration: underline;
+}
+
+.link-button:hover {
+  color: var(--wf-dark-blue);
+}
+
+.deposit-history-link {
+  text-align: center;
+  margin-top: 16px;
+}
+
+/* Error and Info Messages */
+.error-message,
+.info-message {
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.error-message {
+  background-color: rgba(204, 0, 0, 0.1);
+  border-left: 4px solid var(--wf-error);
+  color: var(--wf-error);
+}
+
+.info-message {
+  background-color: rgba(0, 105, 140, 0.1);
+  border-left: 4px solid var(--wf-blue);
+  color: var(--wf-dark-gray);
+}
+
+/* Check Capture Styles */
+.capture-instructions {
+  margin-bottom: 24px;
+}
+
+.capture-instructions ul {
+  margin-left: 20px;
+  margin-top: 8px;
+}
+
+.capture-instructions li {
+  margin-bottom: 6px;
+}
+
+.check-capture-container {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 768px) {
+  .check-capture-container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.check-side {
+  display: flex;
+  flex-direction: column;
+}
+
+.check-side h3 {
+  font-size: 16px;
+  margin-bottom: 12px;
+  color: var(--wf-blue);
+  text-align: center;
+}
+
+.camera-container {
+  background-color: var(--wf-light-gray);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  aspect-ratio: 4/3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--wf-medium-gray);
+  margin-bottom: 12px;
+}
+
+.camera-view {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.camera-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.camera-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wf-white);
+}
+
+.check-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.camera-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+/* Endorsement Instructions */
+.endorsement-instructions {
+  background-color: var(--wf-light-gray);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.endorsement-instructions h3 {
+  color: var(--wf-blue);
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.endorsement-instructions ol {
+  margin-left: 20px;
+}
+
+.endorsement-instructions li {
+  margin-bottom: 6px;
+}
+
+/* Validation Errors */
+.validation-errors {
+  background-color: rgba(204, 0, 0, 0.1);
+  border-radius: 6px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.validation-errors p {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--wf-error);
+}
+
+.validation-errors ul {
+  margin-left: 20px;
+}
+
+.validation-errors li {
+  margin-bottom: 4px;
+  color: var(--wf-error);
+}
+
+/* Review Styles */
+.review-container {
+  margin-bottom: 24px;
+}
+
+.review-section {
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--wf-medium-gray);
+  padding-bottom: 16px;
+}
+
+.review-section:last-child {
+  border-bottom: none;
+}
+
+.review-section h3 {
+  color: var(--wf-blue);
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+.review-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.review-label {
+  width: 140px;
+  font-weight: 600;
+  color: var(--wf-dark-gray);
+}
+
+.review-value {
+  flex: 1;
+}
+
+.check-images-review {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .check-images-review {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.check-review-side {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.check-label {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--wf-blue);
+}
+
+.check-review-image {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border: 1px solid var(--wf-medium-gray);
+  border-radius: 4px;
+  background-color: var(--wf-light-gray);
+}
+
+.deposit-agreement {
+  background-color: var(--wf-light-gray);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 24px;
+}
+
+.deposit-agreement p {
+  margin-top: 16px;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.deposit-agreement ul {
+  margin-left: 20px;
+}
+
+.deposit-agreement li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+/* Success Container */
+.success-container {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 32px 24px;
+  text-align: center;
+}
+
+.success-icon {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
+.success-container h2 {
+  color: var(--wf-success);
+  margin-bottom: 16px;
+  font-size: 24px;
+}
+
+.success-message {
+  font-size: 18px;
+  margin-bottom: 24px;
+}
+
+.deposit-details {
+  background-color: var(--wf-light-gray);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.detail-item {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.detail-label {
+  width: 160px;
+  font-weight: 600;
+  color: var(--wf-dark-gray);
+}
+
+.detail-value {
+  flex: 1;
+}
+
+.next-steps-container {
+  margin-bottom: 24px;
+  text-align: left;
+}
+
+.next-steps-container h3 {
+  color: var(--wf-blue);
+  margin-bottom: 12px;
+  font-size: 18px;
+}
+
+.next-steps-container ul {
+  margin-left: 20px;
+}
+
+.next-steps-container li {
+  margin-bottom: 8px;
+}
+
+.check-retention-info {
+  background-color: rgba(255, 188, 59, 0.2);
+  border-left: 4px solid var(--wf-gold);
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  text-align: left;
+  border-radius: 4px;
+}
+
+.check-retention-info h4 {
+  color: var(--wf-black);
+  margin-bottom: 8px;
+}
+
+.daily-limit-update {
+  margin-bottom: 24px;
+}
+
+.processing-note {
+  font-style: italic;
+  color: var(--wf-dark-gray);
+  margin-bottom: 24px;
+}
+
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (min-width: 576px) {
+  .success-actions {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.support-section {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--wf-medium-gray);
+}
+
+/* FAQ Section */
+.deposit-faq {
+  margin-top: 32px;
+}
+
+.faq-section h3 {
+  color: var(--wf-blue);
+  font-size: 20px;
+  margin-bottom: 16px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--wf-medium-gray);
+  padding: 12px 0;
+}
+
+.faq-question {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--wf-black);
+}
+
+.faq-answer {
+  color: var(--wf-dark-gray);
+  font-size: 14px;
+}
+
+/* Footer */
+.deposit-page-footer {
+  background-color: var(--wf-light-gray);
+  padding: 16px;
+  text-align: center;
+  font-size: 14px;
+  color: var(--wf-dark-gray);
+  margin-top: 40px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 8px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 576px) {
+  .page-header {
+    padding: 12px 16px;
+  }
+  
+  .page-content {
+    padding: 16px;
+  }
+  
+  .logo-container {
+    width: 120px;
+    height: 30px;
+  }
+  
+  .step-container, 
+  .success-container {
+    padding: 16px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .button {
+    width: 100%;
+  }
+}
+
+/* Add loading indicator styles */
+.loading-indicator {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--wf-white);
+  animation: spin 1s ease-in-out infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Additional utilities */
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.font-bold {
+  font-weight: 600;
+}
+
+.text-success {
+  color: var(--wf-success);
+}
+
+.text-warning {
+  color: var(--wf-warning);
+}
+
+.text-error {
+  color: var(--wf-error);
+}
+
+.text-primary {
+  color: var(--wf-blue);
+}

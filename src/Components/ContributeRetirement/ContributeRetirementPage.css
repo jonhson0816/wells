@@ -1,0 +1,373 @@
+:root {
+    --wf-red: #D71E28;
+    --wf-yellow: #FFBC3B;
+    --wf-grey: #F5F5F5;
+    --wf-dark-grey: #666666;
+    --wf-black: #333333;
+    --wf-white: #FFFFFF;
+    --wf-border: #DDDDDD;
+    --wf-success: #008852;
+    --wf-focus: #0078E7;
+  }
+  
+  .che004-contribute-retirement-container {
+    font-family: 'Univers Next', 'Helvetica Neue', Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    color: var(--wf-black);
+    background-color: var(--wf-white);
+  }
+  
+  /* Header Styles */
+  .che004-account-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: var(--wf-white);
+    border-bottom: 1px solid var(--wf-border);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .che004-back-button {
+    display: flex;
+    align-items: center;
+    color: var(--wf-focus);
+    font-weight: 500;
+    cursor: pointer;
+    transition: color 0.2s ease;
+  }
+  
+  .che004-back-button:hover {
+    color: var(--wf-red);
+  }
+  
+  .che004-back-arrow {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+  
+  .che004-wells-fargo-branding {
+    display: flex;
+    align-items: center;
+  }
+  
+  .che004-logo-container {
+    height: 40px;
+    width: auto;
+  }
+  
+  .che004-wf-logo {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+  
+  /* Main Content Styles */
+  .che004-contribute-retirement-main {
+    padding: 24px;
+    background-color: var(--wf-white);
+  }
+  
+  .che004-page-title {
+    font-size: 28px;
+    font-weight: bold;
+    color: var(--wf-black);
+    margin-bottom: 24px;
+    border-bottom: 3px solid var(--wf-red);
+    padding-bottom: 8px;
+    display: inline-block;
+  }
+  
+  .che004-form-section {
+    margin-bottom: 32px;
+    background-color: var(--wf-white);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .che004-section-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--wf-black);
+  }
+  
+  /* Account Selection Styles */
+  .che004-accounts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  .che004-account-card {
+    border: 2px solid var(--wf-border);
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    background-color: var(--wf-white);
+  }
+  
+  .che004-account-card:hover {
+    border-color: var(--wf-focus);
+    box-shadow: 0 4px 12px rgba(0, 120, 231, 0.1);
+  }
+  
+  .che004-account-card.che004-selected {
+    border-color: var(--wf-focus);
+    background-color: rgba(0, 120, 231, 0.05);
+  }
+  
+  .che004-account-info {
+    flex: 1;
+  }
+  
+  .che004-account-name {
+    font-weight: 600;
+    font-size: 18px;
+    margin-bottom: 8px;
+    color: var(--wf-black);
+  }
+  
+  .che004-account-number {
+    font-size: 14px;
+    color: var(--wf-dark-grey);
+    margin-bottom: 4px;
+  }
+  
+  .che004-account-balance {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--wf-black);
+  }
+  
+  .che004-select-indicator {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--wf-border);
+    position: relative;
+    margin-top: 8px;
+  }
+  
+  .che004-account-card.che004-selected .che004-select-indicator::after {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: var(--wf-focus);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Form Controls Styles */
+  .che004-form-group {
+    margin-bottom: 24px;
+  }
+  
+  .che004-form-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--wf-black);
+  }
+  
+  .che004-form-input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--wf-border);
+    border-radius: 4px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+  }
+  
+  .che004-form-input:focus {
+    border-color: var(--wf-focus);
+    box-shadow: 0 0 0 2px rgba(0, 120, 231, 0.2);
+    outline: none;
+  }
+  
+  .che004-amount-input-container {
+    position: relative;
+    max-width: 300px;
+  }
+  
+  .che004-amount-input {
+    padding-left: 16px;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  
+  /* Radio Button Styles */
+  .che004-radio-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  
+  .che004-radio-option {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+  }
+  
+  .che004-radio-input {
+    margin-right: 8px;
+    accent-color: var(--wf-focus);
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+  }
+  
+  .che004-radio-label {
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .che004-select-source {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--wf-border);
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+  
+  /* Button Styles */
+  .che004-form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  
+  .che004-button {
+    padding: 12px 24px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+  
+  .che004-button-primary {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+  }
+  
+  .che004-button-primary:hover {
+    background-color: #B71C24;
+  }
+  
+  .che004-button-secondary {
+    background-color: var(--wf-white);
+    color: var(--wf-black);
+    border: 1px solid var(--wf-border);
+  }
+  
+  .che004-button-secondary:hover {
+    background-color: var(--wf-grey);
+  }
+  
+  /* Confirmation Styles */
+  .che004-confirmation-section {
+    background-color: var(--wf-white);
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .che004-confirmation-details {
+    background-color: var(--wf-grey);
+    border-radius: 8px;
+    padding: 24px;
+    margin: 16px 0 32px;
+  }
+  
+  .che004-confirmation-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--wf-border);
+  }
+  
+  .che004-confirmation-row:last-child {
+    border-bottom: none;
+  }
+  
+  .che004-confirmation-label {
+    font-weight: 600;
+    color: var(--wf-dark-grey);
+  }
+  
+  .che004-confirmation-value {
+    font-weight: 600;
+    color: var(--wf-black);
+  }
+  
+  /* Footer Styles */
+  .che004-page-footer {
+    padding: 24px;
+    text-align: center;
+    border-top: 1px solid var(--wf-border);
+    margin-top: 48px;
+    color: var(--wf-dark-grey);
+    font-size: 14px;
+  }
+  
+  .che004-footer-links {
+    margin-top: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+  }
+  
+  .che004-footer-link {
+    color: var(--wf-focus);
+    text-decoration: none;
+  }
+  
+  .che004-footer-link:hover {
+    text-decoration: underline;
+  }
+  
+  /* Responsive Adjustments */
+  @media (max-width: 768px) {
+    .che004-accounts-container {
+      grid-template-columns: 1fr;
+    }
+    
+    .che004-form-actions {
+      flex-direction: column;
+    }
+    
+    .che004-button {
+      width: 100%;
+    }
+    
+    .che004-confirmation-row {
+      flex-direction: column;
+      gap: 4px;
+    }
+    
+    .che004-account-page-header {
+      padding: 12px 16px;
+    }
+    
+    .che004-logo-container {
+      height: 32px;
+    }
+  }

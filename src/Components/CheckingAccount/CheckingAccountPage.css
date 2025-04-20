@@ -1,0 +1,857 @@
+/* Wells Fargo Checking Account Page Styles */
+/* Using the che004 prefix to scope styles to this component only */
+
+/* Variables for Wells Fargo brand colors */
+:root {
+  --wf-red: #D71E2B;
+  --wf-gold: #FFBC0B;
+  --wf-dark-red: #B01F24;
+  --wf-black: #000000;
+  --wf-dark-gray: #333333;
+  --wf-medium-gray: #666666;
+  --wf-light-gray: #EEEEEE;
+  --wf-white: #FFFFFF;
+  --wf-border-color: #E0E0E0;
+  --wf-input-border: #CCCCCC;
+  --wf-success-green: #007D3D;
+  --wf-hover-bg: #F8F8F8;
+  --wf-light-red: #FFF1F1;
+}
+
+/* Base styles and resets */
+.che004-checking-account-page {
+  font-family: 'Verdana', 'Arial', sans-serif;
+  color: var(--wf-dark-gray);
+  background-color: var(--wf-white);
+  min-height: 100vh;
+  position: relative;
+  padding-bottom: 60px;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.che004-checking-account-page * {
+  box-sizing: border-box;
+}
+
+/* Fixed header styles */
+.che004-dashboard-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--wf-white);
+  border-bottom: 1px solid var(--wf-border-color);
+  padding: 12px 24px;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.che004-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.che004-logo {
+  height: 40px;
+  transition: opacity 0.2s;
+}
+
+.che004-logo:hover {
+  opacity: 0.9;
+}
+
+.che004-back-button {
+  display: flex;
+  align-items: center;
+  color: var(--wf-dark-red);
+  font-weight: 600;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.che004-back-button:hover {
+  background-color: var(--wf-light-gray);
+}
+
+.che004-back-arrow {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+/* Main content area */
+.che004-account-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 16px;
+}
+
+/* Account overview section */
+.che004-account-overview {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.che004-account-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--wf-light-gray);
+  padding-bottom: 16px;
+}
+
+.che004-account-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--wf-dark-red);
+}
+
+.che004-account-number {
+  font-size: 14px;
+  color: var(--wf-medium-gray);
+  font-weight: 600;
+}
+
+.che004-balance-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+.che004-balance-box {
+  flex: 1;
+  min-width: 200px;
+  background-color: var(--wf-light-gray);
+  padding: 16px;
+  border-radius: 6px;
+  border-left: 4px solid var(--wf-red);
+}
+
+.che004-balance-label {
+  font-size: 14px;
+  color: var(--wf-medium-gray);
+  margin-bottom: 4px;
+  display: block;
+}
+
+.che004-balance-amount {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 8px 0 0 0;
+  color: var(--wf-dark-gray);
+}
+
+.che004-account-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.che004-detail-item {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--wf-light-gray);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.che004-detail-label {
+  font-weight: 600;
+  color: var(--wf-medium-gray);
+}
+
+.che004-detail-value {
+  font-weight: 600;
+}
+
+/* Quick actions section */
+.che004-quick-actions {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.che004-quick-actions h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--wf-dark-gray);
+  border-bottom: 2px solid var(--wf-gold);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.che004-action-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.che004-action-btn {
+  background-color: var(--wf-white);
+  color: var(--wf-dark-red);
+  border: 1px solid var(--wf-red);
+  border-radius: 6px;
+  padding: 12px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  outline: none;
+}
+
+.che004-action-btn:hover {
+  background-color: var(--wf-light-red);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.che004-action-btn.che004-small {
+  padding: 6px 12px;
+  font-size: 12px;
+}
+
+/* Transactions section */
+.che004-transactions-section {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.che004-transactions-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.che004-transactions-header h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  color: var(--wf-dark-gray);
+  border-bottom: 2px solid var(--wf-gold);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.che004-transaction-filters {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.che004-filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.che004-filter-group label {
+  font-weight: 600;
+  color: var(--wf-medium-gray);
+  font-size: 14px;
+}
+
+.che004-filter-select {
+  padding: 8px 12px;
+  border: 1px solid var(--wf-input-border);
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: var(--wf-white);
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.che004-filter-select:focus {
+  border-color: var(--wf-red);
+}
+
+.che004-transactions-table-container {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.che004-transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.che004-transactions-table th {
+  background-color: var(--wf-light-gray);
+  color: var(--wf-dark-gray);
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px;
+  border-bottom: 2px solid var(--wf-border-color);
+}
+
+.che004-transactions-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--wf-border-color);
+}
+
+.che004-transaction-row {
+  transition: background-color 0.2s;
+}
+
+.che004-transaction-row:hover {
+  background-color: var(--wf-hover-bg);
+}
+
+.che004-deposit {
+  color: var(--wf-success-green);
+}
+
+.che004-withdrawal, .che004-fee {
+  color: var(--wf-red);
+}
+
+.che004-no-transactions {
+  text-align: center;
+  padding: 24px;
+  color: var(--wf-medium-gray);
+  font-style: italic;
+}
+
+/* Account management section */
+.che004-account-management {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px;
+  margin-bottom: 24px;
+}
+
+.che004-account-management h2 {
+  font-size: 20px;
+  font-weight: 700;
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: var(--wf-dark-gray);
+  border-bottom: 2px solid var(--wf-gold);
+  padding-bottom: 8px;
+  display: inline-block;
+}
+
+.che004-management-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.che004-management-option {
+  display: flex;
+  align-items: flex-start;
+  padding: 16px;
+  border: 1px solid var(--wf-border-color);
+  border-radius: 6px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.che004-management-option:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-color: var(--wf-red);
+}
+
+.che004-option-icon {
+  font-size: 24px;
+  margin-right: 12px;
+  color: var(--wf-dark-red);
+}
+
+.che004-option-content h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  color: var(--wf-dark-gray);
+}
+
+.che004-option-content p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--wf-medium-gray);
+}
+
+/* Modal styles */
+.che004.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.che004.modal-content {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.che004.modal-header {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.che004.modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.che004.close-modal {
+  background: none;
+  border: none;
+  color: var(--wf-white);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+.che004.modal-body {
+  padding: 24px;
+}
+
+.che004.form-group {
+  margin-bottom: 20px;
+}
+
+.che004.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--wf-dark-gray);
+}
+
+.che004.form-input,
+.che004.form-select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--wf-input-border);
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.che004.form-input:focus,
+.che004.form-select:focus {
+  border-color: var(--wf-red);
+  outline: none;
+}
+
+.che004.input-with-icon {
+  position: relative;
+}
+
+.che004.currency-symbol {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  font-weight: 600;
+  color: var(--wf-medium-gray);
+}
+
+.che004.input-with-icon input {
+  padding-left: 24px;
+}
+
+.che004.radio-options {
+  display: flex;
+  gap: 20px;
+}
+
+.che004.radio-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.che004.radio-label input {
+  margin-right: 8px;
+}
+
+.che004.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.che004.button-primary,
+.che004.button-secondary {
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+  border: none;
+}
+
+.che004.button-primary {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+}
+
+.che004.button-primary:hover {
+  background-color: var(--wf-dark-red);
+}
+
+.che004.button-primary:disabled {
+  background-color: var(--wf-light-gray);
+  color: var(--wf-medium-gray);
+  cursor: not-allowed;
+}
+
+.che004.button-secondary {
+  background-color: var(--wf-white);
+  color: var(--wf-dark-gray);
+  border: 1px solid var(--wf-input-border);
+}
+
+.che004.button-secondary:hover {
+  background-color: var(--wf-light-gray);
+}
+
+/* Security Verification Modal Styles */
+.che004.security-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000; /* Higher than regular modals */
+}
+
+.che004.security-modal {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  animation: modalAppear 0.3s ease-out;
+}
+
+@keyframes modalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.che004.security-modal-header {
+  background-color: var(--wf-dark-red);
+  color: var(--wf-white);
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+}
+
+.che004.security-modal-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.che004.security-modal-body {
+  padding: 24px;
+}
+
+.che004.verification-input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid var(--wf-input-border);
+  border-radius: 4px;
+  font-size: 16px;
+  letter-spacing: 1px;
+  font-weight: 600;
+  text-align: center;
+  transition: border-color 0.2s;
+  margin-top: 8px;
+}
+
+.che004.verification-input:focus {
+  border-color: var(--wf-red);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(215, 30, 43, 0.2);
+}
+
+.che004.error-text {
+  color: var(--wf-red);
+  font-size: 14px;
+  margin-top: 8px;
+  font-weight: 600;
+}
+
+.che004.verify-btn {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.che004.verify-btn:hover {
+  background-color: var(--wf-dark-red);
+}
+
+.che004.cancel-btn {
+  background-color: var(--wf-white);
+  color: var(--wf-dark-gray);
+  padding: 12px 20px;
+  border-radius: 4px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid var(--wf-input-border);
+}
+
+.che004.cancel-btn:hover {
+  background-color: var(--wf-light-gray);
+}
+
+/* Loading and Error States */
+.che004-loading-container,
+.che004-error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  padding: 40px;
+  text-align: center;
+}
+
+.che004-loader {
+  border: 5px solid var(--wf-light-gray);
+  border-top: 5px solid var(--wf-red);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.che004-error-container h2 {
+  color: var(--wf-red);
+  margin-bottom: 16px;
+}
+
+.che004-button {
+  padding: 12px 24px;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 8px;
+  border: none;
+  transition: all 0.2s;
+}
+
+.che004-primary {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+}
+
+.che004-primary:hover {
+  background-color: var(--wf-dark-red);
+}
+
+.che004-secondary {
+  background-color: var(--wf-white);
+  color: var(--wf-dark-gray);
+  border: 1px solid var(--wf-input-border);
+}
+
+.che004-secondary:hover {
+  background-color: var(--wf-light-gray);
+}
+
+/* Footer Styles */
+.che004-app-footer {
+  background-color: var(--wf-light-gray);
+  padding: 16px 24px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--wf-border-color);
+}
+
+.che004-footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.che004-footer-links {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.che004-footer-links a {
+  color: var(--wf-medium-gray);
+  text-decoration: none;
+  font-size: 14px;
+  transition: color 0.2s;
+}
+
+.che004-footer-links a:hover {
+  color: var(--wf-dark-red);
+  text-decoration: underline;
+}
+
+.che004-copyright {
+  font-size: 12px;
+  color: var(--wf-medium-gray);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .che004-account-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .che004-transactions-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .che004-transaction-filters {
+    width: 100%;
+    gap: 12px;
+  }
+  
+  .che004-filter-group {
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .che004-filter-select {
+    width: 100%;
+  }
+  
+  .che004-management-options {
+    grid-template-columns: 1fr;
+  }
+  
+  .che004-action-buttons {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .che004.modal-content {
+    max-width: 90%;
+    margin: 0 16px;
+  }
+  
+  .che004-dashboard-header {
+    padding: 12px 16px;
+  }
+  
+  .che004-logo {
+    height: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .che004-action-buttons {
+    grid-template-columns: 1fr;
+  }
+  
+  .che004-back-button {
+    font-size: 14px;
+  }
+  
+  .che004-account-overview,
+  .che004-quick-actions,
+  .che004-transactions-section,
+  .che004-account-management {
+    padding: 16px;
+  }
+  
+  .che004-balance-container {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .che004-balance-box {
+    min-width: unset;
+  }
+  
+  .che004-account-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .che004.modal-actions {
+    flex-direction: column;
+  }
+  
+  .che004.button-primary,
+  .che004.button-secondary,
+  .che004.verify-btn,
+  .che004.cancel-btn {
+    width: 100%;
+  }
+}

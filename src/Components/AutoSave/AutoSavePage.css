@@ -1,0 +1,401 @@
+:root {
+    --wf-red: #D71E28;
+    --wf-gold: #FFBC38;
+    --wf-black: #000000;
+    --wf-dark-gray: #333333;
+    --wf-medium-gray: #666666;
+    --wf-light-gray: #EEEEEE;
+    --wf-white: #FFFFFF;
+    --wf-success: #228B22;
+    --wf-error: #B22222;
+    --border-radius: 4px;
+    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Page container */
+  .autosave-page {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    color: var(--wf-dark-gray);
+    background-color: var(--wf-white);
+  }
+  
+  /* Header styles */
+  .autosave-page header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    position: relative;
+    padding-left: 70px;
+  }
+  
+  .autosave-page header::before {
+    content: "";
+    background-image: url('https://www.wellsfargo.com/assets/images/logos/wf-logo-red.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    left: 0;
+    top: 5px;
+  }
+  
+  .autosave-page h1 {
+    color: var(--wf-red);
+    margin: 0 0 8px 0;
+    font-size: 32px;
+    font-weight: 700;
+  }
+  
+  .autosave-page header p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--wf-medium-gray);
+  }
+  
+  /* Section styling */
+  .autosave-page section {
+    background-color: var(--wf-white);
+    border-radius: var(--border-radius);
+    margin-bottom: 30px;
+    padding: 25px;
+    box-shadow: var(--box-shadow);
+    border-top: 4px solid var(--wf-red);
+  }
+  
+  .autosave-page h2 {
+    color: var(--wf-black);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 22px;
+    font-weight: 600;
+  }
+  
+  .autosave-page h3 {
+    color: var(--wf-black);
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .autosave-page h4 {
+    color: var(--wf-dark-gray);
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  /* AutoSave status section */
+  .autosave-status {
+    margin-bottom: 20px;
+  }
+  
+  .autosave-status div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--wf-light-gray);
+    padding: 15px;
+    border-radius: var(--border-radius);
+  }
+  
+  .autosave-status span {
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+  }
+  
+  .autosave-status span::before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+    background-color: var(--wf-success);
+  }
+  
+  .autosave-status span:contains("Inactive")::before {
+    background-color: var(--wf-medium-gray);
+  }
+  
+  /* Current settings panel */
+  .autosave-current-settings {
+    background-color: var(--wf-light-gray);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-top: 20px;
+  }
+  
+  .autosave-current-settings p {
+    margin: 0 0 15px 0;
+  }
+  
+  /* Progress bar */
+  .saving-goal {
+    background-color: var(--wf-white);
+    padding: 15px;
+    border-radius: var(--border-radius);
+    margin-top: 10px;
+  }
+  
+  .progress-bar-container {
+    height: 12px;
+    background-color: var(--wf-light-gray);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  
+  .progress-bar {
+    height: 100%;
+    width: 45%; /* This would be dynamically set based on savings progress */
+    background-color: var(--wf-gold);
+  }
+  
+  /* Form styling */
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--wf-dark-gray);
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--wf-medium-gray);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    background-color: var(--wf-white);
+    box-sizing: border-box;
+  }
+  
+  .form-group input:focus,
+  .form-group select:focus {
+    outline: none;
+    border-color: var(--wf-gold);
+    box-shadow: 0 0 0 2px rgba(255, 188, 56, 0.3);
+  }
+  
+  .input-with-prefix {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-with-prefix span {
+    background-color: var(--wf-light-gray);
+    padding: 12px;
+    border: 1px solid var(--wf-medium-gray);
+    border-right: none;
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    font-weight: 600;
+  }
+  
+  .input-with-prefix input {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    flex-grow: 1;
+  }
+  
+  /* Button styles */
+  button {
+    cursor: pointer;
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.2s ease;
+  }
+  
+  .primary-button {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    border: none;
+  }
+  
+  .primary-button:hover {
+    background-color: #b51921;
+  }
+  
+  .secondary-button {
+    background-color: var(--wf-white);
+    color: var(--wf-red);
+    border: 1px solid var(--wf-red);
+  }
+  
+  .secondary-button:hover {
+    background-color: rgba(215, 30, 40, 0.05);
+  }
+  
+  .autosave-status button {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    border: none;
+  }
+  
+  .autosave-status button:hover {
+    background-color: #b51921;
+  }
+  
+  /* Rules section */
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .rules-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .rule-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background-color: var(--wf-light-gray);
+    border-radius: var(--border-radius);
+    margin-bottom: 10px;
+  }
+  
+  .rule-details h4 {
+    margin: 0 0 5px 0;
+  }
+  
+  .rule-details p {
+    margin: 0;
+    color: var(--wf-medium-gray);
+  }
+  
+  .delete-button {
+    background-color: transparent;
+    color: var(--wf-red);
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  
+  .delete-button:hover {
+    text-decoration: underline;
+  }
+  
+  /* Add rule form */
+  .add-rule-form {
+    background-color: var(--wf-light-gray);
+    padding: 20px;
+    border-radius: var(--border-radius);
+    margin-top: 20px;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  
+  /* Transaction table */
+  .transactions-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .transactions-table th {
+    text-align: left;
+    padding: 12px 15px;
+    background-color: var(--wf-light-gray);
+    border-bottom: 2px solid var(--wf-medium-gray);
+    font-weight: 600;
+  }
+  
+  .transactions-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .transactions-table tr:hover {
+    background-color: rgba(255, 188, 56, 0.1);
+  }
+  
+  /* FAQ section */
+  .faq-item {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .faq-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+  }
+  
+  .faq-item h3 {
+    color: var(--wf-black);
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+  }
+  
+  .faq-item p {
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    .autosave-status div {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .autosave-status button {
+      margin-top: 15px;
+      width: 100%;
+    }
+    
+    .section-header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .section-header button {
+      margin-top: 10px;
+    }
+    
+    .rule-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    
+    .rule-details {
+      margin-bottom: 10px;
+    }
+    
+    .transactions-table {
+      display: block;
+      overflow-x: auto;
+    }
+    
+    .form-actions {
+      flex-direction: column;
+    }
+    
+    .form-actions button {
+      width: 100%;
+    }
+  }

@@ -1,0 +1,698 @@
+:root {
+    --wf-red: #D71E28;
+    --wf-yellow: #FFBF3F;
+    --wf-dark-red: #B01722;
+    --wf-gray: #F3F3F3;
+    --wf-dark-gray: #666666;
+    --wf-black: #333333;
+    --wf-white: #FFFFFF;
+    --wf-light-gray: #E8E8E8;
+    --wf-blue: #0077C8;
+    --wf-light-blue: #E6F2F9;
+    --border-radius: 4px;
+    --box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    --transition: all 0.2s ease-in-out;
+  }
+  
+  /* Global styles for the retirement loan page */
+  .loa101-retirement-loan-page {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    color: var(--wf-black);
+    background-color: #F8F8F8;
+    line-height: 1.5;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 40px;
+  }
+  
+  /* Header styles */
+  .loa101-account-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: var(--wf-white);
+    border-bottom: 1px solid var(--wf-light-gray);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .loa101-back-button {
+    display: flex;
+    align-items: center;
+    color: var(--wf-blue);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+  }
+  
+  .loa101-back-button:hover {
+    color: var(--wf-dark-red);
+  }
+  
+  .loa101-back-arrow {
+    margin-right: 8px;
+    font-size: 16px;
+  }
+  
+  .loa101-wells-fargo-branding {
+    display: flex;
+    align-items: center;
+  }
+  
+  .loa101-logo-container {
+    height: 40px;
+    width: auto;
+  }
+  
+  .loa101-wf-logo {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+  
+  /* Page content */
+  .loa101-page-content {
+    padding: 20px;
+  }
+  
+  /* Header card */
+  .loa101-loan-header-card {
+    background-color: var(--wf-white);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: var(--box-shadow);
+    border-top: 4px solid var(--wf-red);
+  }
+  
+  .loa101-loan-header-card h1 {
+    margin: 0 0 10px 0;
+    color: var(--wf-black);
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  .loa101-account-number {
+    color: var(--wf-dark-gray);
+    margin: 0;
+    font-size: 14px;
+  }
+  
+  /* Progress tracker */
+  .loa101-loan-progress-tracker {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 30px 0;
+  }
+  
+  .loa101-progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .loa101-step-number {
+    width: 36px;
+    height: 36px;
+    background-color: var(--wf-light-gray);
+    color: var(--wf-dark-gray);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    margin-bottom: 8px;
+    transition: var(--transition);
+  }
+  
+  .loa101-step-label {
+    font-size: 14px;
+    color: var(--wf-dark-gray);
+    font-weight: 600;
+    transition: var(--transition);
+  }
+  
+  .loa101-progress-line {
+    flex-grow: 1;
+    height: 3px;
+    background-color: var(--wf-light-gray);
+    margin: 0 15px;
+    position: relative;
+    top: -18px;
+    z-index: 0;
+  }
+  
+  .loa101-progress-step.loa101-active .loa101-step-number {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+  }
+  
+  .loa101-progress-step.loa101-active .loa101-step-label {
+    color: var(--wf-black);
+  }
+  
+  /* Main content grid */
+  .loa101-loan-content-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+    margin-bottom: 30px;
+  }
+  
+  @media (max-width: 992px) {
+    .loa101-loan-content-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Main content area */
+  .loa101-loan-main-content {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .loa101-loan-card {
+    background-color: var(--wf-white);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .loa101-loan-card h2 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: var(--wf-black);
+    font-size: 20px;
+    font-weight: 700;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  /* Form elements */
+  .loa101-form-group {
+    margin-bottom: 20px;
+  }
+  
+  .loa101-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--wf-black);
+  }
+  
+  .loa101-currency-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .loa101-currency-symbol {
+    position: absolute;
+    left: 12px;
+    color: var(--wf-dark-gray);
+    font-weight: 600;
+  }
+  
+  .loa101-currency-input input {
+    padding: 12px 12px 12px 30px;
+    width: 100%;
+    border: 1px solid var(--wf-light-gray);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    transition: var(--transition);
+  }
+  
+  input, select {
+    padding: 12px;
+    width: 100%;
+    border: 1px solid var(--wf-light-gray);
+    border-radius: var(--border-radius);
+    font-size: 16px;
+    transition: var(--transition);
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--wf-blue);
+    box-shadow: 0 0 0 3px rgba(0, 119, 200, 0.2);
+  }
+  
+  .loa101-error-input {
+    border-color: var(--wf-red) !important;
+  }
+  
+  .loa101-error-message {
+    color: var(--wf-red);
+    font-size: 12px;
+    margin-top: 5px;
+    font-weight: 600;
+  }
+  
+  .loa101-input-hint {
+    color: var(--wf-dark-gray);
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  /* Info card */
+  .loa101-loan-info-card {
+    background-color: var(--wf-light-blue);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    border-left: 4px solid var(--wf-blue);
+    margin-top: 24px;
+  }
+  
+  .loa101-loan-info-card h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: var(--wf-black);
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .loa101-info-list {
+    margin: 0;
+    padding-left: 20px;
+  }
+  
+  .loa101-info-list li {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: var(--wf-dark-gray);
+  }
+  
+  .loa101-info-list li:last-child {
+    margin-bottom: 0;
+  }
+  
+  /* Review section */
+  .loa101-review-section {
+    margin-bottom: 24px;
+  }
+  
+  .loa101-review-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .loa101-review-row:last-child {
+    border-bottom: none;
+    font-weight: 700;
+  }
+  
+  .loa101-review-label {
+    font-weight: 600;
+    color: var(--wf-dark-gray);
+  }
+  
+  .loa101-review-value {
+    font-weight: 600;
+    color: var(--wf-black);
+  }
+  
+  /* Terms section */
+  .loa101-terms-section {
+    margin-top: 24px;
+  }
+  
+  .loa101-terms-section h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .loa101-scrollable-terms {
+    max-height: 200px;
+    overflow-y: auto;
+    padding: 15px;
+    background-color: var(--wf-gray);
+    border-radius: var(--border-radius);
+    margin-bottom: 16px;
+    font-size: 14px;
+    color: var(--wf-dark-gray);
+  }
+  
+  .loa101-scrollable-terms p, .loa101-scrollable-terms ol {
+    margin-top: 0;
+  }
+  
+  .loa101-scrollable-terms li {
+    margin-bottom: 8px;
+  }
+  
+  .loa101-checkbox-group {
+    display: flex;
+    align-items: flex-start;
+    margin-top: 16px;
+  }
+  
+  .loa101-checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+    margin-top: 3px;
+  }
+  
+  .loa101-checkbox-group label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+  
+  /* Sidebar */
+  .loa101-loan-sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  
+  .loa101-account-summary-card,
+  .loa101-payment-calculator-card,
+  .loa101-loan-resources-card,
+  .loa101-need-help-card {
+    background-color: var(--wf-white);
+    border-radius: var(--border-radius);
+    padding: 20px;
+    box-shadow: var(--box-shadow);
+  }
+  
+  .loa101-account-summary-card h3,
+  .loa101-payment-calculator-card h3,
+  .loa101-loan-resources-card h3,
+  .loa101-need-help-card h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--wf-black);
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .loa101-summary-item, .loa101-calculator-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+  
+  .loa101-summary-item:last-child, .loa101-calculator-item:last-child {
+    margin-bottom: 0;
+  }
+  
+  .loa101-summary-item span:first-child, .loa101-calculator-item span:first-child {
+    color: var(--wf-dark-gray);
+  }
+  
+  .loa101-summary-item span:last-child, .loa101-calculator-item span:last-child {
+    font-weight: 600;
+    color: var(--wf-black);
+  }
+  
+  .loa101-calculated-value {
+    color: var(--wf-blue) !important;
+    font-weight: 700 !important;
+  }
+  
+  /* Resources */
+  .loa101-resources-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .loa101-resources-list li {
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  
+  .loa101-resources-list li:last-child {
+    margin-bottom: 0;
+  }
+  
+  .loa101-resources-list a {
+    color: var(--wf-blue);
+    text-decoration: none;
+    transition: var(--transition);
+    display: block;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .loa101-resources-list a:hover {
+    color: var(--wf-dark-red);
+  }
+  
+  /* Need help card */
+  .loa101-need-help-card {
+    text-align: center;
+    background-color: var(--wf-light-blue);
+  }
+  
+  .loa101-need-help-card p {
+    margin: 8px 0;
+    font-size: 14px;
+    color: var(--wf-dark-gray);
+  }
+  
+  .loa101-phone-number {
+    font-size: 20px !important;
+    font-weight: 700;
+    color: var(--wf-blue) !important;
+    margin: 12px 0 !important;
+  }
+  
+  /* Action buttons */
+  .loa101-action-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  
+  .loa101-back-btn {
+    padding: 12px 24px;
+    background-color: var(--wf-white);
+    border: 1px solid var(--wf-light-gray);
+    color: var(--wf-dark-gray);
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .loa101-back-btn:hover {
+    background-color: var(--wf-gray);
+  }
+  
+  .loa101-next-btn {
+    padding: 12px 32px;
+    background-color: var(--wf-red);
+    border: none;
+    color: var(--wf-white);
+    font-weight: 600;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .loa101-next-btn:hover {
+    background-color: var(--wf-dark-red);
+  }
+  
+  /* Modal */
+  .loa101-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+  
+  .loa101-modal-content {
+    background-color: var(--wf-white);
+    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+  }
+  
+  .loa101-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid var(--wf-light-gray);
+  }
+  
+  .loa101-modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+  }
+  
+  .loa101-close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--wf-dark-gray);
+  }
+  
+  .loa101-modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex-grow: 1;
+  }
+  
+  .loa101-confirm-amount {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--wf-blue);
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .loa101-confirm-warning {
+    background-color: var(--wf-light-gray);
+    padding: 15px;
+    border-left: 4px solid var(--wf-dark-red);
+    margin-top: 20px;
+    font-size: 14px;
+    color: var(--wf-black);
+  }
+  
+  .loa101-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 20px;
+    border-top: 1px solid var(--wf-light-gray);
+    gap: 16px;
+  }
+  
+  .loa101-modal-button {
+    padding: 12px 24px;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .loa101-modal-button.loa101-secondary {
+    background-color: var(--wf-white);
+    border: 1px solid var(--wf-light-gray);
+    color: var(--wf-dark-gray);
+  }
+  
+  .loa101-modal-button.loa101-secondary:hover {
+    background-color: var(--wf-light-gray);
+  }
+  
+  .loa101-modal-button.loa101-primary {
+    background-color: var(--wf-red);
+    border: none;
+    color: var(--wf-white);
+  }
+  
+  .loa101-modal-button.loa101-primary:hover {
+    background-color: var(--wf-dark-red);
+  }
+  
+  /* Loading state */
+  .loa101-loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  .loa101-loader {
+    border: 5px solid var(--wf-light-gray);
+    border-top: 5px solid var(--wf-red);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: loa101-spin 1s linear infinite;
+    margin-bottom: 20px;
+  }
+  
+  @keyframes loa101-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .loa101-loan-content-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .loa101-loan-header-card h1 {
+      font-size: 20px;
+    }
+    
+    .loa101-action-buttons {
+      flex-direction: column-reverse;
+    }
+    
+    .loa101-action-buttons button {
+      width: 100%;
+    }
+    
+    .loa101-review-row {
+      flex-direction: column;
+      padding: 10px 0;
+    }
+    
+    .loa101-review-value {
+      margin-top: 5px;
+    }
+  }
+  
+  /* Hover effects for interactivity */
+  button:hover, a:hover, .loa101-back-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  
+  button:active, a:active, .loa101-back-button:active {
+    transform: translateY(0);
+  }
+  
+  /* Focus states for accessibility */
+  button:focus, a:focus, input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(215, 30, 40, 0.2);
+  }
+  
+  /* More prominent active states */
+  .loa101-progress-step.loa101-active .loa101-step-number:after {
+    content: '';
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--wf-red);
+    border-radius: 50%;
+    opacity: 0.3;
+  }

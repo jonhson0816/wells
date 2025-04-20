@@ -1,0 +1,705 @@
+/* Wells Fargo Color Palette */
+:root {
+  --wf-red: #D71E28;
+  --wf-dark-red: #B01D1E;
+  --wf-yellow: #FFBC0D;
+  --wf-gold: #ECB731;
+  --wf-black: #000000;
+  --wf-dark-gray: #333333;
+  --wf-medium-gray: #666666;
+  --wf-light-gray: #CCCCCC;
+  --wf-ultra-light-gray: #F5F5F5;
+  --wf-white: #FFFFFF;
+  --wf-error: #D71E28;
+  --wf-success: #2E8540;
+  --wf-warning: #FF9F1C;
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Avenir Next', 'Open Sans', Arial, sans-serif;
+}
+
+body {
+  background-color: var(--wf-ultra-light-gray);
+  color: var(--wf-dark-gray);
+  line-height: 1.6;
+}
+
+.withdraw-funds-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header Styles */
+.eit0012-withdraw-funds-header {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.eit0012-back-button {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+  color: var(--wf-white);
+  font-size: 1rem;
+  transition: opacity 0.2s;
+}
+
+.eit0012-back-button:hover {
+  opacity: 0.8;
+}
+
+.eit0012-back-arrow {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.eit0012-wells-fargo-branding {
+  display: flex;
+  align-items: center;
+}
+
+.eit0012-logo-container {
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.eit0012-wf-logo {
+  height: 100%;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+/* Content Styles */
+.withdraw-funds-content {
+  flex: 1;
+  padding: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.withdraw-funds-card {
+  background: var(--wf-white);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.withdraw-funds-card h1 {
+  color: var(--wf-dark-gray);
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.withdraw-description {
+  color: var(--wf-medium-gray);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* Form Styles */
+.withdraw-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  color: var(--wf-dark-gray);
+  font-size: 1rem;
+}
+
+.form-control {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--wf-light-gray);
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--wf-red);
+  box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.2);
+}
+
+select.form-control {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333333' d='M6 9L.75 3.75 1.5 3l4.5 4.5L10.5 3l.75.75z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 0.75rem;
+  padding-right: 2.5rem;
+}
+
+/* Amount Input */
+.amount-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.currency-symbol {
+  position: absolute;
+  left: 1rem;
+  font-weight: 500;
+  color: var(--wf-dark-gray);
+}
+
+.amount-input {
+  padding: 0.75rem 1rem 0.75rem 2rem;
+  border: 1px solid var(--wf-light-gray);
+  border-radius: 4px;
+  font-size: 1.25rem;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: var(--wf-red);
+  box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.2);
+}
+
+/* Quick Amount Buttons */
+.quick-amounts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.quick-amount-button {
+  background-color: var(--wf-ultra-light-gray);
+  border: 1px solid var(--wf-light-gray);
+  color: var(--wf-dark-gray);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.quick-amount-button:hover {
+  background-color: var(--wf-light-gray);
+  border-color: var(--wf-medium-gray);
+}
+
+/* Buttons */
+.primary-button {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+  border: none;
+  padding: 0.875rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-align: center;
+}
+
+.primary-button:hover {
+  background-color: var(--wf-dark-red);
+}
+
+.primary-button:disabled {
+  background-color: var(--wf-light-gray);
+  cursor: not-allowed;
+}
+
+.secondary-button {
+  background-color: var(--wf-white);
+  color: var(--wf-red);
+  border: 1px solid var(--wf-red);
+  padding: 0.875rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+  text-align: center;
+}
+
+.secondary-button:hover {
+  background-color: rgba(215, 30, 40, 0.05);
+}
+
+.link-button {
+  background: none;
+  border: none;
+  color: var(--wf-red);
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.link-button:hover {
+  color: var(--wf-dark-red);
+}
+
+.action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--wf-ultra-light-gray);
+  color: var(--wf-dark-gray);
+  border: 1px solid var(--wf-light-gray);
+  padding: 0.625rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.action-button:hover {
+  background-color: var(--wf-light-gray);
+}
+
+.icon {
+  margin-right: 0.5rem;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Error Messages */
+.error-message {
+  background-color: rgba(215, 30, 40, 0.1);
+  color: var(--wf-error);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1.5rem;
+  border-left: 4px solid var(--wf-error);
+}
+
+/* Fee Warning */
+.fee-warning {
+  background-color: rgba(255, 159, 28, 0.1);
+  color: var(--wf-warning);
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--wf-warning);
+}
+
+/* Info Panels */
+.atm-info-panel,
+.branch-info-panel,
+.cash-advance-info-panel {
+  background-color: var(--wf-ultra-light-gray);
+  border-radius: 6px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--wf-light-gray);
+}
+
+.atm-info-panel h3,
+.branch-info-panel h3,
+.cash-advance-info-panel h3 {
+  color: var(--wf-dark-gray);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.atm-instructions,
+.branch-instructions {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.atm-instructions li,
+.branch-instructions li {
+  margin-bottom: 0.5rem;
+}
+
+/* ATM Locations */
+.atm-locations-panel {
+  margin-top: 1rem;
+  background-color: var(--wf-white);
+  border: 1px solid var(--wf-light-gray);
+  border-radius: 4px;
+  padding: 1rem;
+}
+
+.atm-locations-panel h4 {
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: var(--wf-dark-gray);
+}
+
+.atm-locations-list {
+  list-style: none;
+  max-height: 250px;
+  overflow-y: auto;
+}
+
+.atm-location {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--wf-light-gray);
+}
+
+.atm-location:last-child {
+  border-bottom: none;
+}
+
+.atm-location p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+/* Schedule Option */
+.schedule-option {
+  margin: 1rem 0;
+}
+
+.schedule-details {
+  margin-top: 1rem;
+  display: flex;
+  gap: 1rem;
+}
+
+.schedule-details .form-group {
+  flex: 1;
+}
+
+/* Fee Information */
+.fee-information {
+  margin: 1rem 0;
+}
+
+.fee-information ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.fee-information li {
+  margin-bottom: 0.25rem;
+}
+
+/* Terms Checkbox */
+.terms-checkbox {
+  margin: 1rem 0;
+}
+
+/* Receipt Options */
+.receipt-options {
+  margin-bottom: 1rem;
+}
+
+.email-input-group {
+  margin-top: 0.5rem;
+}
+
+/* Recent Withdrawals */
+.recent-withdrawals {
+  margin: 1.5rem 0;
+}
+
+.recent-withdrawals h3 {
+  color: var(--wf-dark-gray);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.recent-withdrawals-list {
+  background-color: var(--wf-ultra-light-gray);
+  border-radius: 6px;
+  padding: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--wf-light-gray);
+}
+
+.recent-withdrawal-item {
+  padding: 0.75rem;
+  background-color: var(--wf-white);
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+  border: 1px solid var(--wf-light-gray);
+}
+
+.withdrawal-date {
+  font-size: 0.8rem;
+  color: var(--wf-medium-gray);
+  margin-bottom: 0.25rem;
+}
+
+.withdrawal-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.withdrawal-amount {
+  font-weight: 600;
+  color: var(--wf-dark-gray);
+}
+
+.withdrawal-type,
+.withdrawal-location {
+  font-size: 0.85rem;
+  color: var(--wf-medium-gray);
+}
+
+/* Biometric Authentication */
+.biometric-authentication {
+  margin: 1rem 0;
+}
+
+.biometric-authentication label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: var(--wf-white);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.modal-content h2 {
+  color: var(--wf-dark-gray);
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+/* Confirmation Modal */
+.confirmation-modal .confirmation-details {
+  margin: 1.5rem 0;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--wf-light-gray);
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.total-row {
+  font-weight: 600;
+  font-size: 1.1rem;
+  padding-top: 0.75rem;
+}
+
+.detail-label {
+  color: var(--wf-medium-gray);
+}
+
+.detail-value {
+  color: var(--wf-dark-gray);
+  font-weight: 500;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.modal-actions button {
+  flex: 1;
+}
+
+/* Success Modal */
+.success-modal .success-message {
+  color: var(--wf-success);
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.transaction-details {
+  margin: 1.5rem 0;
+  background-color: var(--wf-ultra-light-gray);
+  padding: 1.25rem;
+  border-radius: 6px;
+}
+
+.status-complete {
+  color: var(--wf-success);
+}
+
+.atm-code-container {
+  margin: 1.5rem 0;
+  text-align: center;
+}
+
+.atm-code {
+  font-size: 2rem;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: var(--wf-red);
+  background-color: var(--wf-ultra-light-gray);
+  padding: 1rem;
+  border-radius: 6px;
+  margin: 1rem 0;
+}
+
+.code-instructions {
+  font-size: 0.9rem;
+  color: var(--wf-medium-gray);
+}
+
+.receipt-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+
+.email-receipt-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.email-input {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--wf-light-gray);
+  border-radius: 4px;
+  font-size: 0.9rem;
+  width: 100%;
+}
+
+/* Loading Styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--wf-light-gray);
+  border-top: 4px solid var(--wf-red);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .withdraw-funds-card {
+    padding: 1.5rem;
+  }
+  
+  .schedule-details {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .modal-content {
+    width: 95%;
+    padding: 1.5rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .receipt-actions {
+    flex-direction: column;
+  }
+  
+  .withdrawal-details {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .eit0012-withdraw-funds-header,
+  .form-actions,
+  .modal-actions {
+    display: none;
+  }
+  
+  .modal-overlay {
+    position: static;
+    background: none;
+  }
+  
+  .modal-content {
+    box-shadow: none;
+    max-width: 100%;
+    padding: 0;
+  }
+  
+  .receipt-actions {
+    display: none;
+  }
+  
+  .withdraw-funds-card {
+    box-shadow: none;
+  }
+}

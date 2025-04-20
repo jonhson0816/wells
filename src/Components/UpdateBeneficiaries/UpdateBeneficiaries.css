@@ -1,0 +1,584 @@
+/* UpdateBeneficiaries.css */
+
+/* Wells Fargo brand colors */
+:root {
+    --wf-red: #d71e28;
+    --wf-red-light: #e74c3c;
+    --wf-yellow: #ffb81c;
+    --wf-black: #000000;
+    --wf-dark-gray: #333333;
+    --wf-medium-gray: #666666;
+    --wf-light-gray: #f5f5f5;
+    --wf-error-red: #d32f2f;
+    --wf-success-green: #2e7d32;
+    --wf-white: #ffffff;
+    --wf-border-color: #e0e0e0;
+    --wf-hover-red: #b71c1c;
+    --wf-info-blue: #0077b6;
+  }
+  
+  /* Page layout */
+  .upd0011-update-beneficiaries-page {
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    color: var(--wf-dark-gray);
+    background-color: var(--wf-white);
+    min-height: 100vh;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+  
+  /* Header styling */
+  .upd0011-account-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    background-color: var(--wf-white);
+    border-bottom: 1px solid var(--wf-border-color);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  .upd0011-back-button {
+    color: var(--wf-medium-gray);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s ease;
+  }
+  
+  .upd0011-back-button:hover {
+    color: var(--wf-red);
+  }
+  
+  .upd0011-back-arrow {
+    margin-right: 8px;
+    font-weight: bold;
+  }
+  
+  .upd0011-wells-fargo-branding {
+    display: flex;
+    align-items: center;
+  }
+  
+  .upd0011-logo-container {
+    height: 40px;
+    width: auto;
+  }
+  
+  .upd0011-wf-logo {
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+  
+  /* Page content */
+  .upd0011-page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+  }
+  
+  .upd0011-page-header {
+    margin-bottom: 24px;
+  }
+  
+  .upd0011-page-header h1 {
+    color: var(--wf-dark-gray);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  
+  .upd0011-account-number {
+    color: var(--wf-medium-gray);
+    font-size: 16px;
+    margin-top: 0;
+  }
+  
+  /* Success and error messages */
+  .upd0011-success-message {
+    background-color: rgba(46, 125, 50, 0.1);
+    color: var(--wf-success-green);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+  }
+  
+  .upd0011-success-icon {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  .upd0011-error-message {
+    background-color: rgba(211, 47, 47, 0.1);
+    color: var(--wf-error-red);
+    padding: 12px 16px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+  }
+  
+  .upd0011-error-icon {
+    margin-right: 8px;
+    font-size: 18px;
+  }
+  
+  .upd0011-error-text {
+    color: var(--wf-error-red);
+    font-size: 14px;
+    margin-top: 4px;
+  }
+  
+  /* Beneficiaries section */
+  .upd0011-beneficiaries-section {
+    margin-bottom: 32px;
+  }
+  
+  .upd0011-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  
+  .upd0011-section-header h2 {
+    color: var(--wf-dark-gray);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .upd0011-contingent-header {
+    margin-top: 32px;
+  }
+  
+  .upd0011-add-beneficiary-button {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    border: none;
+    border-radius: 4px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .upd0011-add-beneficiary-button:hover {
+    background-color: var(--wf-hover-red);
+  }
+  
+  /* Table styling */
+  .upd0011-beneficiaries-table-container {
+    overflow-x: auto;
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    margin-bottom: 24px;
+  }
+  
+  .upd0011-beneficiaries-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .upd0011-beneficiaries-table th {
+    background-color: var(--wf-light-gray);
+    color: var(--wf-dark-gray);
+    font-weight: 600;
+    text-align: left;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--wf-border-color);
+  }
+  
+  .upd0011-beneficiaries-table td {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--wf-border-color);
+    color: var(--wf-medium-gray);
+  }
+  
+  .upd0011-beneficiaries-table tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .upd0011-beneficiaries-table tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+  }
+  
+  .upd0011-no-beneficiaries {
+    text-align: center;
+    padding: 24px !important;
+    color: var(--wf-medium-gray);
+    font-style: italic;
+  }
+  
+  .upd0011-actions-cell {
+    display: flex;
+    gap: 8px;
+  }
+  
+  .upd0011-edit-button {
+    background-color: transparent;
+    color: var(--wf-info-blue);
+    border: 1px solid var(--wf-info-blue);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .upd0011-edit-button:hover {
+    background-color: var(--wf-info-blue);
+    color: var(--wf-white);
+  }
+  
+  .upd0011-delete-button {
+    background-color: transparent;
+    color: var(--wf-error-red);
+    border: 1px solid var(--wf-error-red);
+    border-radius: 4px;
+    padding: 6px 12px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .upd0011-delete-button:hover {
+    background-color: var(--wf-error-red);
+    color: var(--wf-white);
+  }
+  
+  /* Info section */
+  .upd0011-info-section {
+    margin-bottom: 32px;
+  }
+  
+  .upd0011-info-card {
+    background-color: var(--wf-light-gray);
+    border-radius: 4px;
+    padding: 20px;
+    border-left: 4px solid var(--wf-info-blue);
+  }
+  
+  .upd0011-info-card h3 {
+    color: var(--wf-dark-gray);
+    font-size: 18px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .upd0011-info-icon {
+    color: var(--wf-info-blue);
+    font-weight: bold;
+    margin-right: 8px;
+    font-size: 18px;
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--wf-info-blue);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .upd0011-info-card p {
+    color: var(--wf-medium-gray);
+    margin-bottom: 12px;
+    line-height: 1.5;
+  }
+  
+  .upd0011-info-card ul {
+    padding-left: 20px;
+    margin: 12px 0 0;
+  }
+  
+  .upd0011-info-card li {
+    margin-bottom: 8px;
+    color: var(--wf-medium-gray);
+    line-height: 1.5;
+  }
+  
+  /* Actions section */
+  .upd0011-actions-section {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 32px;
+  }
+  
+  .upd0011-cancel-button {
+    background-color: var(--wf-white);
+    color: var(--wf-medium-gray);
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .upd0011-cancel-button:hover {
+    background-color: var(--wf-light-gray);
+  }
+  
+  .upd0011-save-button {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .upd0011-save-button:hover {
+    background-color: var(--wf-hover-red);
+  }
+  
+  /* Modal styling */
+  .upd0011-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .upd0011-modal-content {
+    background-color: var(--wf-white);
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    animation: upd0011-modal-appear 0.3s ease;
+  }
+  
+  @keyframes upd0011-modal-appear {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .upd0011-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--wf-border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .upd0011-modal-header h2 {
+    color: var(--wf-dark-gray);
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  .upd0011-close-button {
+    background: none;
+    border: none;
+    color: var(--wf-medium-gray);
+    font-size: 24px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    transition: color 0.2s ease;
+  }
+  
+  .upd0011-close-button:hover {
+    color: var(--wf-red);
+  }
+  
+  .upd0011-modal-body {
+    padding: 24px;
+  }
+  
+  .upd0011-form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .upd0011-form-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .upd0011-full-width {
+    flex-basis: 100%;
+  }
+  
+  .upd0011-form-group label {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--wf-dark-gray);
+  }
+  
+  .upd0011-form-group input,
+  .upd0011-form-group select {
+    padding: 12px;
+    border: 1px solid var(--wf-border-color);
+    border-radius: 4px;
+    font-size: 16px;
+    color: var(--wf-dark-gray);
+    transition: all 0.2s ease;
+  }
+  
+  .upd0011-form-group input:focus,
+  .upd0011-form-group select:focus {
+    outline: none;
+    border-color: var(--wf-red);
+    box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.2);
+  }
+  
+  .upd0011-input-error {
+    border-color: var(--wf-error-red) !important;
+  }
+  
+  .upd0011-percentage-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  .upd0011-percentage-input input {
+    width: 100%;
+    padding-right: 30px;
+  }
+  
+  .upd0011-percentage-symbol {
+    position: absolute;
+    right: 12px;
+    color: var(--wf-medium-gray);
+  }
+  
+  .upd0011-required-note {
+    font-size: 14px;
+    color: var(--wf-medium-gray);
+    margin-top: 16px;
+  }
+  
+  .upd0011-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid var(--wf-border-color);
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+  
+  .upd0011-add-button {
+    background-color: var(--wf-red);
+    color: var(--wf-white);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .upd0011-add-button:hover {
+    background-color: var(--wf-hover-red);
+  }
+  
+  /* Delete confirmation modal */
+  .upd0011-confirm-modal {
+    max-width: 480px;
+  }
+  
+  .upd0011-warning-icon {
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  
+  .upd0011-confirm-message {
+    font-size: 18px;
+    color: var(--wf-dark-gray);
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  
+  .upd0011-sub-message {
+    color: var(--wf-medium-gray);
+    text-align: center;
+    margin-bottom: 0;
+  }
+  
+  .upd0011-delete-confirm-button {
+    background-color: var(--wf-error-red);
+    color: var(--wf-white);
+    border: none;
+    border-radius: 4px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+  
+  .upd0011-delete-confirm-button:hover {
+    background-color: #b71c1c;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .upd0011-form-row {
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .upd0011-section-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    
+    .upd0011-actions-section {
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    .upd0011-save-button,
+    .upd0011-cancel-button {
+      width: 100%;
+    }
+    
+    .upd0011-modal-content {
+      width: 95%;
+    }
+  }

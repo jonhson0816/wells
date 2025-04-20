@@ -1,0 +1,910 @@
+.reg1011-user-profile-container {
+  font-family: 'Open Sans', Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  background-color: #f8f8f8;
+  color: #333;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+/* Wells Fargo Header */
+.reg1011-wells-fargo-header {
+  background-color: #D71E28; /* Wells Fargo red */
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.reg1011-header-content {
+  display: flex;
+  align-items: center;
+}
+
+.reg1011-dash002.reg1011-logo {
+  height: 40px;
+  cursor: pointer;
+  margin-right: 20px;
+}
+
+.reg1011-wells-fargo-header h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Profile Content Layout */
+.reg1011-profile-content {
+  display: flex;
+  min-height: calc(100vh - 80px);
+  background-color: #fff;
+}
+
+.reg1011-profile-navigation {
+  width: 250px;
+  background-color: #F2F2F2;
+  border-right: 1px solid #e0e0e0;
+  padding: 20px 0;
+}
+
+.reg1011-profile-navigation ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reg1011-profile-navigation li {
+  padding: 12px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  color: #333;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.reg1011-profile-navigation li:hover {
+  background-color: #E6E6E6;
+}
+
+.reg1011-profile-navigation li.reg1011-active {
+  background-color: #FFE8E9; /* Light red for active tab */
+  color: #D71E28; /* Wells Fargo red */
+  font-weight: 600;
+  border-left: 4px solid #D71E28;
+  padding-left: 16px;
+}
+
+.reg1011-profile-navigation li i {
+  margin-right: 10px;
+  font-size: 18px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Navigation icons */
+.reg1011-profile-icon::before {
+  content: "\f007"; /* Font awesome user icon */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.reg1011-security-icon::before {
+  content: "\f023"; /* Font awesome lock icon */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.reg1011-preferences-icon::before {
+  content: "\f013"; /* Font awesome gear icon */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.reg1011-notifications-icon::before {
+  content: "\f0f3"; /* Font awesome bell icon */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+}
+
+.reg1011-profile-details {
+  flex: 1;
+  padding: 30px;
+  background-color: #fff;
+}
+
+/* Status Messages */
+.reg1011-success-message {
+  background-color: #d4edda;
+  color: #155724;
+  padding: 12px 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  border-left: 4px solid #28a745;
+}
+
+.reg1011-error-message {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 12px 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-weight: 500;
+  border-left: 4px solid #dc3545;
+}
+
+/* Profile View */
+.reg1011-user-profile-view {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reg1011-profile-header {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.reg1011-profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 25px;
+  border: 3px solid #D71E28; /* Wells Fargo red */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f5f5f5;
+}
+
+.reg1011-profile-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.reg1011-placeholder-image {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #D71E28; /* Wells Fargo red */
+  color: white;
+  font-size: 36px;
+  font-weight: bold;
+}
+
+.reg1011-user-basic-info {
+  flex-grow: 1;
+}
+
+.reg1011-user-basic-info h2 {
+  margin: 0 0 8px 0;
+  font-size: 26px;
+  color: #333;
+}
+
+.reg1011-user-id {
+  margin: 0 0 10px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.reg1011-credit-score-display {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reg1011-credit-score-label {
+  font-weight: 500;
+  color: #555;
+}
+
+.reg1011-credit-score-value {
+  font-weight: 700;
+  color: #28a745;
+  padding: 4px 8px;
+  background-color: #e8f5e9;
+  border-radius: 4px;
+}
+
+.reg1011-credit-score-rating {
+  color: #555;
+  font-style: italic;
+}
+
+.reg1011-edit-profile-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: #D71E28; /* Wells Fargo red */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
+}
+
+.reg1011-edit-profile-button:hover {
+  background-color: #B51A20; /* Darker red on hover */
+}
+
+.reg1011-edit-icon::before {
+  content: "\f303"; /* Font awesome edit icon */
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  margin-right: 6px;
+}
+
+.reg1011-profile-details-section {
+  padding: 20px;
+}
+
+.reg1011-profile-details-section h3 {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: #333;
+  border-bottom: 2px solid #FFE8E9;
+  padding-bottom: 10px;
+}
+
+.reg1011-profile-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.reg1011-info-item {
+  padding: 12px 16px;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  border-left: 3px solid #D71E28; /* Wells Fargo red */
+}
+
+.reg1011-info-label {
+  display: block;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 5px;
+}
+
+.reg1011-info-value {
+  color: #333;
+  font-size: 16px;
+}
+
+/* Edit Profile Form */
+.reg1011-profile-edit-form {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reg1011-profile-edit-form h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  border-bottom: 2px solid #FFE8E9;
+  padding-bottom: 10px;
+}
+
+.reg1011-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 30px;
+}
+
+.reg1011-profile-picture-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.reg1011-profile-picture-upload {
+  position: relative;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-bottom: 20px;
+  border: 3px solid #D71E28; /* Wells Fargo red */
+}
+
+.reg1011-profile-picture-input {
+  display: none;
+}
+
+.reg1011-profile-picture-label {
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.reg1011-upload-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(215, 30, 40, 0.8); /* Semi-transparent Wells Fargo red */
+  color: white;
+  padding: 5px;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.reg1011-profile-picture-label:hover .reg1011-upload-overlay {
+  opacity: 1;
+}
+
+.reg1011-edit-form-fields {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.reg1011-input-group {
+  margin-bottom: 20px;
+}
+
+.reg1011-input-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #333;
+}
+
+.reg1011-input-group input, 
+.reg1011-input-group select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  transition: border-color 0.2s ease;
+}
+
+.reg1011-input-group input:focus, 
+.reg1011-input-group select:focus {
+  border-color: #D71E28; /* Wells Fargo red */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.2);
+}
+
+.reg1011-profile-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+  gap: 15px;
+}
+
+.reg1011-save-button {
+  background-color: #D71E28; /* Wells Fargo red */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.reg1011-save-button:hover {
+  background-color: #B51A20; /* Darker red on hover */
+}
+
+.reg1011-save-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.reg1011-cancel-button {
+  background-color: #fff;
+  color: #333;
+  border: 1px solid #ccc;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.reg1011-cancel-button:hover {
+  background-color: #f2f2f2;
+  border-color: #999;
+}
+
+/* Security Settings */
+.reg1011-security-settings {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reg1011-security-settings h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  border-bottom: 2px solid #FFE8E9;
+  padding-bottom: 10px;
+}
+
+.reg1011-security-section {
+  margin-bottom: 30px;
+}
+
+.reg1011-security-section h3 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #333;
+}
+
+.reg1011-security-item {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 3px solid #D71E28; /* Wells Fargo red */
+}
+
+.reg1011-security-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.reg1011-security-item-header h4 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.reg1011-security-item-info {
+  color: #666;
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+.reg1011-change-password-button {
+  background-color: #D71E28; /* Wells Fargo red */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+}
+
+.reg1011-change-password-button:hover {
+  background-color: #B51A20; /* Darker red on hover */
+}
+
+/* Toggle Switch */
+.reg1011-toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.reg1011-toggle-input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.reg1011-toggle-label {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: .4s;
+  border-radius: 34px;
+}
+
+.reg1011-toggle-label:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.reg1011-toggle-input:checked + .reg1011-toggle-label {
+  background-color: #D71E28; /* Wells Fargo red */
+}
+
+.reg1011-toggle-input:focus + .reg1011-toggle-label {
+  box-shadow: 0 0 1px #D71E28; /* Wells Fargo red */
+}
+
+.reg1011-toggle-input:checked + .reg1011-toggle-label:before {
+  transform: translateX(26px);
+}
+
+/* Login History Table */
+.reg1011-login-history {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.reg1011-login-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.reg1011-login-table th,
+.reg1011-login-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.reg1011-login-table th {
+  background-color: #f5f5f5;
+  font-weight: 600;
+}
+
+.reg1011-login-table tr:hover {
+  background-color: #f9f9f9;
+}
+
+/* Preferences Settings */
+.reg1011-preferences-settings {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reg1011-preferences-settings h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  border-bottom: 2px solid #FFE8E9;
+  padding-bottom: 10px;
+}
+
+.reg1011-preferences-section {
+  margin-bottom: 30px;
+}
+
+.reg1011-preference-item {
+  margin-bottom: 25px;
+}
+
+.reg1011-preference-item label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+}
+
+.reg1011-language-select,
+.reg1011-account-select {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-position: right 12px center;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  cursor: pointer;
+}
+
+.reg1011-language-select:focus,
+.reg1011-account-select:focus {
+  border-color: #D71E28; /* Wells Fargo red */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(215, 30, 40, 0.2);
+}
+
+.reg1011-preference-description {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
+}
+
+.reg1011-delivery-options {
+  margin-top: 10px;
+}
+
+.reg1011-radio-option {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.reg1011-radio-option input[type="radio"] {
+  margin-right: 10px;
+  accent-color: #D71E28; /* Wells Fargo red */
+}
+
+.reg1011-radio-option label {
+  margin: 0;
+  font-weight: normal;
+}
+
+/* Notification Settings */
+.reg1011-notification-settings {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.reg1011-notification-settings h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 24px;
+  border-bottom: 2px solid #FFE8E9;
+  padding-bottom: 10px;
+}
+
+.reg1011-notification-section {
+  margin-bottom: 30px;
+}
+
+.reg1011-notification-section h3 {
+  margin-top: 20px;
+  margin-bottom: 15px;
+  font-size: 20px;
+  color: #333;
+}
+
+.reg1011-notification-item {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-left: 3px solid #D71E28; /* Wells Fargo red */
+}
+
+.reg1011-notification-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.reg1011-notification-item-header h4 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.reg1011-notification-item-info {
+  color: #666;
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+/* Password Change Modal */
+.reg1011-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.reg1011-modal {
+  background-color: #fff;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.reg1011-modal-header {
+  background-color: #D71E28; /* Wells Fargo red */
+  color: white;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.reg1011-modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.reg1011-modal-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.reg1011-modal-content {
+  padding: 20px;
+}
+
+.reg1011-password-requirements {
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin: 15px 0;
+  font-size: 14px;
+}
+
+.reg1011-password-requirements p {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.reg1011-password-requirements ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.reg1011-password-requirements li {
+  margin-bottom: 4px;
+  color: #555;
+}
+
+.reg1011-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .reg1011-form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .reg1011-profile-picture-section {
+    margin-bottom: 20px;
+  }
+  
+  .reg1011-edit-form-fields {
+    grid-template-columns: 1fr;
+  }
+  
+  .reg1011-profile-info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .reg1011-profile-content {
+    flex-direction: column;
+  }
+  
+  .reg1011-profile-navigation {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 10px 0;
+  }
+  
+  .reg1011-profile-navigation ul {
+    display: flex;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding: 0 10px;
+  }
+  
+  .reg1011-profile-navigation li {
+    padding: 10px 15px;
+    border-bottom: 3px solid transparent;
+  }
+  
+  .reg1011-profile-navigation li.reg1011-active {
+    border-left: none;
+    border-bottom: 3px solid #D71E28; /* Wells Fargo red */
+    background-color: transparent;
+    padding-left: 15px;
+  }
+  
+  .reg1011-profile-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .reg1011-profile-picture {
+    margin: 0 auto 15px;
+  }
+  
+  .reg1011-user-basic-info {
+    margin-bottom: 15px;
+  }
+  
+  .reg1011-edit-profile-button {
+    position: static;
+    margin-top: 15px;
+  }
+  
+  .reg1011-security-item-header,
+  .reg1011-notification-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+}
+
+/* Print styles */
+@media print {
+  .reg1011-profile-navigation,
+  .reg1011-edit-profile-button,
+  .reg1011-profile-actions,
+  .reg1011-toggle-switch {
+    display: none !important;
+  }
+  
+  .reg1011-user-profile-container {
+    box-shadow: none;
+  }
+  
+  .reg1011-profile-content {
+    display: block;
+  }
+  
+  .reg1011-profile-details {
+    padding: 0;
+  }
+  
+  .reg1011-profile-info-grid {
+    grid-template-columns: 1fr;
+  }
+}

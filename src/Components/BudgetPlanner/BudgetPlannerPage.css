@@ -1,0 +1,376 @@
+/* Wells Fargo Colors:
+   Primary Red: #D71E28
+   Secondary Gold: #FFBC0D
+   Dark Gray: #333333
+   Medium Gray: #666666
+   Light Gray: #F1F1F1
+   White: #FFFFFF
+*/
+
+/* Reset and Base Styles */
+.budget-planner {
+    font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+    color: #333333;
+    line-height: 1.5;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #F9F9F9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  /* Header Styles */
+  .budget-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #FFBC0D;
+    margin-bottom: 30px;
+    position: relative;
+  }
+  
+  .budget-header h1 {
+    color: #D71E28;
+    font-size: 28px;
+    margin: 0;
+    padding-left: 50px;
+    position: relative;
+  }
+  
+  .budget-header h1::before {
+    content: '';
+    background-image: url('https://www.wellsfargo.com/assets/images/logos/wells-fargo-logo.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .month-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .month-selector button {
+    background-color: #FFFFFF;
+    border: 1px solid #D71E28;
+    color: #D71E28;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+  }
+  
+  .month-selector button:hover {
+    background-color: #D71E28;
+    color: white;
+  }
+  
+  .month-selector h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333333;
+  }
+  
+  /* Summary Cards */
+  .budget-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+  
+  .summary-card {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  
+  .summary-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .summary-card h3 {
+    color: #666666;
+    margin: 0 0 10px;
+    font-size: 16px;
+    font-weight: 600;
+  }
+  
+  .summary-card h2 {
+    color: #333333;
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+  }
+  
+  .summary-card button {
+    background-color: #FFBC0D;
+    color: #333333;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-top: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  
+  .summary-card button:hover {
+    background-color: #E6A800;
+  }
+  
+  .income-edit {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  
+  .income-edit input {
+    padding: 8px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    text-align: center;
+    font-size: 16px;
+  }
+  
+  .negative {
+    color: #D71E28 !important;
+  }
+  
+  /* Main Container */
+  .budget-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+    gap: 30px;
+    margin-bottom: 30px;
+  }
+  
+  @media (max-width: 1100px) {
+    .budget-container {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  th {
+    background-color: #D71E28;
+    color: white;
+    text-align: left;
+    padding: 12px 15px;
+  }
+  
+  td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #EEEEEE;
+  }
+  
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  tbody tr:hover {
+    background-color: #F5F5F5;
+  }
+  
+  input[type="number"],
+  input[type="text"],
+  input[type="date"],
+  select {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  /* Categories Section */
+  .budget-categories,
+  .recent-transactions {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .budget-categories h2,
+  .recent-transactions h2,
+  .budget-insights h2,
+  .budget-tools h2 {
+    color: #D71E28;
+    font-size: 22px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #FFBC0D;
+  }
+  
+  /* Forms */
+  .add-category,
+  .add-transaction {
+    background-color: #F1F1F1;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+  
+  .add-category h3,
+  .add-transaction h3 {
+    color: #333333;
+    margin-top: 0;
+    font-size: 18px;
+    margin-bottom: 15px;
+  }
+  
+  form {
+    display: grid;
+    gap: 15px;
+  }
+  
+  form div {
+    display: grid;
+    gap: 5px;
+  }
+  
+  form label {
+    font-weight: 600;
+    color: #666666;
+  }
+  
+  form button {
+    background-color: #D71E28;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    justify-self: start;
+    margin-top: 10px;
+  }
+  
+  form button:hover {
+    background-color: #BB1A22;
+  }
+  
+  /* Buttons */
+  button {
+    background-color: #D71E28;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+  }
+  
+  button:hover {
+    background-color: #BB1A22;
+  }
+  
+  /* Insights */
+  .budget-insights {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+  }
+  
+  .insights-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .insight-alert {
+    background-color: #FFEBE9;
+    border-left: 4px solid #D71E28;
+    padding: 15px;
+    border-radius: 4px;
+  }
+  
+  .insight-item {
+    background-color: #FFF8E1;
+    border-left: 4px solid #FFBC0D;
+    padding: 15px;
+    border-radius: 4px;
+  }
+  
+  /* Budget Tools */
+  .budget-tools {
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tools-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+  
+  .tools-container button {
+    background-color: #FFFFFF;
+    color: #D71E28;
+    border: 2px solid #D71E28;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .tools-container button:hover {
+    background-color: #D71E28;
+    color: white;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .budget-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .budget-summary {
+      grid-template-columns: 1fr;
+    }
+    
+    .tools-container {
+      grid-template-columns: 1fr;
+    }
+  }
