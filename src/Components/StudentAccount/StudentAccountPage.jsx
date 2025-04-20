@@ -52,7 +52,7 @@ const StudentAccountPage = () => {
   // Get the appropriate API endpoint for student accounts
   const getApiEndpoint = (endpoint = '') => {
     // Use the full URL including the base URL of your API server
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
     return accountId 
       ? `${baseUrl}/api/student/${accountId}${endpoint}` 
       : `${baseUrl}/api/student/primary${endpoint}`;

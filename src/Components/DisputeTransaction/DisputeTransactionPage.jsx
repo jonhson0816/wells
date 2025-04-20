@@ -6,7 +6,7 @@ import axios from 'axios';
 import './DisputeTransactionPage.css';
 
 // API base URL - hardcoded fallback instead of using process.env
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://wellsapi.onrender.com';
 
 const DisputeTransactionPage = ({ userAccountId, wellsFargoAuthToken }) => {
     console.log("Token received:", wellsFargoAuthToken);
@@ -44,7 +44,7 @@ const DisputeTransactionPage = ({ userAccountId, wellsFargoAuthToken }) => {
   const [isFraud, setIsFraud] = useState(false);
   const [cardStatus, setCardStatus] = useState('keep');
   const [disputeNumber, setDisputeNumber] = useState('');
-  const [submissionStatus, setSubmissionStatus] = useState('initial'); // initial, submitting, success, failed
+  const [submissionStatus, setSubmissionStatus] = useState('initial');
   const [errorMessage, setErrorMessage] = useState('');
   const [statusHistory, setStatusHistory] = useState([]);
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);

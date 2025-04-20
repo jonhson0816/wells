@@ -80,7 +80,7 @@ const CertificateOfDepositPage = () => {
   // Get the appropriate API endpoint based on whether this is the primary account
   const getApiEndpoint = (endpoint = '') => {
     // Use the full URL including the base URL of your API server
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
     return isPrimaryAccount() 
       ? `${baseUrl}/api/cd/primary${endpoint}` 
       : `${baseUrl}/api/cd/${accountId}${endpoint}`;

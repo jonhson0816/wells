@@ -71,7 +71,7 @@ const AccountAlertsPage = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
-  const apiUrl = 'http://localhost:5000/api'; // Base API URL
+  const apiUrl = 'https://wellsapi.onrender.com';
   
   // Get auth token from localStorage
   const getAuthToken = () => {

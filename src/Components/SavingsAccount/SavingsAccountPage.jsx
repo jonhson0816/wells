@@ -56,7 +56,7 @@ const SavingsAccountPage = () => {
   // Get the appropriate API endpoint based on whether this is the primary account
   const getApiEndpoint = (endpoint = '') => {
     // Use the full URL including the base URL of your API server
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
     
     // If this is the primary account, use the primary endpoint
     if (isPrimaryAccount()) {
