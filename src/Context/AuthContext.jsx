@@ -190,6 +190,7 @@ export const AuthProvider = ({ children }) => {
 
   
   const register = async (userData) => {
+    const response = await api.post('/auth/register', formattedUserData);
     try {
       setLoading(true);
       setAuthError(null);
