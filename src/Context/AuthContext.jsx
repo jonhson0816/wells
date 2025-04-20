@@ -15,7 +15,8 @@ if (JWT_EXPIRE === '30d') {
 }
 
 // Create API client with base URL
-const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com';
+// FIXED: Ensure this matches your actual API URL and set up local environment variables correctly
+const API_URL = import.meta.env?.VITE_API_URL || 'http://localhost:5000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -190,11 +191,8 @@ export const AuthProvider = ({ children }) => {
     return phoneNumber ? phoneNumber.replace(/\D/g, '') : '';
   };
 
-  
+  // FIXED: Register function with proper variable definition order
   const register = async (userData) => {
-    const response = await api.post('/auth/register', formattedUserData);
-    console.log('Register function called with API_URL:', API_URL);
-    console.log('Using axios instance with baseURL:', api.defaults.baseURL);
     try {
       setLoading(true);
       setAuthError(null);
@@ -233,6 +231,9 @@ export const AuthProvider = ({ children }) => {
       if (formattedUserData.phoneNumber.replace(/\D/g, '').length !== 10) {
         throw new Error("Please provide a valid 10-digit phone number");
       }
+      
+      console.log('Register function called with API_URL:', API_URL);
+      console.log('Using axios instance with baseURL:', api.defaults.baseURL);
       
       // Send registration request to backend
       const response = await api.post('/auth/register', formattedUserData);
