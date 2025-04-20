@@ -24,6 +24,8 @@ const api = axios.create({
   }
 });
 
+console.log('API instance created with baseURL:', API_URL);
+
 // Add token to requests if available
 api.interceptors.request.use(
   (config) => {
@@ -191,6 +193,8 @@ export const AuthProvider = ({ children }) => {
   
   const register = async (userData) => {
     const response = await api.post('/auth/register', formattedUserData);
+    console.log('Register function called with API_URL:', API_URL);
+    console.log('Using axios instance with baseURL:', api.defaults.baseURL);
     try {
       setLoading(true);
       setAuthError(null);
