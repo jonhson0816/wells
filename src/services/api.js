@@ -2,9 +2,11 @@ import axios from 'axios';
 
 // Always use the Render URL in production (when deployed to Vercel)
 // Use relative URL in development for proxy
-const API_URL = window.location.hostname === 'localhost' 
+const API_URL = import.meta.env.MODE === 'development' 
   ? '/api' // Local development using Vite proxy
   : 'https://wellsapi.onrender.com/api'; // Production URL
+
+console.log('API URL configured as:', API_URL);
 
 // Create API client instance
 const api = axios.create({
