@@ -2,15 +2,17 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
 // Use Vite's import.meta.env instead of process.env for frontend
-const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com/api';
+const API_URL = 'https://wellsapi.onrender.com/api';
 
-// Create API instance with baseURL
+// Create API client with base URL
 const api = axios.create({
   baseURL: API_URL,
   headers: {
     'Content-Type': 'application/json'
   }
 });
+
+console.log('API instance created with baseURL:', API_URL);
 
 // Create the UserContext
 export const UserContext = createContext();
