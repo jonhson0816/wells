@@ -1,6 +1,17 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
+// Use Vite's import.meta.env instead of process.env for frontend
+const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com/api';
+
+// Create API instance with baseURL
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
+
 // Create the UserContext
 export const UserContext = createContext();
 
@@ -96,11 +107,11 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       localStorage.setItem('wellsFargoAuthToken', token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       setIsAuthenticated(true);
     } else {
       localStorage.removeItem('wellsFargoAuthToken');
-      delete axios.defaults.headers.common['Authorization'];
+      delete api.defaults.headers.common['Authorization'];
       setIsAuthenticated(false);
     }
   }, [token]);
@@ -112,15 +123,17 @@ export const UserProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
+  // Log API URL on component mount
+  useEffect(() => {
+    console.log('UserContext is using API URL:', API_URL);
+  }, []);
+
   // Load dashboard data from API
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/dashboard', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
+      // Use API_URL directly for this call
+      const response = await api.get('/dashboard');
       
       if (response.data && response.data.success) {
         setUser(response.data.data.user);
@@ -147,7 +160,7 @@ export const UserProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('/api/auth/login', credentials);
+      const response = await api.post('/auth/login', credentials);
       
       if (response.data && response.data.success) {
         // Save token
@@ -178,7 +191,7 @@ export const UserProvider = ({ children }) => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.post('/api/auth/register', userData);
+      const response = await api.post('/auth/register', userData);
       
       if (response.data && response.data.success) {
         // Save token
@@ -227,9 +240,7 @@ export const UserProvider = ({ children }) => {
   const updateUser = async (newUserData) => {
     setLoading(true);
     try {
-      const response = await axios.put('/api/auth/updateprofile', newUserData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.put('/auth/updateprofile', newUserData);
       
       if (response.data && response.data.success) {
         setUser(prevUser => {
@@ -261,12 +272,10 @@ export const UserProvider = ({ children }) => {
       return true;
     }
     
-    // Otherwise, we need to make an API call (this would be rare since we usually make the API call before calling addAccount)
+    // Otherwise, we need to make an API call
     setLoading(true);
     try {
-      const response = await axios.post('/api/dashboard/account', newAccount, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.post('/dashboard/account', newAccount);
       
       if (response.data && response.data.success) {
         setAccounts(prev => [...prev, response.data.data.account]);
@@ -289,9 +298,7 @@ export const UserProvider = ({ children }) => {
     
     setLoading(true);
     try {
-      const response = await axios.get(`/api/dashboard/account/${accountId}`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.get(`/dashboard/account/${accountId}`);
       
       if (response.data && response.data.success) {
         return response.data.data;
@@ -314,9 +321,7 @@ export const UserProvider = ({ children }) => {
     
     setLoading(true);
     try {
-      const response = await axios.post('/api/dashboard/transfer', transferData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      const response = await api.post('/dashboard/transfer', transferData);
       
       if (response.data && response.data.success) {
         // Refresh account data to get updated balances
