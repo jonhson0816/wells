@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
-import axios from 'axios';
+import api from '../../utils/apiClient';
 import './Dashboard.css';
 
 // Modified Security Verification Modal Component
@@ -185,14 +185,14 @@ const Dashboard = () => {
         }
   
         // Create API client with auth header
-        const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com';
-        const api = axios.create({
-          baseURL: API_URL,
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }
-        });
+        // const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com';
+        // const api = axios.create({
+        //   baseURL: API_URL,
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': `Bearer ${token}`
+        //   }
+        // });
   
         // First, get any existing accounts from localStorage
         const storedAccounts = localStorage.getItem('wellsFargoAccounts');
@@ -221,6 +221,7 @@ const Dashboard = () => {
         }
   
         // Fetch dashboard data
+        // const response = await api.get('/dashboard');
         const response = await api.get('/dashboard');
         
         if (response.data.success) {
