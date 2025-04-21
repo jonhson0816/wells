@@ -2,13 +2,10 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-// API URL to use consistently throughout the app
+// API URL to use for production or when proxy is not available
 const API_URL = 'https://wellsapi.onrender.com';
 
 export default defineConfig(({ command }) => {
-  // Determine if we're in development mode
-  const isDev = command === 'serve';
-  
   return {
     plugins: [react()],
     server: {
@@ -28,9 +25,7 @@ export default defineConfig(({ command }) => {
       },
     },
     define: {
-      // Make environment variables available
-      'import.meta.env.VITE_API_URL': JSON.stringify(API_URL),
-      'import.meta.env.VITE_IS_DEV': JSON.stringify(isDev),
+      // We don't need to explicitly define VITE_IS_DEV as Vite provides MODE
     },
   };
 });
