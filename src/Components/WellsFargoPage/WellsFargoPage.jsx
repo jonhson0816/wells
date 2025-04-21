@@ -611,7 +611,7 @@ const WellsFargoPage = () => {
               </div>
             </div>
           ) : (
-            // Guest view
+            // Guest views
             <>
               <div className="reg001-welcome-section">
                 <h1>Welcome to Wells Fargo</h1>
