@@ -1,8 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
-// Use Vite's import.meta.env instead of process.env for frontend
-// Set a fixed API URL instead of relying on potentially missing environment variables
+
 const API_URL = 'https://wellsapi.onrender.com/api';
 
 // Create API client with base URL

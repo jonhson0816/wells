@@ -217,7 +217,7 @@ const SavingsAccountPage = () => {
       if (dateRange !== 'all') queryParams.append('dateRange', dateRange);
   
       // Use the base URL from your environment
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
       
       // Determine the correct endpoint to use
       let effectiveAccountId;
@@ -405,7 +405,7 @@ const downloadStatement = async () => {
         effectiveAccountId = 'primary';
       }
       
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
       const apiEndpoint = `${baseUrl}/api/savings/${effectiveAccountId}/deposit`;
       
       console.log(`Making deposit to endpoint: ${apiEndpoint}`);
