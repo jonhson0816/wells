@@ -16,7 +16,7 @@ if (JWT_EXPIRE === '30d') {
 
 // Create API client with base URL
 // FIXED: Ensure this matches your actual API URL and set up local environment variables correctly
-const API_URL = import.meta.env?.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com/api';
 
 const api = axios.create({
   baseURL: API_URL,
