@@ -1,18 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
-
-// Use Vite's import.meta.env instead of process.env for frontend
-const API_URL = 'https://wellsapi.onrender.com/api';
-
-// Create API client with base URL
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-console.log('API instance created with baseURL:', API_URL);
+import api from '../services/api';
 
 // Create the UserContext
 export const UserContext = createContext();
@@ -24,7 +11,7 @@ export const UserProvider = ({ children }) => {
     return localStorage.getItem('wellsFargoAuthToken') ? true : false;
   });
   
-  // Token state - changed from 'token' to 'wellsFargoAuthToken' to match AuthContext
+  // Token state
   const [token, setToken] = useState(() => {
     return localStorage.getItem('wellsFargoAuthToken') || null;
   });
@@ -125,16 +112,10 @@ export const UserProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  // Log API URL on component mount
-  useEffect(() => {
-    console.log('UserContext is using API URL:', API_URL);
-  }, []);
-
   // Load dashboard data from API
   const loadDashboardData = async () => {
     setLoading(true);
     try {
-      // Use API_URL directly for this call
       const response = await api.get('/dashboard');
       
       if (response.data && response.data.success) {

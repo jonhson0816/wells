@@ -1,30 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import axios from 'axios';
-
-
-const API_URL = 'https://wellsapi.onrender.com/api';
-
-// Create API client with base URL
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
-});
-
-console.log('API instance created with baseURL:', API_URL);
-
-// Add token to requests if available
-api.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem('wellsFargoAuthToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
+import api from '../services/api';
 
 // Create the auth context
 export const AuthContext = createContext();
@@ -218,9 +193,6 @@ export const AuthProvider = ({ children }) => {
       if (formattedUserData.phoneNumber.replace(/\D/g, '').length !== 10) {
         throw new Error("Please provide a valid 10-digit phone number");
       }
-      
-      console.log('Register function called with API_URL:', API_URL);
-      console.log('Using axios instance with baseURL:', api.defaults.baseURL);
       
       // Send registration request to backend
       const response = await api.post('/auth/register', formattedUserData);

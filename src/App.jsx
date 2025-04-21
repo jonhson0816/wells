@@ -122,7 +122,7 @@ function App() {
       {/* Wrap the entire application with AuthProvider */}
       <AuthProvider>
         {/* Keep your existing UserProvider for backward compatibility */}
-        {/* <UserProvider> */}
+        <UserProvider>
           <div className="app-container">
             <Navbar />
             <Routes>
@@ -662,7 +662,7 @@ function App() {
               />
             </Routes>
           </div>
-        {/* </UserProvider> */}
+        </UserProvider>
       </AuthProvider>
     </Router>
   );
