@@ -46,6 +46,14 @@ import InvestmentAccountPage from './Components/InvestmentAccount/InvestmentAcco
 import StudentAccountPage from './Components/StudentAccount/StudentAccountPage';
 import CertificateOfDepositPage from './Components/CertificateOfDeposit/CertificateOfDepositPage';
 
+if (import.meta.env.DEV) {
+  const originalFetch = window.fetch;
+  window.fetch = function(resource, init) {
+    console.log(`Fetch request to: ${resource}`);
+    return originalFetch.apply(this, arguments);
+  };
+}
+
 // Wrapper component to handle page-level loading
 const PageLoader = ({ children }) => {
   const [isLoading, setIsLoading] = React.useState(true);

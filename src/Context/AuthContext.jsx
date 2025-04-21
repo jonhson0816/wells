@@ -156,6 +156,11 @@ export const AuthProvider = ({ children }) => {
   // Register function with proper variable definition order
   const register = async (userData) => {
     try {
+      console.log("Starting registration with API base URL:", api.defaults.baseURL);
+      console.log("Registration endpoint:", `/auth/register`);
+      console.log("Full URL should be:", api.defaults.baseURL + "/auth/register");
+      setLoading(true);
+      setAuthError(null);
       setLoading(true);
       setAuthError(null);
       
@@ -211,6 +216,9 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(user);
       return { success: true };
     } catch (error) {
+      console.error('Registration error:', error);
+      console.log('Error response:', error.response);
+      console.log('Error request config:', error.config);
       console.error("Registration error:", error);
       const errorMessage = error.response?.data?.error || error.message || "Registration failed. Please try again.";
       setAuthError(errorMessage);
