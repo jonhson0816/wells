@@ -1,11 +1,12 @@
 import axios from 'axios';
 
-// Determine the base URL based on environment
-const API_URL = import.meta.env.MODE === 'development'
-  ? '/api' // This will use the Vite proxy in development
-  : 'https://wellsapi.onrender.com/api'; // Direct URL in production
+// Always use the Render URL in production (when deployed to Vercel)
+// Use relative URL in development for proxy
+const API_URL = window.location.hostname === 'localhost' 
+  ? '/api' // Local development using Vite proxy
+  : 'https://wellsapi.onrender.com/api'; // Production URL
 
-// Create a single API client instance
+// Create API client instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -13,10 +14,9 @@ const api = axios.create({
   }
 });
 
-// Add debugging interceptor
+// Add authentication interceptor
 api.interceptors.request.use(
   (config) => {
-    // Log the request URL for debugging
     console.log('Making request to:', config.baseURL + (config.url || ''));
     
     const token = localStorage.getItem('wellsFargoAuthToken');
