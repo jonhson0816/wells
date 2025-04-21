@@ -1,34 +1,36 @@
-import axios from 'axios';
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import path from 'path';
 
-// Determine the base URL based on environment
-const isDevelopment = import.meta.env.DEV;
-const API_URL = isDevelopment
-  ? '/api' // This will use the Vite proxy in development
-  : 'https://wellsapi.onrender.com/api'; // Direct URL in production
+// API URL to use consistently throughout the app
+const API_URL = 'https://wellsapi.onrender.com';
 
-// Create a single API client instance to be used throughout the app
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json'
-  }
+export default defineConfig(({ command }) => {
+  // Determine if we're in development mode
+  const isDev = command === 'serve';
+  
+  return {
+    plugins: [react()],
+    server: {
+      port: 3000,
+      proxy: {
+        '/api': {
+          target: API_URL,
+          changeOrigin: true,
+          secure: false,
+        }
+      },
+    },
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+        '@assets': path.resolve(__dirname, './src/assets'),
+      },
+    },
+    define: {
+      // Make environment variables available
+      'import.meta.env.VITE_API_URL': JSON.stringify(API_URL),
+      'import.meta.env.VITE_IS_DEV': JSON.stringify(isDev),
+    },
+  };
 });
-
-// Add token to requests if available
-api.interceptors.request.use(
-  (config) => {
-    // Log the request URL for debugging
-    console.log('Making request to:', config.baseURL + config.url);
-    
-    const token = localStorage.getItem('wellsFargoAuthToken');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
-
-// Export the base URL and API instance
-export const apiBaseUrl = API_URL;
-export default api;

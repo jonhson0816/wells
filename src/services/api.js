@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-// Use a consistent API URL across the entire application
-const API_URL = 'https://wellsapi.onrender.com/api';
+// Determine the base URL based on environment
+const isDevelopment = import.meta.env.VITE_IS_DEV === 'true';
+const API_URL = isDevelopment
+  ? '/api' // This will use the Vite proxy in development
+  : 'https://wellsapi.onrender.com/api'; // Direct URL in production
 
-// Create a single API client instance to be used throughout the app
+// Create a single API client instance
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -11,9 +14,14 @@ const api = axios.create({
   }
 });
 
-// Add token to requests if available
+// Add debugging interceptor
 api.interceptors.request.use(
   (config) => {
+    // Log the request URL for debugging
+    if (isDevelopment) {
+      console.log('Making request to:', config.baseURL + (config.url || ''));
+    }
+    
     const token = localStorage.getItem('wellsFargoAuthToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -23,6 +31,4 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Export the base URL and API instance
-export const apiBaseUrl = API_URL;
 export default api;

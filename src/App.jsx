@@ -46,13 +46,35 @@ import InvestmentAccountPage from './Components/InvestmentAccount/InvestmentAcco
 import StudentAccountPage from './Components/StudentAccount/StudentAccountPage';
 import CertificateOfDepositPage from './Components/CertificateOfDeposit/CertificateOfDepositPage';
 
-if (import.meta.env.DEV) {
-  const originalFetch = window.fetch;
-  window.fetch = function(resource, init) {
-    console.log(`Fetch request to: ${resource}`);
-    return originalFetch.apply(this, arguments);
-  };
-}
+import axios from 'axios';
+
+// Debug utility to find all axios requests
+const originalAxiosCreate = axios.create;
+axios.create = function(config) {
+  const instance = originalAxiosCreate.call(this, config);
+  
+  // Add an interceptor to log requests
+  instance.interceptors.request.use(
+    (reqConfig) => {
+      console.log('Axios request to:', reqConfig.baseURL + (reqConfig.url || ''));
+      return reqConfig;
+    },
+    (error) => Promise.reject(error)
+  );
+  
+  return instance;
+};
+
+// Also intercept all direct axios calls
+axios.interceptors.request.use(
+  (config) => {
+    console.log('Direct axios request to:', config.baseURL + (config.url || ''));
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+console.log('Axios debugging enabled - all requests will be logged');
 
 // Wrapper component to handle page-level loading
 const PageLoader = ({ children }) => {
