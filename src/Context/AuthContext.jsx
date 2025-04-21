@@ -2,22 +2,10 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import axios from 'axios';
 
 // Use Vite's import.meta.env instead of process.env for frontend
-const JWT_SECRET = import.meta.env?.VITE_JWT_SECRET || 'your_fallback_jwt_secret_here';
-const JWT_EXPIRE = import.meta.env?.VITE_JWT_EXPIRE || '30d';
-
-// For development warning only
-if (JWT_SECRET === 'your_fallback_jwt_secret_here') {
-  console.warn('WARNING: JWT_SECRET not set in environment, using fallback');
-}
-
-if (JWT_EXPIRE === '30d') {
-  console.warn('WARNING: JWT_EXPIRE not set in environment, using fallback');
-}
+// Set a fixed API URL instead of relying on potentially missing environment variables
+const API_URL = 'https://wellsapi.onrender.com/api';
 
 // Create API client with base URL
-// FIXED: Ensure this matches your actual API URL and set up local environment variables correctly
-const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com/api';
-
 const api = axios.create({
   baseURL: API_URL,
   headers: {
@@ -191,7 +179,7 @@ export const AuthProvider = ({ children }) => {
     return phoneNumber ? phoneNumber.replace(/\D/g, '') : '';
   };
 
-  // FIXED: Register function with proper variable definition order
+  // Register function with proper variable definition order
   const register = async (userData) => {
     try {
       setLoading(true);
