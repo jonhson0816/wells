@@ -131,7 +131,7 @@ const CheckingAccountPage = () => {
     const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
     return isPrimaryAccount() 
       ? `${baseUrl}/api/checking/primary${endpoint}` 
-      : `${baseUrl}/api/checking/${accountId}${endpoint}`;
+      : `${baseUrl}/checking/${accountId}${endpoint}`;
   };
 
   // Try to get account data from localStorage first (as stored by Dashboard)
