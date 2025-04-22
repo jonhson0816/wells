@@ -5,7 +5,7 @@ import CryptoJS from 'crypto-js';
 // Create the auth context
 export const AuthContext = createContext();
 
-// Secret key for encryption (in a real app, this would be stored securely, not in the code)
+// Secret key for encryption (in production, use environment variables)
 const ENCRYPTION_KEY = 'WELLS_FARGO_SECURE_KEY_2025';
 
 // Helper functions for encryption/decryption
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       
       // Check if we have a token
-      const token = sessionStorage.getItem('wf_auth_token');
+      const token = localStorage.getItem('wellsFargoAuthToken');
       
       if (!token) {
         console.log("No auth token found during session check");
@@ -52,8 +52,8 @@ export const AuthProvider = ({ children }) => {
       
       console.log("Auth token found, checking for local user data");
       
-      // First try to get user data from sessionStorage to avoid unnecessary API calls
-      const encryptedUser = sessionStorage.getItem('wf_user_data');
+      // First try to get user data from localStorage to avoid unnecessary API calls
+      const encryptedUser = localStorage.getItem('wellsFargoUser');
       if (encryptedUser) {
         try {
           const userData = decryptData(encryptedUser);
@@ -92,7 +92,7 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log("Validating token with backend");
       
-      // Set token for API call
+      // Set auth header for API call
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       // Validate token with backend
@@ -100,21 +100,15 @@ export const AuthProvider = ({ children }) => {
       
       if (response.data.success) {
         console.log("Token validated successfully");
-        
-        // Store only essential user data, not full profile with sensitive details
         const userData = response.data.data;
-        const essentialUserData = {
-          id: userData._id,
-          name: userData.name,
-          email: userData.email,
-          firstName: userData.firstName,
-          lastName: userData.lastName
-        };
+        
+        // Store user data with sensitive fields removed
+        const sanitizedUser = sanitizeUserData(userData);
         
         setCurrentUser(userData);
         
-        // Store encrypted data in sessionStorage, not localStorage
-        sessionStorage.setItem('wf_user_data', encryptData(essentialUserData));
+        // Update stored user data with fresh data from server (encrypted)
+        localStorage.setItem('wellsFargoUser', encryptData(sanitizedUser));
       } else {
         console.log("Token validation failed:", response.data);
         clearUserData();
@@ -125,6 +119,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // Helper function to remove sensitive data before storing
+  const sanitizeUserData = (userData) => {
+    // Create a copy without password, SSN, and other sensitive fields
+    const { password, securityAnswer, ssn, ...sanitizedData } = userData;
+    
+    // If there are accounts, sanitize them too
+    if (sanitizedData.accounts) {
+      sanitizedData.accounts = sanitizedData.accounts.map(account => {
+        // Keep only summary account info, not full transaction history
+        const { accountNumber, accountName, accountType, balance } = account;
+        return { accountNumber, accountName, accountType, balance };
+      });
+    }
+    
+    return sanitizedData;
+  };
+
   // Clear user data function to ensure proper user isolation
   const clearUserData = () => {
     // Clear all user-related data from storage
@@ -132,10 +143,6 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('wellsFargoUserData');
     localStorage.removeItem('wellsFargoAuthToken');
     localStorage.removeItem('wellsFargoAccounts');
-    
-    // Clear session storage items
-    sessionStorage.removeItem('wf_user_data');
-    sessionStorage.removeItem('wf_auth_token');
     sessionStorage.removeItem('wellsFargoUserData');
     sessionStorage.removeItem('wellsFargoSession');
     
@@ -149,7 +156,7 @@ export const AuthProvider = ({ children }) => {
     setAuthError(null);
   };
   
-  // Login function
+  // Login function - FIXED
   const login = async (username, password) => {
     try {
       setLoading(true);
@@ -157,7 +164,8 @@ export const AuthProvider = ({ children }) => {
       
       // Clear current session for clean login
       setCurrentUser(null);
-      clearUserData();
+      sessionStorage.removeItem('wellsFargoUserData');
+      sessionStorage.removeItem('wellsFargoSession');
       
       // Validate inputs
       if (!username || !password) {
@@ -178,26 +186,21 @@ export const AuthProvider = ({ children }) => {
         throw new Error("Unexpected response from server");
       }
       
-      // Store token and minimal user data
+      // Store token and user data
       const { token, user } = response.data;
-      
-      // Store token in sessionStorage only (more secure than localStorage)
-      sessionStorage.setItem('wf_auth_token', token);
       
       // Set token for subsequent API calls
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
-      // Store only essential user data, encrypted
-      const essentialUserData = {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
-      };
+      // Store token in plain text (as in original code)
+      localStorage.setItem('wellsFargoAuthToken', token);
       
-      // Save encrypted user data to sessionStorage
-      sessionStorage.setItem('wf_user_data', encryptData(essentialUserData));
+      // Store sanitized user data with encryption
+      const sanitizedUser = sanitizeUserData(user);
+      localStorage.setItem('wellsFargoUser', encryptData(sanitizedUser));
+      
+      // Also store in session storage as per original code, but encrypted
+      sessionStorage.setItem('wellsFargoUserData', encryptData(sanitizedUser));
       
       setCurrentUser(user);
       return { success: true };
@@ -217,7 +220,7 @@ export const AuthProvider = ({ children }) => {
     return phoneNumber ? phoneNumber.replace(/\D/g, '') : '';
   };
 
-  // Register function
+  // Register function - FIXED
   const register = async (userData) => {
     try {
       console.log("Starting registration with API base URL:", api.defaults.baseURL);
@@ -226,7 +229,9 @@ export const AuthProvider = ({ children }) => {
       
       // Clear session data for clean registration
       setCurrentUser(null);
-      clearUserData();
+      sessionStorage.removeItem('wellsFargoUserData');
+      sessionStorage.removeItem('wellsFargoSession');
+      localStorage.removeItem('wellsFargoAuthToken');
       
       // Validate required fields
       if (!userData.username || !userData.password || !userData.email || 
@@ -244,7 +249,7 @@ export const AuthProvider = ({ children }) => {
         name: `${userData.firstName} ${userData.lastName}`
       };
       
-      // Log the data being sent to confirm name is set (redacting sensitive fields)
+      // Log the data being sent to confirm name is set
       console.log("Data being sent to server:", {
         ...formattedUserData,
         password: "[REDACTED]",
@@ -266,27 +271,22 @@ export const AuthProvider = ({ children }) => {
         throw new Error(response.data.error || "Registration failed");
       }
       
-      // Store token and minimal user data
+      // Store token and user data
       const { token, user } = response.data;
-      
-      // Store token in sessionStorage
-      sessionStorage.setItem('wf_auth_token', token);
       
       // Set token for subsequent API calls
       api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
-      // Store only essential user data, encrypted
-      const essentialUserData = {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName
-      };
+      // Store token in plain text (as in original code)
+      localStorage.setItem('wellsFargoAuthToken', token);
       
-      // Save encrypted user data to sessionStorage
-      sessionStorage.setItem('wf_user_data', encryptData(essentialUserData));
-      sessionStorage.setItem('wellsFargoSession', 'active');
+      // Store sanitized user data with encryption
+      const sanitizedUser = sanitizeUserData(user);
+      localStorage.setItem('wellsFargoUser', encryptData(sanitizedUser));
+      
+      // Also store in session storage as per original code, but encrypted
+      sessionStorage.setItem('wellsFargoUserData', encryptData(sanitizedUser));
+      sessionStorage.setItem('wellsFargoSession', 'true');
       
       setCurrentUser(user);
       return { success: true };
@@ -352,17 +352,10 @@ export const AuthProvider = ({ children }) => {
       // Update stored user data
       const updatedUser = response.data.data;
       
-      // Store only essential user data, encrypted
-      const essentialUserData = {
-        id: updatedUser._id,
-        name: updatedUser.name,
-        email: updatedUser.email,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName
-      };
-      
-      // Save encrypted user data to sessionStorage
-      sessionStorage.setItem('wf_user_data', encryptData(essentialUserData));
+      // Store sanitized user data with encryption
+      const sanitizedUser = sanitizeUserData(updatedUser);
+      localStorage.setItem('wellsFargoUser', encryptData(sanitizedUser));
+      sessionStorage.setItem('wellsFargoUserData', encryptData(sanitizedUser));
       
       setCurrentUser(updatedUser);
       return { success: true };
@@ -425,8 +418,8 @@ export const AuthProvider = ({ children }) => {
   
   // Check if a user is authenticated (has valid token and user data)
   const isAuthenticated = () => {
-    const token = sessionStorage.getItem('wf_auth_token');
-    const encryptedUserData = sessionStorage.getItem('wf_user_data');
+    const token = localStorage.getItem('wellsFargoAuthToken');
+    const encryptedUserData = localStorage.getItem('wellsFargoUser');
     
     // Try to decrypt the user data to verify it's valid
     if (token && encryptedUserData) {
@@ -437,23 +430,28 @@ export const AuthProvider = ({ children }) => {
     return false;
   };
   
-  // Get account data securely from API
+  // Securely retrieve account data
   const getAccountData = async () => {
     try {
-      if (!isAuthenticated()) {
-        throw new Error("User not authenticated");
+      const token = localStorage.getItem('wellsFargoAuthToken');
+      if (!token) {
+        throw new Error("Not authenticated");
       }
       
+      // Ensure auth header is set
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
+      // Fetch account data from API instead of local storage
       const response = await api.get('/accounts');
       
-      if (!response.data.success) {
-        throw new Error(response.data.error || "Failed to fetch account data");
+      if (response.data && response.data.success) {
+        return response.data.data;
+      } else {
+        throw new Error("Failed to fetch account data");
       }
-      
-      return { success: true, data: response.data.data };
     } catch (error) {
       console.error("Error fetching account data:", error);
-      return { success: false, error: error.message };
+      throw error;
     }
   };
   
