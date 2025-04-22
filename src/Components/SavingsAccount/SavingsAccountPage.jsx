@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import api from '../services/api';
 import './SavingsAccountPage.css';
 
 const SavingsAccountPage = () => {
@@ -53,23 +54,20 @@ const SavingsAccountPage = () => {
     return !accountId || accountId === 'primary';
   };
 
-  // Get the appropriate API endpoint based on whether this is the primary account
+  // This function is now only used for logging
   const getApiEndpoint = (endpoint = '') => {
-    // Use the full URL including the base URL of your API server
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
-    
     // If this is the primary account, use the primary endpoint
     if (isPrimaryAccount()) {
-      return `${baseUrl}/savings/primary${endpoint}`;
+      return `/savings/primary${endpoint}`;
     }
     
     // For accounts fetched from real DB, use the MongoDB _id if available
     if (account && account._id) {
-      return `${baseUrl}/savings/${account._id}${endpoint}`;
+      return `/savings/${account._id}${endpoint}`;
     }
     
-    // Otherwise use the accountId from params directly - let the backend handle any prefixes
-    return `${baseUrl}/savings/${accountId}${endpoint}`;
+    // Otherwise use the accountId from params directly
+    return `/savings/${accountId}${endpoint}`;
   };
 
   // Try to get account data from localStorage first (as stored by Dashboard)
@@ -126,11 +124,11 @@ const SavingsAccountPage = () => {
         }
       }
       
-      const apiEndpoint = getApiEndpoint();
-      console.log('Using API endpoint:', apiEndpoint);
+      const endpoint = getApiEndpoint();
+      console.log('Using API endpoint:', endpoint);
       
       try {
-        const response = await axios.get(apiEndpoint, apiConfig());
+        const response = await api.get(endpoint);
         
         console.log('API Response:', response);
         
@@ -216,13 +214,8 @@ const SavingsAccountPage = () => {
       if (filter !== 'all') queryParams.append('filter', filter);
       if (dateRange !== 'all') queryParams.append('dateRange', dateRange);
   
-      // Use the base URL from your environment
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
-      
-      // Determine the correct endpoint to use
-
       let effectiveAccountId;
-
+  
       if (isPrimaryAccount()) {
         console.log('Using primary account endpoint');
         effectiveAccountId = 'primary';
@@ -236,16 +229,12 @@ const SavingsAccountPage = () => {
         effectiveAccountId = 'primary';
         console.log('Defaulting to primary account');
       }
-
-      // Remove the duplicate /api in the URL path
-      const apiEndpoint = `${baseUrl}/savings/${effectiveAccountId}/transactions`;
-      console.log(`Fetching transactions from: ${apiEndpoint}`);
+  
+      const endpoint = `/savings/${effectiveAccountId}/transactions?${queryParams.toString()}`;
+      console.log(`Fetching transactions from: ${endpoint}`);
             
       try {
-        const response = await axios.get(
-          `${apiEndpoint}?${queryParams.toString()}`,
-          apiConfig()
-        );
+        const response = await api.get(endpoint);
         
         if (response.data.success) {
           setTransactions(response.data.data);
@@ -334,125 +323,128 @@ const SavingsAccountPage = () => {
     return mockTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
   };
 
-  // Download statement
-const downloadStatement = async () => {
-  try {
-    const token = getAuthToken();
-    if (!token) {
-      alert('Authentication required. Please log in.');
-      return;
-    }
+    // Download statement
+    const downloadStatement = async () => {
+      try {
+        const token = getAuthToken();
+        if (!token) {
+          alert('Authentication required. Please log in.');
+          return;
+        }
     
-    // Get the API endpoint using existing function
-    let apiEndpoint = getApiEndpoint('/statement');
-    
-    console.log(`Attempting to download statement using endpoint: ${apiEndpoint}`);
-    
-    const response = await axios.post(
-      apiEndpoint,
-      {
-        period: statementPeriod,
-        format: statementFormat
-      },
-      apiConfig()
-    );
-    
-    if (response.data.success) {
-      alert(`Your statement is being prepared for download. It will be available soon.`);
-      setIsStatementModalOpen(false);
-    } else {
-      throw new Error(response.data.error || 'Failed to generate statement');
-    }
-  } catch (err) {
-    console.error('Error downloading statement (details):', err);
-    
-    if (err.response && err.response.status === 401) {
-      alert('Your session has expired. Please log in again.');
-    } else if (err.response && err.response.status === 404) {
-      console.error('Account not found. Details:', err.response.data);
-      alert(`Could not find the account. Please try again or select a different account.`);
-    } else {
-      alert(err.response?.data?.error || 'Error generating statement');
-    }
-  }
-};
+        let effectiveAccountId;
+        if (isPrimaryAccount()) {
+          effectiveAccountId = 'primary';
+        } else if (account && account._id) {
+          effectiveAccountId = account._id;
+        } else {
+          effectiveAccountId = accountId;
+        }
+        
+        const endpoint = `/savings/${effectiveAccountId}/statement`;
+        console.log(`Attempting to download statement using endpoint: ${endpoint}`);
+        
+        const response = await api.post(
+          endpoint,
+          {
+            period: statementPeriod,
+            format: statementFormat
+          }
+        );
+        
+        if (response.data.success) {
+          alert(`Your statement is being prepared for download. It will be available soon.`);
+          setIsStatementModalOpen(false);
+        } else {
+          throw new Error(response.data.error || 'Failed to generate statement');
+        }
+      } catch (err) {
+        console.error('Error downloading statement (details):', err);
+        
+        if (err.response && err.response.status === 401) {
+          alert('Your session has expired. Please log in again.');
+        } else if (err.response && err.response.status === 404) {
+          console.error('Account not found. Details:', err.response.data);
+          alert(`Could not find the account. Please try again or select a different account.`);
+        } else {
+          alert(err.response?.data?.error || 'Error generating statement');
+        }
+      }
+    };
 
-  const handleDeposit = async () => {
-    try {
-      const token = getAuthToken();
-      if (!token) {
-        alert('Authentication required. Please log in.');
-        handleLoginRedirect();
-        return;
-      }
-      
-      const amount = parseFloat(depositAmount);
-      if (isNaN(amount) || amount <= 0) {
-        alert('Please enter a valid positive amount.');
-        return;
-      }
-      
-      // Use the correct account identifier
-      let effectiveAccountId;
-      
-      if (isPrimaryAccount()) {
-        effectiveAccountId = 'primary';
-      } else if (account && account._id) {
-        // Use MongoDB's _id directly if available
-        effectiveAccountId = account._id;
-      } else if (accountId) {
-        // Remove any prefix if present
-        effectiveAccountId = accountId.replace(/^acc-/, '');
-      } else {
-        effectiveAccountId = 'primary';
-      }
-      
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
-      const apiEndpoint = `${baseUrl}/savings/${effectiveAccountId}/deposit`;
-      
-      console.log(`Making deposit to endpoint: ${apiEndpoint}`);
-      
-      const response = await axios.post(
-        apiEndpoint,
-        {
-          amount: amount,
-          description: depositDescription || 'Deposit'
-        },
-        apiConfig()
-      );
-      
-      if (response.data.success) {
-        // Update the account balance and transactions
-        setAccount({
-          ...account,
-          balance: response.data.data.newBalance,
-          availableBalance: response.data.data.newBalance
-        });
+    const handleDeposit = async () => {
+      try {
+        const token = getAuthToken();
+        if (!token) {
+          alert('Authentication required. Please log in.');
+          handleLoginRedirect();
+          return;
+        }
         
-        // Add the new transaction to the transactions list
-        setTransactions([response.data.data.transaction, ...transactions]);
+        const amount = parseFloat(depositAmount);
+        if (isNaN(amount) || amount <= 0) {
+          alert('Please enter a valid positive amount.');
+          return;
+        }
         
-        // Update the account in localStorage to maintain consistency across pages
-        updateAccountInLocalStorage(response.data.data.newBalance);
+        // Use the correct account identifier
+        let effectiveAccountId;
         
-        alert(`Successfully deposited $${amount}`);
-        setIsDepositModalOpen(false);
-        setDepositAmount('');
-        setDepositDescription('');
-      } else {
-        throw new Error(response.data.error || 'Failed to process deposit');
+        if (isPrimaryAccount()) {
+          effectiveAccountId = 'primary';
+        } else if (account && account._id) {
+          // Use MongoDB's _id directly if available
+          effectiveAccountId = account._id;
+        } else if (accountId) {
+          // Remove any prefix if present
+          effectiveAccountId = accountId.replace(/^acc-/, '');
+        } else {
+          effectiveAccountId = 'primary';
+        }
+        
+        const endpoint = `/savings/${effectiveAccountId}/deposit`;
+        console.log(`Making deposit to endpoint: ${endpoint}`);
+        
+        const response = await api.post(
+          endpoint,
+          {
+            amount: amount,
+            description: depositDescription || 'Deposit'
+          }
+        );
+        
+        if (response.data.success) {
+          // Update the account balance and transactions
+          setAccount({
+            ...account,
+            balance: response.data.data.newBalance,
+            availableBalance: response.data.data.newBalance
+          });
+          
+          // Add the new transaction to the transactions list
+          setTransactions([response.data.data.transaction, ...transactions]);
+          
+          // Update the account in localStorage to maintain consistency across pages
+          updateAccountInLocalStorage(response.data.data.newBalance);
+          
+          alert(`Successfully deposited $${amount}`);
+          setIsDepositModalOpen(false);
+          setDepositAmount('');
+          setDepositDescription('');
+        } else {
+          throw new Error(response.data.error || 'Failed to process deposit');
+        }
+      } catch (err) {
+        if (err.response && err.response.status === 401) {
+          alert('Your session has expired. Please log in again.');
+          handleLoginRedirect();
+        } else {
+          const errorMessage = err.response?.data?.error || 'Error processing deposit';
+          console.error('Deposit error details:', err);
+          alert(errorMessage);
+        }
       }
-    } catch (err) {
-      if (err.response && err.response.status === 401) {
-        alert('Your session has expired. Please log in again.');
-        handleLoginRedirect();
-      } else {
-        const errorMessage = err.response?.data?.error || 'Error processing deposit';
-        console.error('Deposit error details:', err);
-        alert(errorMessage);
-      }
-    }
-  };
+    };
 
   // Helper function to update account balance in localStorage
   const updateAccountInLocalStorage = (newBalance) => {
