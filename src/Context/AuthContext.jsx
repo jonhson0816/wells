@@ -119,10 +119,12 @@ export const AuthProvider = ({ children }) => {
       }
       
       // Send login request to backend
-      const response = await api.post('/auth/login', {
-        username,
-        password
-      });
+      // const response = await api.post('/auth/login', {
+      //   username,
+      //   password
+      // });
+
+      const response = await api.post('/auth/login', formattedUserData);
       
       // Check if the response structure matches what we expect
       if (!response.data || !response.data.token || !response.data.user) {

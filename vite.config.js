@@ -14,7 +14,7 @@ export default defineConfig(({ command, mode }) => {
       port: 3000,
       proxy: {
         '/api': {
-          target: mode === 'development' ? 'http://localhost:5000' : API_URL,
+          target: mode === 'development' ? 'https://wellsapi.onrender.com' : API_URL,
           changeOrigin: true,
           secure: false,
         }
