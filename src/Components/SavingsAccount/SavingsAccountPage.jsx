@@ -60,16 +60,16 @@ const SavingsAccountPage = () => {
     
     // If this is the primary account, use the primary endpoint
     if (isPrimaryAccount()) {
-      return `${baseUrl}/api/savings/primary${endpoint}`;
+      return `${baseUrl}/savings/primary${endpoint}`;
     }
     
     // For accounts fetched from real DB, use the MongoDB _id if available
     if (account && account._id) {
-      return `${baseUrl}/api/savings/${account._id}${endpoint}`;
+      return `${baseUrl}/savings/${account._id}${endpoint}`;
     }
     
     // Otherwise use the accountId from params directly - let the backend handle any prefixes
-    return `${baseUrl}/api/savings/${accountId}${endpoint}`;
+    return `${baseUrl}/savings/${accountId}${endpoint}`;
   };
 
   // Try to get account data from localStorage first (as stored by Dashboard)
@@ -220,7 +220,7 @@ const SavingsAccountPage = () => {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
       
       // Determine the correct endpoint to use
-      
+
       let effectiveAccountId;
 
       if (isPrimaryAccount()) {
@@ -408,7 +408,7 @@ const downloadStatement = async () => {
       }
       
       const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
-      const apiEndpoint = `${baseUrl}/api/savings/${effectiveAccountId}/deposit`;
+      const apiEndpoint = `${baseUrl}/savings/${effectiveAccountId}/deposit`;
       
       console.log(`Making deposit to endpoint: ${apiEndpoint}`);
       
