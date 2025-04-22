@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useUser } from '../../Context/UserContext';
+import api from '../../services/api';
 import axios from 'axios';
 import './OpenNewAccount.css';
 
@@ -282,16 +283,7 @@ const OpenNewAccount = () => {
         }
       };
       
-      // Make sure the API URL matches your backend route - removed process.env reference
-      const API_URL = window.ENV_API_URL || '';
-      
-      // Set up request with Authorization header
-      const response = await axios.post(`${API_URL}/api/open-account`, payload, {
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await api.post('/open-account', payload);
       
       if (response.data && response.data.success) {
         // Get account data from response
