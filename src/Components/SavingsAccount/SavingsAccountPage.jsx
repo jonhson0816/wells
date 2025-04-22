@@ -4,6 +4,76 @@ import axios from 'axios';
 import api from '../../services/api';
 import './SavingsAccountPage.css';
 
+// Security Verification Modal Component
+const SecurityVerificationModal = ({ isOpen, onClose, onVerify, targetAction }) => {
+  const [verificationCode, setVerificationCode] = useState('');
+  const [error, setError] = useState('');
+
+  // Valid verification codes
+  const validCodes = ['WFBPLC09!', 'WFBUSA09!', 'WFBAFC09!', 'WFBEUR09!'];
+
+  // Reset form when modal opens/closes
+  useEffect(() => {
+    setVerificationCode('');
+    setError('');
+  }, [isOpen]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    // Basic validation
+    if (!verificationCode.trim()) {
+      setError('Please enter a verification code');
+      return;
+    }
+    
+    // Check if code is one of the valid codes
+    if (!validCodes.includes(verificationCode)) {
+      setError('Invalid code. Please enter a valid verification code.');
+      return;
+    }
+    
+    // Valid code provided
+    onVerify(targetAction);
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="dash002 security-modal-overlay">
+      <div className="dash002 security-modal">
+        <div className="dash002 security-modal-header">
+          <h3>Verification Required</h3>
+          <button className="dash002 close-modal" onClick={onClose}>&times;</button>
+        </div>
+        <div className="dash002 security-modal-body">
+          <p>To complete this operation, please contact your Bank to obtain your transaction approval code.</p>
+          
+          <form onSubmit={handleSubmit}>
+            <div className="dash002 form-group">
+              <label htmlFor="transaction-code">Transaction Approval Code</label>
+              <input
+                type="text"
+                id="transaction-code"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                className="dash002 verification-input"
+                placeholder="Enter your code"
+              />
+              {error && <p className="dash002 error-text">{error}</p>}
+            </div>
+            
+            <div className="dash002 modal-actions">
+              <button type="button" className="dash002 cancel-btn" onClick={onClose}>Cancel</button>
+              <button type="submit" className="dash002 verify-btn">Verify</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SavingsAccountPage = () => {
   const { accountId } = useParams();
   const location = useLocation();
@@ -22,6 +92,10 @@ const SavingsAccountPage = () => {
   const [statementFormat, setStatementFormat] = useState('pdf');
   const [depositAmount, setDepositAmount] = useState('');
   const [depositDescription, setDepositDescription] = useState('');
+  
+  // Security modal state
+  const [securityModalOpen, setSecurityModalOpen] = useState(false);
+  const [pendingAction, setPendingAction] = useState(null);
   
   // Format currency helper
   const formatCurrency = (amount) => {
@@ -323,128 +397,128 @@ const SavingsAccountPage = () => {
     return mockTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
   };
 
-    // Download statement
-    const downloadStatement = async () => {
-      try {
-        const token = getAuthToken();
-        if (!token) {
-          alert('Authentication required. Please log in.');
-          return;
-        }
-    
-        let effectiveAccountId;
-        if (isPrimaryAccount()) {
-          effectiveAccountId = 'primary';
-        } else if (account && account._id) {
-          effectiveAccountId = account._id;
-        } else {
-          effectiveAccountId = accountId;
-        }
-        
-        const endpoint = `/savings/${effectiveAccountId}/statement`;
-        console.log(`Attempting to download statement using endpoint: ${endpoint}`);
-        
-        const response = await api.post(
-          endpoint,
-          {
-            period: statementPeriod,
-            format: statementFormat
-          }
-        );
-        
-        if (response.data.success) {
-          alert(`Your statement is being prepared for download. It will be available soon.`);
-          setIsStatementModalOpen(false);
-        } else {
-          throw new Error(response.data.error || 'Failed to generate statement');
-        }
-      } catch (err) {
-        console.error('Error downloading statement (details):', err);
-        
-        if (err.response && err.response.status === 401) {
-          alert('Your session has expired. Please log in again.');
-        } else if (err.response && err.response.status === 404) {
-          console.error('Account not found. Details:', err.response.data);
-          alert(`Could not find the account. Please try again or select a different account.`);
-        } else {
-          alert(err.response?.data?.error || 'Error generating statement');
-        }
+  // Download statement
+  const downloadStatement = async () => {
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        alert('Authentication required. Please log in.');
+        return;
       }
-    };
+  
+      let effectiveAccountId;
+      if (isPrimaryAccount()) {
+        effectiveAccountId = 'primary';
+      } else if (account && account._id) {
+        effectiveAccountId = account._id;
+      } else {
+        effectiveAccountId = accountId;
+      }
+      
+      const endpoint = `/savings/${effectiveAccountId}/statement`;
+      console.log(`Attempting to download statement using endpoint: ${endpoint}`);
+      
+      const response = await api.post(
+        endpoint,
+        {
+          period: statementPeriod,
+          format: statementFormat
+        }
+      );
+      
+      if (response.data.success) {
+        alert(`Your statement is being prepared for download. It will be available soon.`);
+        setIsStatementModalOpen(false);
+      } else {
+        throw new Error(response.data.error || 'Failed to generate statement');
+      }
+    } catch (err) {
+      console.error('Error downloading statement (details):', err);
+      
+      if (err.response && err.response.status === 401) {
+        alert('Your session has expired. Please log in again.');
+      } else if (err.response && err.response.status === 404) {
+        console.error('Account not found. Details:', err.response.data);
+        alert(`Could not find the account. Please try again or select a different account.`);
+      } else {
+        alert(err.response?.data?.error || 'Error generating statement');
+      }
+    }
+  };
 
-    const handleDeposit = async () => {
-      try {
-        const token = getAuthToken();
-        if (!token) {
-          alert('Authentication required. Please log in.');
-          handleLoginRedirect();
-          return;
-        }
-        
-        const amount = parseFloat(depositAmount);
-        if (isNaN(amount) || amount <= 0) {
-          alert('Please enter a valid positive amount.');
-          return;
-        }
-        
-        // Use the correct account identifier
-        let effectiveAccountId;
-        
-        if (isPrimaryAccount()) {
-          effectiveAccountId = 'primary';
-        } else if (account && account._id) {
-          // Use MongoDB's _id directly if available
-          effectiveAccountId = account._id;
-        } else if (accountId) {
-          // Remove any prefix if present
-          effectiveAccountId = accountId.replace(/^acc-/, '');
-        } else {
-          effectiveAccountId = 'primary';
-        }
-        
-        const endpoint = `/savings/${effectiveAccountId}/deposit`;
-        console.log(`Making deposit to endpoint: ${endpoint}`);
-        
-        const response = await api.post(
-          endpoint,
-          {
-            amount: amount,
-            description: depositDescription || 'Deposit'
-          }
-        );
-        
-        if (response.data.success) {
-          // Update the account balance and transactions
-          setAccount({
-            ...account,
-            balance: response.data.data.newBalance,
-            availableBalance: response.data.data.newBalance
-          });
-          
-          // Add the new transaction to the transactions list
-          setTransactions([response.data.data.transaction, ...transactions]);
-          
-          // Update the account in localStorage to maintain consistency across pages
-          updateAccountInLocalStorage(response.data.data.newBalance);
-          
-          alert(`Successfully deposited $${amount}`);
-          setIsDepositModalOpen(false);
-          setDepositAmount('');
-          setDepositDescription('');
-        } else {
-          throw new Error(response.data.error || 'Failed to process deposit');
-        }
-      } catch (err) {
-        if (err.response && err.response.status === 401) {
-          alert('Your session has expired. Please log in again.');
-          handleLoginRedirect();
-        } else {
-          const errorMessage = err.response?.data?.error || 'Error processing deposit';
-          console.error('Deposit error details:', err);
-          alert(errorMessage);
-        }
+  const handleDeposit = async () => {
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        alert('Authentication required. Please log in.');
+        handleLoginRedirect();
+        return;
       }
-    };
+      
+      const amount = parseFloat(depositAmount);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid positive amount.');
+        return;
+      }
+      
+      // Use the correct account identifier
+      let effectiveAccountId;
+      
+      if (isPrimaryAccount()) {
+        effectiveAccountId = 'primary';
+      } else if (account && account._id) {
+        // Use MongoDB's _id directly if available
+        effectiveAccountId = account._id;
+      } else if (accountId) {
+        // Remove any prefix if present
+        effectiveAccountId = accountId.replace(/^acc-/, '');
+      } else {
+        effectiveAccountId = 'primary';
+      }
+      
+      const endpoint = `/savings/${effectiveAccountId}/deposit`;
+      console.log(`Making deposit to endpoint: ${endpoint}`);
+      
+      const response = await api.post(
+        endpoint,
+        {
+          amount: amount,
+          description: depositDescription || 'Deposit'
+        }
+      );
+      
+      if (response.data.success) {
+        // Update the account balance and transactions
+        setAccount({
+          ...account,
+          balance: response.data.data.newBalance,
+          availableBalance: response.data.data.newBalance
+        });
+        
+        // Add the new transaction to the transactions list
+        setTransactions([response.data.data.transaction, ...transactions]);
+        
+        // Update the account in localStorage to maintain consistency across pages
+        updateAccountInLocalStorage(response.data.data.newBalance);
+        
+        alert(`Successfully deposited $${amount}`);
+        setIsDepositModalOpen(false);
+        setDepositAmount('');
+        setDepositDescription('');
+      } else {
+        throw new Error(response.data.error || 'Failed to process deposit');
+      }
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        alert('Your session has expired. Please log in again.');
+        handleLoginRedirect();
+      } else {
+        const errorMessage = err.response?.data?.error || 'Error processing deposit';
+        console.error('Deposit error details:', err);
+        alert(errorMessage);
+      }
+    }
+  };
 
   // Helper function to update account balance in localStorage
   const updateAccountInLocalStorage = (newBalance) => {
@@ -473,26 +547,8 @@ const SavingsAccountPage = () => {
     navigate('/login', { state: { from: location.pathname } });
   };
 
-  // Initial data fetch
-  useEffect(() => {
-    fetchAccountData();
-  }, [accountId]); // Re-fetch when accountId changes
-
-  // Fetch transactions when filters change and we have account data
-  useEffect(() => {
-    if (account && (filter !== 'all' || dateRange !== '30days')) {
-      fetchTransactions();
-    }
-  }, [account, filter, dateRange]);
-
-  // Reset filter and date range when account changes
-  useEffect(() => {
-    setFilter('all');
-    setDateRange('30days');
-  }, [accountId]);
-
-  // Handle quick actions
-  const handleQuickAction = (action) => {
+  // NEW: Handle security verification
+  const handleSecureAction = (action) => {
     // First check if user is authenticated
     const token = getAuthToken();
     if (!token) {
@@ -501,6 +557,16 @@ const SavingsAccountPage = () => {
       return;
     }
     
+    // Set the pending action and open security modal
+    setPendingAction(action);
+    setSecurityModalOpen(true);
+  };
+
+  // NEW: Handle verification success
+  const handleVerificationSuccess = (action) => {
+    setSecurityModalOpen(false);
+    
+    // Process the action that was pending verification
     switch (action) {
       case 'transfer':
         navigate('/transfer-money', { state: { fromAccount: account } });
@@ -525,6 +591,38 @@ const SavingsAccountPage = () => {
         break;
     }
   };
+
+  // Handle quick actions - UPDATED to use security verification
+  const handleQuickAction = (action) => {
+    // First check if user is authenticated
+    const token = getAuthToken();
+    if (!token) {
+      alert('Authentication required. Please log in.');
+      handleLoginRedirect();
+      return;
+    }
+    
+    // All quick actions now require security verification
+    handleSecureAction(action);
+  };
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchAccountData();
+  }, [accountId]); // Re-fetch when accountId changes
+
+  // Fetch transactions when filters change and we have account data
+  useEffect(() => {
+    if (account && (filter !== 'all' || dateRange !== '30days')) {
+      fetchTransactions();
+    }
+  }, [account, filter, dateRange]);
+
+  // Reset filter and date range when account changes
+  useEffect(() => {
+    setFilter('all');
+    setDateRange('30days');
+  }, [accountId]);
 
   const goToDashboard = () => {
     navigate('/dashboard');
@@ -706,14 +804,12 @@ const SavingsAccountPage = () => {
                   <option value="all">All Time</option>
                 </select>
               </div>
-            </div>
+              </div>
           </div>
           
-          <div className="sav004-transactions-list">
-            {transactions.length === 0 ? (
-              <p className="sav004-no-transactions">No transactions found for the selected filters.</p>
-            ) : (
-              <table className="sav004-transactions-table">
+          <div className="sav004-transactions-table">
+            {transactions.length > 0 ? (
+              <table>
                 <thead>
                   <tr>
                     <th>Date</th>
@@ -725,50 +821,61 @@ const SavingsAccountPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                {transactions.map((transaction) => (
-                  <tr key={transaction.id || `${transaction.date}-${transaction.amount}-${transaction.type}`}>
-                    <td>{new Date(transaction.date).toLocaleDateString()}</td>
-                    <td>{transaction.description}</td>
-                    <td className="sav004-transaction-type">{transaction.type}</td>
-                    <td>{transaction.status}</td>
-                    <td className={`sav004-amount ${transaction.type === 'deposit' || transaction.type === 'interest' ? 'sav004-positive' : 'sav004-negative'}`}>
-                      {transaction.type === 'deposit' || transaction.type === 'interest' ? '+' : '-'}{formatCurrency(transaction.amount)}
-                    </td>
-                    <td>{formatCurrency(transaction.balance)}</td>
-                  </tr>
-                ))}
+                  {transactions.map((transaction) => (
+                    <tr key={transaction.id} className={`transaction-${transaction.type}`}>
+                      <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                      <td>{transaction.description}</td>
+                      <td>{transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)}</td>
+                      <td>{transaction.status}</td>
+                      <td className={`amount-${transaction.type === 'deposit' || transaction.type === 'interest' ? 'positive' : 'negative'}`}>
+                        {transaction.type === 'deposit' || transaction.type === 'interest' ? '+' : '-'} {formatCurrency(Math.abs(transaction.amount))}
+                      </td>
+                      <td>{formatCurrency(transaction.balance)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
+            ) : (
+              <div className="sav004-no-transactions">
+                <p>No transactions found for the selected filters.</p>
+              </div>
             )}
+          </div>
+          
+          <div className="sav004-view-more">
+            <button className="sav004-button sav004-secondary">View All Transactions</button>
           </div>
         </div>
       </div>
 
       {/* Statement Modal */}
       {isStatementModalOpen && (
-        <div className="sav004-modal-backdrop">
+        <div className="sav004-modal-overlay">
           <div className="sav004-modal">
             <div className="sav004-modal-header">
               <h3>Download Statement</h3>
-              <button className="sav004-close-button" onClick={() => setIsStatementModalOpen(false)}>×</button>
+              <button className="sav004-close-modal" onClick={() => setIsStatementModalOpen(false)}>×</button>
             </div>
             <div className="sav004-modal-body">
               <div className="sav004-form-group">
-                <label htmlFor="statement-period">Statement Period:</label>
+                <label htmlFor="statement-period">Select Period:</label>
                 <select 
                   id="statement-period" 
                   value={statementPeriod}
                   onChange={(e) => setStatementPeriod(e.target.value)}
+                  required
                 >
-                  <option value="">Select Period</option>
+                  <option value="">-- Select Period --</option>
                   <option value="current">Current Month</option>
                   <option value="previous">Previous Month</option>
                   <option value="last3">Last 3 Months</option>
+                  <option value="last6">Last 6 Months</option>
                   <option value="ytd">Year to Date</option>
                 </select>
               </div>
+              
               <div className="sav004-form-group">
-                <label htmlFor="statement-format">Format:</label>
+                <label htmlFor="statement-format">Select Format:</label>
                 <select 
                   id="statement-format" 
                   value={statementFormat}
@@ -778,21 +885,22 @@ const SavingsAccountPage = () => {
                   <option value="csv">CSV</option>
                 </select>
               </div>
-            </div>
-            <div className="sav004-modal-footer">
-              <button 
-                className="sav004-button sav004-secondary"
-                onClick={() => setIsStatementModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="sav004-button sav004-primary"
-                onClick={downloadStatement}
-                disabled={!statementPeriod}
-              >
-                Download
-              </button>
+              
+              <div className="sav004-modal-actions">
+                <button 
+                  className="sav004-button sav004-secondary" 
+                  onClick={() => setIsStatementModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="sav004-button sav004-primary" 
+                  onClick={downloadStatement}
+                  disabled={!statementPeriod}
+                >
+                  Download
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -800,66 +908,68 @@ const SavingsAccountPage = () => {
 
       {/* Deposit Modal */}
       {isDepositModalOpen && (
-        <div className="sav004-modal-backdrop">
+        <div className="sav004-modal-overlay">
           <div className="sav004-modal">
             <div className="sav004-modal-header">
               <h3>Make a Deposit</h3>
-              <button className="sav004-close-button" onClick={() => setIsDepositModalOpen(false)}>×</button>
+              <button className="sav004-close-modal" onClick={() => setIsDepositModalOpen(false)}>×</button>
             </div>
             <div className="sav004-modal-body">
               <div className="sav004-form-group">
                 <label htmlFor="deposit-amount">Amount:</label>
-                <input 
-                  type="number" 
-                  id="deposit-amount" 
-                  value={depositAmount}
-                  onChange={(e) => setDepositAmount(e.target.value)}
-                  placeholder="Enter amount"
-                  min="0.01"
-                  step="0.01"
-                />
+                <div className="sav004-input-with-icon">
+                  <span className="sav004-currency-icon">$</span>
+                  <input 
+                    type="number" 
+                    id="deposit-amount" 
+                    placeholder="Enter amount"
+                    value={depositAmount}
+                    onChange={(e) => setDepositAmount(e.target.value)}
+                    min="0.01"
+                    step="0.01"
+                    required
+                  />
+                </div>
               </div>
+              
               <div className="sav004-form-group">
                 <label htmlFor="deposit-description">Description (Optional):</label>
                 <input 
                   type="text" 
                   id="deposit-description" 
+                  placeholder="e.g., Monthly Savings"
                   value={depositDescription}
                   onChange={(e) => setDepositDescription(e.target.value)}
-                  placeholder="Enter description"
                 />
               </div>
-            </div>
-            <div className="sav004-modal-footer">
-              <button 
-                className="sav004-button sav004-secondary"
-                onClick={() => setIsDepositModalOpen(false)}
-              >
-                Cancel
-              </button>
-              <button 
-                className="sav004-button sav004-primary"
-                onClick={handleDeposit}
-                disabled={!depositAmount || isNaN(parseFloat(depositAmount)) || parseFloat(depositAmount) <= 0}
-              >
-                Deposit
-              </button>
+              
+              <div className="sav004-modal-actions">
+                <button 
+                  className="sav004-button sav004-secondary" 
+                  onClick={() => setIsDepositModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button 
+                  className="sav004-button sav004-primary" 
+                  onClick={handleDeposit}
+                  disabled={!depositAmount || parseFloat(depositAmount) <= 0}
+                >
+                  Deposit
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
-      
-      <div className="cre014-account-footer">
-        <p>
-          <Link to="/financial-tools">Financial Tools</Link> | 
-          <Link to="/support">Contact Support</Link> | 
-          <Link to="/faqs">FAQs</Link>
-        </p>
-        <p className="cre014-disclaimer">
-          For security reasons, please log out when you are done accessing your accounts.
-          Always monitor your account for suspicious activity and report any unauthorized transactions.
-        </p>
-      </div>
+
+      {/* Security Verification Modal */}
+      <SecurityVerificationModal
+        isOpen={securityModalOpen}
+        onClose={() => setSecurityModalOpen(false)}
+        onVerify={handleVerificationSuccess}
+        targetAction={pendingAction}
+      />
     </div>
   );
 };
