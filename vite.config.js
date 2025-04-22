@@ -14,11 +14,11 @@ export default defineConfig(({ command, mode }) => {
       port: 3000,
       proxy: {
         '/api': {
-          target: mode === 'development' ? 'https://wellsapi.onrender.com' : API_URL,
+          target: 'https://wellsapi.onrender.com',
           changeOrigin: true,
-          secure: false,
+          rewrite: (path) => path.replace(/^\/api/, '')
         }
-      },
+      }
     },
     resolve: {
       alias: {

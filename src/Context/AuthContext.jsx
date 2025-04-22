@@ -200,6 +200,7 @@ export const AuthProvider = ({ children }) => {
       // Send registration request to backend
       const response = await api.post('/auth/register', formattedUserData);
       
+      
       console.log("Registration response:", response.data);
       
       if (!response.data.success) {
