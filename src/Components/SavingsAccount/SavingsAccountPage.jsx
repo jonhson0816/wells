@@ -304,7 +304,14 @@ const SavingsAccountPage = () => {
         console.log('Defaulting to primary account');
       }
   
-      const endpoint = `/savings/${effectiveAccountId}/transactions?${queryParams.toString()}`;
+      // Create a cleaned account ID without any prefix
+      let effectiveAccountIdClean = effectiveAccountId;
+      if (typeof effectiveAccountId === 'string' && effectiveAccountId.startsWith('acc-')) {
+        effectiveAccountIdClean = effectiveAccountId.replace(/^acc-/, '');
+        console.log(`Using cleaned account ID for API request: ${effectiveAccountIdClean} (original: ${effectiveAccountId})`);
+      }
+
+      const endpoint = `/savings/${effectiveAccountIdClean}/transactions?${queryParams.toString()}`;
       console.log(`Fetching transactions from: ${endpoint}`);
             
       try {
@@ -356,6 +363,60 @@ const SavingsAccountPage = () => {
       setIsLoading(false);
     }
   };
+
+  // Add this diagnostic function to help debug account ID issues
+  const runAccountDiagnostics = async () => {
+    try {
+      console.log('Running account diagnostics...');
+      const token = getAuthToken();
+      if (!token) {
+        console.error('No authentication token available');
+        return;
+      }
+      
+      // Log what we currently know
+      console.log('Current account state:', {
+        accountId: accountId,
+        accountFromState: account ? {
+          id: account.id,
+          _id: account._id,
+          accountNumber: account.accountNumber
+        } : 'No account in state'
+      });
+      
+      // Try a direct debug API call
+      const debugEndpoint = '/savings/debug-accounts';
+      console.log(`Making diagnostic request to: ${debugEndpoint}`);
+      
+      const response = await api.get(debugEndpoint);
+      
+      if (response.data.success) {
+        console.log('All user accounts:', response.data.data);
+        
+        // Look for the problematic account
+        const matchingAccount = response.data.data.find(acc => 
+          acc.accountNumber === accountId || 
+          acc.accountNumber === accountId.replace(/^acc-/, '') ||
+          acc.id === accountId
+        );
+        
+        if (matchingAccount) {
+          console.log('Found matching account:', matchingAccount);
+        } else {
+          console.log('No exact match found in accounts');
+        }
+      } else {
+        console.error('Debug API call failed:', response.data.error);
+      }
+    } catch (err) {
+      console.error('Diagnostics error:', err);
+    }
+  };
+
+  // Call diagnostics when there's an error fetching transactions
+  if (error && error.includes('Account not found')) {
+    runAccountDiagnostics();
+  }
   
   // Add a helper function to create mock transactions (for development)
   const createMockTransactions = () => {
