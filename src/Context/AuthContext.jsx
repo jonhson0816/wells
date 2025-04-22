@@ -1,7 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 
-
 // Create the auth context
 export const AuthContext = createContext();
 
@@ -102,7 +101,7 @@ export const AuthProvider = ({ children }) => {
     setAuthError(null);
   };
   
-  // Login function
+  // Login function - FIXED
   const login = async (username, password) => {
     try {
       setLoading(true);
@@ -119,12 +118,12 @@ export const AuthProvider = ({ children }) => {
       }
       
       // Send login request to backend
-      // const response = await api.post('/auth/login', {
-      //   username,
-      //   password
-      // });
-
-      const response = await api.post('/auth/login', formattedUserData);
+      const response = await api.post('/auth/login', {
+        username,
+        password
+      });
+      
+      console.log("Login response:", response.data);
       
       // Check if the response structure matches what we expect
       if (!response.data || !response.data.token || !response.data.user) {
@@ -156,14 +155,10 @@ export const AuthProvider = ({ children }) => {
     return phoneNumber ? phoneNumber.replace(/\D/g, '') : '';
   };
 
-  // Register function with proper variable definition order
+  // Register function - FIXED
   const register = async (userData) => {
     try {
       console.log("Starting registration with API base URL:", api.defaults.baseURL);
-      console.log("Registration endpoint:", `/auth/register`);
-      console.log("Full URL should be:", api.defaults.baseURL + "/auth/register");
-      setLoading(true);
-      setAuthError(null);
       setLoading(true);
       setAuthError(null);
       
@@ -205,6 +200,8 @@ export const AuthProvider = ({ children }) => {
       // Send registration request to backend
       const response = await api.post('/auth/register', formattedUserData);
       
+      console.log("Registration response:", response.data);
+      
       if (!response.data.success) {
         throw new Error(response.data.error || "Registration failed");
       }
@@ -214,15 +211,13 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('wellsFargoAuthToken', token);
       localStorage.setItem('wellsFargoUser', JSON.stringify(user));
       sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
-      sessionStorage.setItem('wellsFargoSession', true);
+      sessionStorage.setItem('wellsFargoSession', 'true');
       
       setCurrentUser(user);
       return { success: true };
     } catch (error) {
       console.error('Registration error:', error);
-      console.log('Error response:', error.response);
-      console.log('Error request config:', error.config);
-      console.error("Registration error:", error);
+      console.log('Error response:', error.response?.data);
       const errorMessage = error.response?.data?.error || error.message || "Registration failed. Please try again.";
       setAuthError(errorMessage);
       return { success: false, error: errorMessage };
@@ -296,50 +291,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Verify identity for high-security operations
-  const verifyIdentity = async (verificationMethod, verificationData) => {
-    try {
-      setLoading(true);
-      setAuthError(null);
-      
-      // Validate the current user exists
-      if (!currentUser) {
-        throw new Error("No user logged in");
-      }
-      
-      // Send verification request to backend
-      const response = await api.post('/auth/verifyidentity', {
-        verificationMethod,
-        verificationData
-      });
-      
-      if (!response.data.success) {
-        throw new Error(response.data.error || "Identity verification failed");
-      }
-      
-      // Update the user record with verification status
-      const updatedUser = {
-        ...currentUser,
-        securityVerified: response.data.user.securityVerified,
-        lastVerification: response.data.user.lastVerification
-      };
-      
-      // Save updated user data
-      localStorage.setItem('wellsFargoUser', JSON.stringify(updatedUser));
-      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(updatedUser));
-      
-      setCurrentUser(updatedUser);
-      return { success: true, verified: true };
-    } catch (error) {
-      console.error("Identity verification error:", error);
-      const errorMessage = error.response?.data?.error || error.message || "Identity verification failed. Please try again.";
-      setAuthError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  };
-  
   // Password reset functionality
   const resetPassword = async (username, securityAnswer) => {
     try {
@@ -387,33 +338,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Username recovery functionality
-  const recoverUsername = async (email) => {
-    try {
-      setLoading(true);
-      setAuthError(null);
-      
-      if (!email) {
-        throw new Error("Email address is required");
-      }
-      
-      // Send username recovery request
-      const response = await api.post('/auth/recoverusername', { email });
-      
-      return {
-        success: true,
-        message: response.data.message || "If this email address matches our records, we will send your username to it."
-      };
-    } catch (error) {
-      console.error("Username recovery error:", error);
-      const errorMessage = error.response?.data?.error || error.message || "Username recovery failed. Please try again.";
-      setAuthError(errorMessage);
-      return { success: false, error: errorMessage };
-    } finally {
-      setLoading(false);
-    }
-  };
-  
   // Check if a user is authenticated (has valid token and user data)
   const isAuthenticated = () => {
     const token = localStorage.getItem('wellsFargoAuthToken');
@@ -432,9 +356,7 @@ export const AuthProvider = ({ children }) => {
     logout,
     register,
     updateProfile,
-    verifyIdentity,
     resetPassword,
-    recoverUsername,
     clearUserData
   };
   
