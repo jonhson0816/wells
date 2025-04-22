@@ -220,8 +220,9 @@ const SavingsAccountPage = () => {
       const baseUrl = import.meta.env.VITE_API_BASE_URL || 'https://wellsapi.onrender.com';
       
       // Determine the correct endpoint to use
-      let effectiveAccountId;
       
+      let effectiveAccountId;
+
       if (isPrimaryAccount()) {
         console.log('Using primary account endpoint');
         effectiveAccountId = 'primary';
@@ -235,10 +236,11 @@ const SavingsAccountPage = () => {
         effectiveAccountId = 'primary';
         console.log('Defaulting to primary account');
       }
-      
-      const apiEndpoint = `${baseUrl}/api/savings/${effectiveAccountId}/transactions`;
+
+      // Remove the duplicate /api in the URL path
+      const apiEndpoint = `${baseUrl}/savings/${effectiveAccountId}/transactions`;
       console.log(`Fetching transactions from: ${apiEndpoint}`);
-      
+            
       try {
         const response = await axios.get(
           `${apiEndpoint}?${queryParams.toString()}`,
