@@ -147,7 +147,7 @@ const AccountTypeIcon = ({ type }) => {
 // Main Dashboard Component
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { currentUser, loading: authLoading, isAuthenticated } = useAuth();
+  const { currentUser, loading: authLoading, isAuthenticated, refreshToken } = useAuth();
   
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -180,8 +180,14 @@ const Dashboard = () => {
       try {
         setLoading(true);
         
+        // Try to refresh the token before making the request
+        try {
+          await refreshToken();
+        } catch (refreshError) {
+          console.log('Token refresh failed, will try with existing token');
+        }
+        
         // Fetch dashboard data using our authenticated API client
-        // The token is sent automatically via HttpOnly cookie
         const response = await api.get('/dashboard');
         
         if (response.data && response.data.success) {
@@ -193,7 +199,17 @@ const Dashboard = () => {
         }
       } catch (err) {
         console.error('Dashboard data fetch error:', err);
-        setError(err.message || 'Failed to load dashboard data');
+        
+        // Check if the error is due to authentication
+        if (err.response && err.response.status === 401) {
+          setError('Your session has expired. Please log in again.');
+          // Redirect to login after a short delay
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+        } else {
+          setError(err.message || 'Failed to load dashboard data');
+        }
         
         // For development purposes only - create mock accounts
         if (process.env.NODE_ENV === 'development') {
@@ -227,7 +243,7 @@ const Dashboard = () => {
     };
   
     fetchDashboardData();
-  }, [navigate, isAuthenticated, authLoading, currentUser]);
+  }, [navigate, isAuthenticated, authLoading, currentUser, refreshToken]);
 
   // Handler for navigation that requires verification
   const handleSecureNavigation = (path) => {
