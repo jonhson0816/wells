@@ -20,8 +20,8 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       
-      // Check if we have a token
-      const token = sessionStorage.getItem('wellsFargoAuthToken');
+      // Only check if we have a token
+      const token = getAuthToken();
       
       if (!token) {
         setCurrentUser(null);
@@ -29,25 +29,8 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       
-      // First try to get user data from sessionStorage to avoid unnecessary API calls
-      const storedUser = sessionStorage.getItem('wellsFargoUser');
-      if (storedUser) {
-        try {
-          const userData = JSON.parse(storedUser);
-          
-          // Set current user from storage first to avoid loading state
-          setCurrentUser(userData);
-          
-          // Then validate token with backend in the background
-          await validateTokenWithBackend(token);
-        } catch (parseError) {
-          // Continue to backend validation if parsing fails
-          await validateTokenWithBackend(token);
-        }
-      } else {
-        // If we don't have valid stored user data, validate with backend
-        await validateTokenWithBackend(token);
-      }
+      // Always validate with backend
+      await validateTokenWithBackend();
     } catch (error) {
       setAuthError("Unable to verify your session. Please log in again.");
       clearUserData();
@@ -56,17 +39,22 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
+  // Get auth token from memory-only HttpOnly cookie via API
+  const getAuthToken = () => {
+    // We no longer access token directly from sessionStorage
+    // This is now just a flag to know if we should attempt validation
+    return sessionStorage.getItem('wf_auth_session') === 'true';
+  };
+  
   // Separate function to validate token with backend
-  const validateTokenWithBackend = async (token) => {
+  const validateTokenWithBackend = async () => {
     try {
-      // Validate token with backend
+      // Token is sent automatically via HttpOnly cookie
       const response = await api.get('/auth/me');
       
       if (response.data.success) {
+        // Store minimal user data in memory only
         setCurrentUser(response.data.data);
-        
-        // Update stored user data with fresh data from server
-        sessionStorage.setItem('wellsFargoUser', JSON.stringify(response.data.data));
       } else {
         clearUserData();
       }
@@ -77,19 +65,20 @@ export const AuthProvider = ({ children }) => {
 
   // Clear user data function to ensure proper user isolation
   const clearUserData = () => {
-    // Clear all user-related data from storage
-    sessionStorage.removeItem('wellsFargoUser');
-    sessionStorage.removeItem('wellsFargoUserData');
-    sessionStorage.removeItem('wellsFargoAuthToken');
-    sessionStorage.removeItem('wellsFargoAccounts');
-    sessionStorage.removeItem('wellsFargoSession');
+    // Only remove the session flag
+    sessionStorage.removeItem('wf_auth_session');
     
     // Reset context state
     setCurrentUser(null);
     setAuthError(null);
+    
+    // Clear the HttpOnly cookie via API
+    api.post('/auth/clear-cookie').catch(() => {
+      // Silent catch - even if this fails, we've removed local references
+    });
   };
   
-  // Login function - FIXED
+  // Login function
   const login = async (username, password) => {
     try {
       setLoading(true);
@@ -97,32 +86,29 @@ export const AuthProvider = ({ children }) => {
       
       // Clear current session for clean login
       setCurrentUser(null);
-      sessionStorage.removeItem('wellsFargoUserData');
-      sessionStorage.removeItem('wellsFargoSession');
+      sessionStorage.removeItem('wf_auth_session');
       
       // Validate inputs
       if (!username || !password) {
         throw new Error("Username and password are required");
       }
       
-      // Send login request to backend
+      // Send login request to backend - token will be set as HttpOnly cookie
       const response = await api.post('/auth/login', {
         username,
         password
       });
       
       // Check if the response structure matches what we expect
-      if (!response.data || !response.data.token || !response.data.user) {
+      if (!response.data || !response.data.success || !response.data.user) {
         throw new Error("Unexpected response from server");
       }
       
-      // Store token and user data
-      const { token, user } = response.data;
-      sessionStorage.setItem('wellsFargoAuthToken', token);
-      sessionStorage.setItem('wellsFargoUser', JSON.stringify(user));
-      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
+      // Only set a flag that we're authenticated, not the actual token
+      sessionStorage.setItem('wf_auth_session', 'true');
       
-      setCurrentUser(user);
+      // Store user data in memory only
+      setCurrentUser(response.data.user);
       return { success: true };
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.message || "Login failed. Please check your credentials.";
@@ -136,10 +122,10 @@ export const AuthProvider = ({ children }) => {
   // Helper function to format phone number
   const formatPhoneNumber = (phoneNumber) => {
     // Remove all non-digit characters
-    return phoneNumber ? phoneNumber.replace(/\\D/g, '') : '';
+    return phoneNumber ? phoneNumber.replace(/\D/g, '') : '';
   };
 
-  // Register function - FIXED
+  // Register function
   const register = async (userData) => {
     try {
       setLoading(true);
@@ -147,9 +133,7 @@ export const AuthProvider = ({ children }) => {
       
       // Clear session data for clean registration
       setCurrentUser(null);
-      sessionStorage.removeItem('wellsFargoUserData');
-      sessionStorage.removeItem('wellsFargoSession');
-      sessionStorage.removeItem('wellsFargoAuthToken');
+      sessionStorage.removeItem('wf_auth_session');
       
       // Validate required fields
       if (!userData.username || !userData.password || !userData.email || 
@@ -168,25 +152,22 @@ export const AuthProvider = ({ children }) => {
       };
       
       // Validate phone number format after formatting
-      if (formattedUserData.phoneNumber.replace(/\\D/g, '').length !== 10) {
+      if (formattedUserData.phoneNumber.replace(/\D/g, '').length !== 10) {
         throw new Error("Please provide a valid 10-digit phone number");
       }
       
-      // Send registration request to backend
+      // Send registration request to backend - token will be set as HttpOnly cookie
       const response = await api.post('/auth/register', formattedUserData);
       
       if (!response.data.success) {
         throw new Error(response.data.error || "Registration failed");
       }
       
-      // Store token and user data
-      const { token, user } = response.data;
-      sessionStorage.setItem('wellsFargoAuthToken', token);
-      sessionStorage.setItem('wellsFargoUser', JSON.stringify(user));
-      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
-      sessionStorage.setItem('wellsFargoSession', 'true');
+      // Only set a flag that we're authenticated, not the actual token or user data
+      sessionStorage.setItem('wf_auth_session', 'true');
       
-      setCurrentUser(user);
+      // Store user data in memory only
+      setCurrentUser(response.data.user);
       return { success: true };
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.message || "Registration failed. Please try again.";
@@ -202,13 +183,17 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       
-      // No need to call backend for logout as JWT is stateless
-      // Just clear all local data
+      // Call backend to clear the HttpOnly cookie
+      await api.post('/auth/logout');
+      
+      // Clear all local data
       clearUserData();
       
       return { success: true };
     } catch (error) {
       setAuthError("Logout failed. Please try again.");
+      // Still clear local data even if the API call fails
+      clearUserData();
       return { success: false, error: error.message };
     } finally {
       setLoading(false);
@@ -244,12 +229,8 @@ export const AuthProvider = ({ children }) => {
         throw new Error(response.data.error || "Profile update failed");
       }
       
-      // Update stored user data
-      const updatedUser = response.data.data;
-      sessionStorage.setItem('wellsFargoUser', JSON.stringify(updatedUser));
-      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(updatedUser));
-      
-      setCurrentUser(updatedUser);
+      // Update user data in memory only
+      setCurrentUser(response.data.data);
       return { success: true };
     } catch (error) {
       const errorMessage = error.response?.data?.error || error.message || "Failed to update profile. Please try again.";
@@ -306,12 +287,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Check if a user is authenticated (has valid token and user data)
+  // Check if a user is authenticated
   const isAuthenticated = () => {
-    const token = sessionStorage.getItem('wellsFargoAuthToken');
-    const userData = sessionStorage.getItem('wellsFargoUser');
-    
-    return !!(token && userData);
+    // Check if we have an active session flag and current user in memory
+    return sessionStorage.getItem('wf_auth_session') === 'true' && currentUser !== null;
   };
   
   // Provide the auth context values
