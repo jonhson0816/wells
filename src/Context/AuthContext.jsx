@@ -1,332 +1,320 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 
-// Create the context
-const AuthContext = createContext();
+// Create the auth context
+export const AuthContext = createContext();
 
-// Create a hook to use the auth context
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
-
-// Provider component
+// Create a provider component
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [tokenExpires, setTokenExpires] = useState(null);
   const [authError, setAuthError] = useState(null);
-
-  // Check if user is authenticated
-  const isAuthenticated = () => {
-    // Check for user and token expiration
-    if (!currentUser) return false;
-    
-    // If we have expiration time, check if token is still valid
-    if (tokenExpires) {
-      const now = new Date().getTime();
-      return now < tokenExpires;
-    }
-    
-    // Default to true if we have a user but no expiration info
-    return true;
-  };
-
+  
+  // Check if user is logged in on mount
   useEffect(() => {
-    // Check for user session on component mount
     checkUserSession();
-    
-    // Set up token refresh interval
-    const refreshInterval = setInterval(() => {
-      if (isAuthenticated()) {
-        refreshToken();
-      }
-    }, 15 * 60 * 1000); // Refresh every 15 minutes
-    
-    return () => clearInterval(refreshInterval);
   }, []);
-
-  // Check user session
+  
+  // Check for a user session
   const checkUserSession = async () => {
     try {
       setLoading(true);
       
-      // Check if we have auth flag in storage
-      const hasSession = localStorage.getItem('auth_session') === 'true';
+      // Check if we have a token
+      const token = sessionStorage.getItem('wellsFargoAuthToken');
       
-      if (!hasSession) {
+      if (!token) {
         setCurrentUser(null);
         setLoading(false);
         return;
       }
       
-      // Validate session with backend
+      // First try to get user data from sessionStorage to avoid unnecessary API calls
+      const storedUser = sessionStorage.getItem('wellsFargoUser');
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          
+          // Set current user from storage first to avoid loading state
+          setCurrentUser(userData);
+          
+          // Then validate token with backend in the background
+          await validateTokenWithBackend(token);
+        } catch (parseError) {
+          // Continue to backend validation if parsing fails
+          await validateTokenWithBackend(token);
+        }
+      } else {
+        // If we don't have valid stored user data, validate with backend
+        await validateTokenWithBackend(token);
+      }
+    } catch (error) {
+      setAuthError("Unable to verify your session. Please log in again.");
+      clearUserData();
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Separate function to validate token with backend
+  const validateTokenWithBackend = async (token) => {
+    try {
+      // Validate token with backend
       const response = await api.get('/auth/me');
       
       if (response.data.success) {
-        setCurrentUser(response.data.user);
+        setCurrentUser(response.data.data);
         
-        // Set token expiration time if provided
-        if (response.data.expiresAt) {
-          setTokenExpires(new Date(response.data.expiresAt).getTime());
-        } else {
-          // Default token expiration to 1 hour from now
-          setTokenExpires(new Date().getTime() + 60 * 60 * 1000);
-        }
+        // Update stored user data with fresh data from server
+        sessionStorage.setItem('wellsFargoUser', JSON.stringify(response.data.data));
       } else {
         clearUserData();
       }
     } catch (error) {
-      console.error('Session check failed:', error);
       clearUserData();
-    } finally {
-      setLoading(false);
     }
   };
 
-  // Refresh token function
-  const refreshToken = async () => {
-    try {
-      const response = await api.post('/auth/refresh-token');
-      
-      if (response.data.success) {
-        // Update token expiration time if provided by backend
-        if (response.data.expiresAt) {
-          setTokenExpires(new Date(response.data.expiresAt).getTime());
-        } else {
-          // Default token expiration to 1 hour from now if not provided
-          setTokenExpires(new Date().getTime() + 60 * 60 * 1000);
-        }
-        return true;
-      }
-      return false;
-    } catch (error) {
-      console.error('Token refresh failed:', error);
-      return false;
-    }
-  };
-
-  // Clear user data
+  // Clear user data function to ensure proper user isolation
   const clearUserData = () => {
-    localStorage.removeItem('auth_session');
+    // Clear all user-related data from storage
+    sessionStorage.removeItem('wellsFargoUser');
+    sessionStorage.removeItem('wellsFargoUserData');
+    sessionStorage.removeItem('wellsFargoAuthToken');
+    sessionStorage.removeItem('wellsFargoAccounts');
+    sessionStorage.removeItem('wellsFargoSession');
+    
+    // Reset context state
     setCurrentUser(null);
-    setTokenExpires(null);
     setAuthError(null);
   };
-
-  // Login function
-  const login = async (email, password) => {
+  
+  // Login function - FIXED
+  const login = async (username, password) => {
     try {
       setLoading(true);
       setAuthError(null);
       
-      // Clear any existing session for clean login
-      clearUserData();
+      // Clear current session for clean login
+      setCurrentUser(null);
+      sessionStorage.removeItem('wellsFargoUserData');
+      sessionStorage.removeItem('wellsFargoSession');
       
-      const response = await api.post('/auth/login', { email, password });
-      
-      if (response.data.success) {
-        setCurrentUser(response.data.user);
-        
-        // Set token expiration time if provided
-        if (response.data.expiresAt) {
-          setTokenExpires(new Date(response.data.expiresAt).getTime());
-        } else {
-          // Default token expiration to 1 hour from now
-          setTokenExpires(new Date().getTime() + 60 * 60 * 1000);
-        }
-        
-        // Store session flag
-        localStorage.setItem('auth_session', 'true');
-        
-        return { success: true };
-      } else {
-        setAuthError(response.data.error || 'Login failed');
-        return { 
-          success: false, 
-          error: response.data.error || 'Login failed' 
-        };
+      // Validate inputs
+      if (!username || !password) {
+        throw new Error("Username and password are required");
       }
+      
+      // Send login request to backend
+      const response = await api.post('/auth/login', {
+        username,
+        password
+      });
+      
+      // Check if the response structure matches what we expect
+      if (!response.data || !response.data.token || !response.data.user) {
+        throw new Error("Unexpected response from server");
+      }
+      
+      // Store token and user data
+      const { token, user } = response.data;
+      sessionStorage.setItem('wellsFargoAuthToken', token);
+      sessionStorage.setItem('wellsFargoUser', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
+      
+      setCurrentUser(user);
+      return { success: true };
     } catch (error) {
-      console.error('Login error:', error);
-      const errorMessage = error.response?.data?.error || error.message || 'Login failed';
+      const errorMessage = error.response?.data?.error || error.message || "Login failed. Please check your credentials.";
       setAuthError(errorMessage);
-      return { 
-        success: false, 
-        error: errorMessage
-      };
+      return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
     }
   };
+  
+  // Helper function to format phone number
+  const formatPhoneNumber = (phoneNumber) => {
+    // Remove all non-digit characters
+    return phoneNumber ? phoneNumber.replace(/\\D/g, '') : '';
+  };
 
-  // Register function
+  // Register function - FIXED
   const register = async (userData) => {
     try {
       setLoading(true);
       setAuthError(null);
       
-      // Clear any existing session for clean registration
-      clearUserData();
+      // Clear session data for clean registration
+      setCurrentUser(null);
+      sessionStorage.removeItem('wellsFargoUserData');
+      sessionStorage.removeItem('wellsFargoSession');
+      sessionStorage.removeItem('wellsFargoAuthToken');
       
       // Validate required fields
-      if (!userData.email || !userData.password || !userData.name) {
-        throw new Error('Required fields are missing');
+      if (!userData.username || !userData.password || !userData.email || 
+          !userData.firstName || !userData.lastName || !userData.phoneNumber ||
+          !userData.dateOfBirth || !userData.ssn || !userData.addressLine1 || 
+          !userData.city || !userData.state || !userData.zipCode ||
+          !userData.securityQuestion || !userData.securityAnswer) {
+        throw new Error("All required fields must be completed");
       }
       
-      const response = await api.post('/auth/register', userData);
-      
-      if (response.data.success) {
-        setCurrentUser(response.data.user);
-        
-        // Set token expiration time if provided
-        if (response.data.expiresAt) {
-          setTokenExpires(new Date(response.data.expiresAt).getTime());
-        } else {
-          // Default token expiration to 1 hour from now
-          setTokenExpires(new Date().getTime() + 60 * 60 * 1000);
-        }
-        
-        // Store session flag
-        localStorage.setItem('auth_session', 'true');
-        
-        return { success: true };
-      } else {
-        setAuthError(response.data.error || 'Registration failed');
-        return { 
-          success: false, 
-          error: response.data.error || 'Registration failed' 
-        };
-      }
-    } catch (error) {
-      console.error('Registration error:', error);
-      const errorMessage = error.response?.data?.error || error.message || 'Registration failed';
-      setAuthError(errorMessage);
-      return { 
-        success: false, 
-        error: errorMessage 
+      // Create a new object with all fields including explicit name field
+      const formattedUserData = {
+        ...userData,
+        phoneNumber: formatPhoneNumber(userData.phoneNumber),
+        name: `${userData.firstName} ${userData.lastName}`
       };
+      
+      // Validate phone number format after formatting
+      if (formattedUserData.phoneNumber.replace(/\\D/g, '').length !== 10) {
+        throw new Error("Please provide a valid 10-digit phone number");
+      }
+      
+      // Send registration request to backend
+      const response = await api.post('/auth/register', formattedUserData);
+      
+      if (!response.data.success) {
+        throw new Error(response.data.error || "Registration failed");
+      }
+      
+      // Store token and user data
+      const { token, user } = response.data;
+      sessionStorage.setItem('wellsFargoAuthToken', token);
+      sessionStorage.setItem('wellsFargoUser', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoSession', 'true');
+      
+      setCurrentUser(user);
+      return { success: true };
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || error.message || "Registration failed. Please try again.";
+      setAuthError(errorMessage);
+      return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
     }
   };
-
+  
   // Logout function
   const logout = async () => {
     try {
       setLoading(true);
       
-      // Call backend to invalidate the token
-      await api.post('/auth/logout');
-      
-      // Clear user data
+      // No need to call backend for logout as JWT is stateless
+      // Just clear all local data
       clearUserData();
       
       return { success: true };
     } catch (error) {
-      console.error('Logout error:', error);
-      
-      // Still clear user data even if API call fails
-      clearUserData();
-      
-      return { 
-        success: false, 
-        error: error.message || 'Logout failed' 
-      };
+      setAuthError("Logout failed. Please try again.");
+      return { success: false, error: error.message };
     } finally {
       setLoading(false);
     }
   };
-
+  
   // Update user profile
   const updateProfile = async (updateData) => {
     try {
       setLoading(true);
       setAuthError(null);
       
-      if (!currentUser) {
-        throw new Error('No user logged in');
+      // For registration, we might not have a current user yet
+      if (!currentUser && !updateData.isRegistration) {
+        throw new Error("No user logged in");
       }
       
-      const response = await api.put('/auth/update-profile', updateData);
+      // Format phone number if it exists in the update data
+      const formattedUpdateData = { ...updateData };
+      if (formattedUpdateData.phoneNumber) {
+        formattedUpdateData.phoneNumber = formatPhoneNumber(formattedUpdateData.phoneNumber);
+        
+        // Validate phone number format after formatting
+        if (formattedUpdateData.phoneNumber.length !== 10) {
+          throw new Error("Please provide a valid 10-digit phone number");
+        }
+      }
       
-      if (response.data.success) {
-        // Update user data in state
-        setCurrentUser({
-          ...currentUser,
-          ...response.data.user
+      // Send update request to backend
+      const response = await api.put('/auth/updateprofile', formattedUpdateData);
+      
+      if (!response.data.success) {
+        throw new Error(response.data.error || "Profile update failed");
+      }
+      
+      // Update stored user data
+      const updatedUser = response.data.data;
+      sessionStorage.setItem('wellsFargoUser', JSON.stringify(updatedUser));
+      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(updatedUser));
+      
+      setCurrentUser(updatedUser);
+      return { success: true };
+    } catch (error) {
+      const errorMessage = error.response?.data?.error || error.message || "Failed to update profile. Please try again.";
+      setAuthError(errorMessage);
+      return { success: false, error: errorMessage };
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  // Password reset functionality
+  const resetPassword = async (username, securityAnswer) => {
+    try {
+      setLoading(true);
+      setAuthError(null);
+      
+      if (!username) {
+        throw new Error("Username is required");
+      }
+      
+      // First, request a password reset
+      let response = await api.post('/auth/forgotpassword', { username });
+      
+      // If security answer is provided, validate and reset password
+      if (securityAnswer && response.data.resetToken) {
+        // This part would typically be in a separate form/flow after email verification
+        // But for demo purposes, we're combining the steps
+        response = await api.put(`/auth/resetpassword/${response.data.resetToken}`, {
+          securityAnswer,
+          password: 'NewTemp123!' // In a real app, user would choose this
         });
         
-        return { success: true };
-      } else {
-        throw new Error(response.data.error || 'Profile update failed');
+        if (!response.data.success) {
+          throw new Error(response.data.error || "Password reset failed");
+        }
+        
+        return { 
+          success: true, 
+          message: "Your password has been reset. Please log in with your new password." 
+        };
       }
-    } catch (error) {
-      console.error('Profile update error:', error);
-      const errorMessage = error.response?.data?.error || error.message || 'Profile update failed';
-      setAuthError(errorMessage);
-      return { 
-        success: false, 
-        error: errorMessage 
-      };
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Reset password functionality
-  const requestPasswordReset = async (email) => {
-    try {
-      setLoading(true);
-      setAuthError(null);
       
-      const response = await api.post('/auth/forgot-password', { email });
-      
+      // Return success message for the initial request
       return { 
         success: true, 
-        message: response.data.message || 'Password reset instructions sent to your email.' 
+        message: response.data.message || "Password reset instructions have been sent to your email." 
       };
     } catch (error) {
-      console.error('Password reset request error:', error);
-      const errorMessage = error.response?.data?.error || error.message || 'Password reset request failed';
+      const errorMessage = error.response?.data?.error || error.message || "Password reset failed. Please try again.";
       setAuthError(errorMessage);
-      return { 
-        success: false, 
-        error: errorMessage 
-      };
+      return { success: false, error: errorMessage };
     } finally {
       setLoading(false);
     }
   };
-
-  // Reset password with token
-  const resetPassword = async (token, newPassword) => {
-    try {
-      setLoading(true);
-      setAuthError(null);
-      
-      const response = await api.post('/auth/reset-password', {
-        token,
-        password: newPassword
-      });
-      
-      return { 
-        success: true, 
-        message: response.data.message || 'Password has been reset successfully.' 
-      };
-    } catch (error) {
-      console.error('Password reset error:', error);
-      const errorMessage = error.response?.data?.error || error.message || 'Password reset failed';
-      setAuthError(errorMessage);
-      return { 
-        success: false, 
-        error: errorMessage 
-      };
-    } finally {
-      setLoading(false);
-    }
+  
+  // Check if a user is authenticated (has valid token and user data)
+  const isAuthenticated = () => {
+    const token = sessionStorage.getItem('wellsFargoAuthToken');
+    const userData = sessionStorage.getItem('wellsFargoUser');
+    
+    return !!(token && userData);
   };
-
-  // Provide the auth context value
+  
+  // Provide the auth context values
   const value = {
     currentUser,
     loading,
@@ -336,11 +324,10 @@ export const AuthProvider = ({ children }) => {
     logout,
     register,
     updateProfile,
-    requestPasswordReset,
     resetPassword,
-    refreshToken
+    clearUserData
   };
-
+  
   return (
     <AuthContext.Provider value={value}>
       {children}
@@ -348,4 +335,11 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export default AuthProvider;
+// Custom hook for using the auth context
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+};
