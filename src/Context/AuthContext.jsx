@@ -9,31 +9,10 @@ export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [authError, setAuthError] = useState(null);
-  const [authenticated, setAuthenticated] = useState(false);
   
   // Check if user is logged in on mount
   useEffect(() => {
     checkUserSession();
-  }, []);
-  
-  // Configure interceptor to handle token expiration
-  useEffect(() => {
-    const interceptor = api.interceptors.response.use(
-      (response) => response,
-      async (error) => {
-        // If error is 401 Unauthorized, token might be expired
-        if (error.response && error.response.status === 401) {
-          // Clear auth state
-          clearAuthState();
-          // Redirect to login
-          window.location.href = '/login';
-        }
-        return Promise.reject(error);
-      }
-    );
-
-    // Clean up interceptor on unmount
-    return () => api.interceptors.response.eject(interceptor);
   }, []);
   
   // Check for a user session
@@ -41,41 +20,97 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       
-      // Use a secure approach to get session info from the server
-      const response = await api.get('/auth/me');
+      // Check if we have a token
+      const token = localStorage.getItem('wellsFargoAuthToken');
       
-      if (response.data.success) {
-        console.log("Session validated successfully");
-        setCurrentUser(response.data.data);
-        setAuthenticated(true);
+      if (!token) {
+        console.log("No auth token found during session check");
+        setCurrentUser(null);
+        setLoading(false);
+        return;
+      }
+      
+      console.log("Auth token found, checking for local user data");
+      
+      // First try to get user data from localStorage to avoid unnecessary API calls
+      const storedUser = localStorage.getItem('wellsFargoUser');
+      if (storedUser) {
+        try {
+          const userData = JSON.parse(storedUser);
+          console.log("Found stored user data:", userData);
+          
+          // Set current user from storage first to avoid loading state
+          setCurrentUser(userData);
+          
+          // Then validate token with backend in the background
+          await validateTokenWithBackend(token);
+        } catch (parseError) {
+          console.error("Error parsing stored user data:", parseError);
+          // Continue to backend validation if parsing fails
+          await validateTokenWithBackend(token);
+        }
       } else {
-        console.log("No valid session found");
-        clearAuthState();
+        // If we don't have valid stored user data, validate with backend
+        await validateTokenWithBackend(token);
       }
     } catch (error) {
       console.error("Session check error:", error);
       setAuthError("Unable to verify your session. Please log in again.");
-      clearAuthState();
+      clearUserData();
     } finally {
       setLoading(false);
     }
   };
   
-  // Clear auth state function for secure logout
-  const clearAuthState = () => {
+  // Separate function to validate token with backend
+  const validateTokenWithBackend = async (token) => {
+    try {
+      console.log("Validating token with backend");
+      
+      // Validate token with backend
+      const response = await api.get('/auth/me');
+      
+      if (response.data.success) {
+        console.log("Token validated successfully, user:", response.data.data);
+        setCurrentUser(response.data.data);
+        
+        // Update stored user data with fresh data from server
+        localStorage.setItem('wellsFargoUser', JSON.stringify(response.data.data));
+      } else {
+        console.log("Token validation failed:", response.data);
+        clearUserData();
+      }
+    } catch (error) {
+      console.error("Token validation error:", error);
+      clearUserData();
+    }
+  };
+
+  // Clear user data function to ensure proper user isolation
+  const clearUserData = () => {
+    // Clear all user-related data from storage
+    localStorage.removeItem('wellsFargoUser');
+    localStorage.removeItem('wellsFargoUserData');
+    localStorage.removeItem('wellsFargoAuthToken');
+    localStorage.removeItem('wellsFargoAccounts');
+    sessionStorage.removeItem('wellsFargoUserData');
+    sessionStorage.removeItem('wellsFargoSession');
+    
+    // Reset context state
     setCurrentUser(null);
-    setAuthenticated(false);
     setAuthError(null);
   };
   
-  // Login function - Security improved
+  // Login function - FIXED
   const login = async (username, password) => {
     try {
       setLoading(true);
       setAuthError(null);
       
       // Clear current session for clean login
-      clearAuthState();
+      setCurrentUser(null);
+      sessionStorage.removeItem('wellsFargoUserData');
+      sessionStorage.removeItem('wellsFargoSession');
       
       // Validate inputs
       if (!username || !password) {
@@ -88,18 +123,21 @@ export const AuthProvider = ({ children }) => {
         password
       });
       
-      console.log("Login response received");
+      console.log("Login response:", response.data);
       
       // Check if the response structure matches what we expect
-      if (!response.data || !response.data.success) {
-        console.error("Invalid response structure");
-        throw new Error(response.data?.error || "Unexpected response from server");
+      if (!response.data || !response.data.token || !response.data.user) {
+        console.error("Invalid response structure:", response.data);
+        throw new Error("Unexpected response from server");
       }
       
-      // Set user data in state
-      setCurrentUser(response.data.user);
-      setAuthenticated(true);
+      // Store token and user data
+      const { token, user } = response.data;
+      localStorage.setItem('wellsFargoAuthToken', token);
+      localStorage.setItem('wellsFargoUser', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
       
+      setCurrentUser(user);
       return { success: true };
     } catch (error) {
       console.error("Login error:", error);
@@ -117,15 +155,18 @@ export const AuthProvider = ({ children }) => {
     return phoneNumber ? phoneNumber.replace(/\D/g, '') : '';
   };
 
-  // Register function - Security improved
+  // Register function - FIXED
   const register = async (userData) => {
     try {
-      console.log("Starting registration process");
+      console.log("Starting registration with API base URL:", api.defaults.baseURL);
       setLoading(true);
       setAuthError(null);
       
       // Clear session data for clean registration
-      clearAuthState();
+      setCurrentUser(null);
+      sessionStorage.removeItem('wellsFargoUserData');
+      sessionStorage.removeItem('wellsFargoSession');
+      localStorage.removeItem('wellsFargoAuthToken');
       
       // Validate required fields
       if (!userData.username || !userData.password || !userData.email || 
@@ -143,8 +184,13 @@ export const AuthProvider = ({ children }) => {
         name: `${userData.firstName} ${userData.lastName}`
       };
       
-      // Log the data being sent (without sensitive info)
-      console.log("Sending registration data to server");
+      // Log the data being sent to confirm name is set
+      console.log("Data being sent to server:", {
+        ...formattedUserData,
+        password: "[REDACTED]",
+        ssn: "[REDACTED]",
+        securityAnswer: "[REDACTED]"
+      });
       
       // Validate phone number format after formatting
       if (formattedUserData.phoneNumber.replace(/\D/g, '').length !== 10) {
@@ -154,16 +200,21 @@ export const AuthProvider = ({ children }) => {
       // Send registration request to backend
       const response = await api.post('/auth/register', formattedUserData);
       
-      console.log("Registration response received");
+      
+      console.log("Registration response:", response.data);
       
       if (!response.data.success) {
         throw new Error(response.data.error || "Registration failed");
       }
       
-      // Set user data in state
-      setCurrentUser(response.data.user);
-      setAuthenticated(true);
+      // Store token and user data
+      const { token, user } = response.data;
+      localStorage.setItem('wellsFargoAuthToken', token);
+      localStorage.setItem('wellsFargoUser', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoSession', 'true');
       
+      setCurrentUser(user);
       return { success: true };
     } catch (error) {
       console.error('Registration error:', error);
@@ -176,16 +227,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Logout function - Security improved
+  // Logout function
   const logout = async () => {
     try {
       setLoading(true);
       
-      // Call backend to invalidate session
-      await api.post('/auth/logout');
-      
-      // Clear auth state
-      clearAuthState();
+      // No need to call backend for logout as JWT is stateless
+      // Just clear all local data
+      clearUserData();
       
       return { success: true };
     } catch (error) {
@@ -197,14 +246,14 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Update user profile - Security improved
+  // Update user profile
   const updateProfile = async (updateData) => {
     try {
       setLoading(true);
       setAuthError(null);
       
       // For registration, we might not have a current user yet
-      if (!authenticated && !updateData.isRegistration) {
+      if (!currentUser && !updateData.isRegistration) {
         throw new Error("No user logged in");
       }
       
@@ -227,8 +276,11 @@ export const AuthProvider = ({ children }) => {
       }
       
       // Update stored user data
-      setCurrentUser(response.data.data);
+      const updatedUser = response.data.data;
+      localStorage.setItem('wellsFargoUser', JSON.stringify(updatedUser));
+      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(updatedUser));
       
+      setCurrentUser(updatedUser);
       return { success: true };
     } catch (error) {
       console.error("Profile update error:", error);
@@ -240,7 +292,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Password reset functionality - Security improved
+  // Password reset functionality
   const resetPassword = async (username, securityAnswer) => {
     try {
       setLoading(true);
@@ -256,6 +308,7 @@ export const AuthProvider = ({ children }) => {
       // If security answer is provided, validate and reset password
       if (securityAnswer && response.data.resetToken) {
         // This part would typically be in a separate form/flow after email verification
+        // But for demo purposes, we're combining the steps
         response = await api.put(`/auth/resetpassword/${response.data.resetToken}`, {
           securityAnswer,
           password: 'NewTemp123!' // In a real app, user would choose this
@@ -286,35 +339,17 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  // Check if a user is authenticated 
+  // Check if a user is authenticated (has valid token and user data)
   const isAuthenticated = () => {
-    return authenticated;
-  };
-  
-  // Get user data - minimal safe version
-  const getUserSafeData = () => {
-    if (!currentUser) return null;
+    const token = localStorage.getItem('wellsFargoAuthToken');
+    const userData = localStorage.getItem('wellsFargoUser');
     
-    // Return only non-sensitive user data
-    return {
-      firstName: currentUser.firstName,
-      lastName: currentUser.lastName,
-      email: currentUser.email,
-      phone: currentUser.phoneNumber,
-      address: {
-        line1: currentUser.addressLine1,
-        line2: currentUser.addressLine2,
-        city: currentUser.city,
-        state: currentUser.state,
-        zipCode: currentUser.zipCode
-      },
-      profilePicture: currentUser.profilePicture
-    };
+    return !!(token && userData);
   };
   
   // Provide the auth context values
   const value = {
-    currentUser: getUserSafeData(), // Only expose non-sensitive data
+    currentUser,
     loading,
     authError,
     isAuthenticated,
@@ -322,7 +357,8 @@ export const AuthProvider = ({ children }) => {
     logout,
     register,
     updateProfile,
-    resetPassword
+    resetPassword,
+    clearUserData
   };
   
   return (

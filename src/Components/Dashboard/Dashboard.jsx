@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../Context/AuthContext';
 import api from '../../utils/apiClient';
 import './Dashboard.css';
 
-// Security Verification Modal Component
+// Modified Security Verification Modal Component
 const SecurityVerificationModal = ({ isOpen, onClose, onVerify, targetPath }) => {
   const [verificationCode, setVerificationCode] = useState('');
   const [error, setError] = useState('');
@@ -86,22 +86,24 @@ const formatCurrency = (amount) => {
 const UserProfile = ({ user }) => {
   return (
     <div className="dash002 user-profile">
-      {user?.profilePicture ? (
+      {user.profilePicture ? (
         <img src={user.profilePicture} alt="Profile" className="dash002 profile-picture" />
       ) : (
         <div className="dash002 placeholder-profile">
-          {user?.firstName && user?.lastName ? 
+          {user.firstName && user.lastName ? 
             `${user.firstName[0]}${user.lastName[0]}` : 'WF'}
         </div>
       )}
       <div className="dash002 user-details">
-        <p>{user?.firstName || ''} {user?.lastName || ''}</p>
-        <p>{user?.email || ''}</p>
-        {user?.address && (
+        <p>{user.firstName || ''} {user.lastName || ''}</p>
+        <p>{user.email || ''}</p>
+        {user.address && typeof user.address === 'object' ? (
           <p>
             {user.address.line1 || ''} {user.address.line2 ? user.address.line2 : ''}
             {user.address.city && user.address.state ? `, ${user.address.city}, ${user.address.state} ${user.address.zipCode || ''}` : ''}
           </p>
+        ) : (
+          user.address && typeof user.address === 'string' && <p>{user.address}</p>
         )}
       </div>
     </div>
@@ -147,7 +149,7 @@ const AccountTypeIcon = ({ type }) => {
 // Main Dashboard Component
 const Dashboard = () => {
   const navigate = useNavigate();
-  const { currentUser, isAuthenticated, loading: authLoading } = useAuth();
+  const { currentUser, isAuthenticated } = useAuth();
   
   const [accounts, setAccounts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -157,67 +159,6 @@ const Dashboard = () => {
   const [securityModalOpen, setSecurityModalOpen] = useState(false);
   const [pendingPath, setPendingPath] = useState(null);
   
-  // Check authentication on component mount
-  useEffect(() => {
-    if (!authLoading && !isAuthenticated()) {
-      navigate('/login');
-    }
-  }, [authLoading, isAuthenticated, navigate]);
-  
-  // Fetch dashboard data from the API
-  useEffect(() => {
-    if (authLoading || !isAuthenticated()) return;
-    
-    const fetchDashboardData = async () => {
-      try {
-        setLoading(true);
-        
-        // Fetch dashboard data
-        const response = await api.get('/dashboard');
-        
-        if (response.data.success) {
-          // Process accounts from API response
-          const apiAccounts = response.data.data.accounts || [];
-          setAccounts(apiAccounts);
-        } else {
-          throw new Error(response.data.error || 'Failed to fetch dashboard data');
-        }
-      } catch (err) {
-        console.error('Dashboard data fetch error:', err);
-        setError(err.message || 'Failed to load dashboard data');
-        
-        // For development purposes only - mock data
-        if (process.env.NODE_ENV === 'development') {
-          setAccounts([
-            {
-              id: 'acc-123456',
-              type: 'Checking Account',
-              balance: 1250.75,
-              accountNumber: '1234567890'
-            },
-            {
-              id: 'acc-789012',
-              type: 'Savings Account',
-              balance: 5430.20,
-              accountNumber: '0987654321'
-            },
-            {
-              id: 'acc-345678',
-              type: 'Credit Card',
-              balance: -1200.30,
-              accountNumber: '5555666677778888',
-              creditLimit: 5000
-            }
-          ]);
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    fetchDashboardData();
-  }, [navigate, isAuthenticated, authLoading]);
-
   // Check if this user is newly registered (has no accounts)
   const isNewUser = accounts.length === 0;
 
@@ -225,6 +166,184 @@ const Dashboard = () => {
   const welcomeMessage = isNewUser && currentUser
     ? `Welcome to Wells Fargo Online Banking, ${currentUser.firstName || ''}! You currently have no accounts. Get started by opening your first account below.`
     : '';
+
+  // Fetch dashboard data from the API
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      if (!isAuthenticated()) {
+        navigate('/login');
+        return;
+      }
+  
+      try {
+        setLoading(true);
+        
+        // Get the auth token
+        const token = localStorage.getItem('wellsFargoAuthToken');
+        if (!token) {
+          throw new Error('Authentication token not found');
+        }
+  
+        // Create API client with auth header
+        // const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com';
+        // const api = axios.create({
+        //   baseURL: API_URL,
+        //   headers: {
+        //     'Content-Type': 'application/json',
+        //     'Authorization': `Bearer ${token}`
+        //   }
+        // });
+  
+        // First, get any existing accounts from localStorage
+        const storedAccounts = localStorage.getItem('wellsFargoAccounts');
+        let existingAccounts = [];
+        
+        if (storedAccounts) {
+          try {
+            existingAccounts = JSON.parse(storedAccounts);
+            console.log('Retrieved existing accounts from storage:', existingAccounts);
+          } catch (parseError) {
+            console.error('Error parsing existing accounts data:', parseError);
+          }
+        }
+        
+        // Check for new account in localStorage
+        const newAccountFromStorage = localStorage.getItem('newWellsFargoAccount');
+        let newAccount = null;
+        
+        if (newAccountFromStorage) {
+          try {
+            newAccount = JSON.parse(newAccountFromStorage);
+            console.log('Retrieved new account from storage:', newAccount);
+          } catch (parseError) {
+            console.error('Error parsing new account data:', parseError);
+          }
+        }
+  
+        // Fetch dashboard data
+        // const response = await api.get('/dashboard');
+        const response = await api.get('/dashboard');
+        
+        if (response.data.success) {
+          // Process accounts from API response
+          const apiAccounts = response.data.data.accounts || [];
+          let combinedAccounts = [...apiAccounts];
+          
+          // Add existing accounts if they're not already in the API accounts
+          if (existingAccounts.length > 0) {
+            existingAccounts.forEach(existingAcc => {
+              const accountExists = combinedAccounts.some(acc => 
+                acc.id === existingAcc.id || 
+                acc._id === existingAcc._id || 
+                acc.accountNumber === existingAcc.accountNumber
+              );
+              
+              if (!accountExists) {
+                combinedAccounts.push(existingAcc);
+              }
+            });
+          }
+          
+          // Add the new account if it exists and isn't already included
+          if (newAccount) {
+            // Check if new account already exists in combined accounts
+            const accountExists = combinedAccounts.some(acc => 
+              acc.id === newAccount.id || 
+              acc._id === newAccount._id || 
+              acc.accountNumber === newAccount.accountNumber
+            );
+            
+            if (!accountExists) {
+              // Process account to ensure it has the correct format
+              const processedAccount = {
+                ...newAccount,
+                id: newAccount.id || newAccount._id || `acc-${Date.now()}`,
+                type: newAccount.type || newAccount.accountType,
+                balance: parseFloat(newAccount.balance || newAccount.initialDeposit || 0),
+                accountNumber: newAccount.accountNumber || `${Math.floor(1000000000 + Math.random() * 9000000000)}`
+              };
+              
+              // Add specific properties based on account type
+              if (processedAccount.type && processedAccount.type.toLowerCase().includes('credit')) {
+                processedAccount.creditLimit = processedAccount.creditLimit || 5000;
+              }
+              
+              combinedAccounts.push(processedAccount);
+            }
+          }
+          
+          // Store the combined accounts in localStorage for future reference
+          localStorage.setItem('wellsFargoAccounts', JSON.stringify(combinedAccounts));
+          
+          setAccounts(combinedAccounts);
+          
+          // Update user data in local storage if needed
+          if (response.data.data.user) {
+            const updatedUserData = {
+              ...currentUser,
+              ...response.data.data.user
+            };
+            localStorage.setItem('wellsFargoUser', JSON.stringify(updatedUserData));
+          }
+        } else {
+          throw new Error(response.data.error || 'Failed to fetch dashboard data');
+        }
+      } catch (err) {
+        console.error('Dashboard data fetch error:', err);
+        setError(err.message || 'Failed to load dashboard data');
+        
+        // Fallback for development without backend
+        if (process.env.NODE_ENV === 'development') {
+          // Load all accounts from localStorage
+          const storedAccounts = localStorage.getItem('wellsFargoAccounts');
+          if (storedAccounts) {
+            try {
+              const existingAccounts = JSON.parse(storedAccounts);
+              setAccounts(existingAccounts);
+              console.log('Loaded accounts from localStorage fallback:', existingAccounts);
+            } catch (parseError) {
+              console.error('Error parsing accounts from localStorage:', parseError);
+            }
+          } else {
+            // Try to get account from newWellsFargoAccount as a last resort
+            const newAccountFromStorage = localStorage.getItem('newWellsFargoAccount');
+            if (newAccountFromStorage) {
+              try {
+                const newAccount = JSON.parse(newAccountFromStorage);
+                console.log('Fallback: Retrieved new account from storage:', newAccount);
+                
+                // Prepare the account with consistent properties
+                const processedAccount = {
+                  ...newAccount,
+                  id: newAccount.id || newAccount._id || `acc-${Date.now()}`,
+                  type: newAccount.type || newAccount.accountType,
+                  balance: parseFloat(newAccount.balance || newAccount.initialDeposit || 0),
+                  accountNumber: newAccount.accountNumber || `${Math.floor(1000000000 + Math.random() * 9000000000)}`
+                };
+                
+                if (processedAccount.type && processedAccount.type.toLowerCase().includes('credit')) {
+                  processedAccount.creditLimit = processedAccount.creditLimit || 5000;
+                }
+                
+                const accountsList = [processedAccount];
+                
+                // Store in localStorage for future reference
+                localStorage.setItem('wellsFargoAccounts', JSON.stringify(accountsList));
+                
+                setAccounts(accountsList);
+              } catch (parseError) {
+                console.error('Error parsing new account data:', parseError);
+              }
+            }
+          }
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchDashboardData();
+  }, [navigate, isAuthenticated, currentUser]);
 
   // Handler for navigation that requires verification
   const handleSecureNavigation = (path) => {
@@ -315,7 +434,7 @@ const Dashboard = () => {
 
   // Render accounts section based on user status
   const renderAccountsSection = () => {
-    if (loading || authLoading) {
+    if (loading) {
       return <div className="dash002 loading">Loading your accounts...</div>;
     }
     
@@ -340,6 +459,7 @@ const Dashboard = () => {
         </section>
       );
     }
+    
     
     return (
       <section className="dash002 accounts-overview">
@@ -438,15 +558,80 @@ const Dashboard = () => {
     );
   };
 
-  // If still loading auth state, show loading indicator
-  if (authLoading) {
-    return <div className="dash002 loading-container">Verifying your session...</div>;
-  }
+  // Render account type selection for new accounts
+  const renderAllAccountTypes = () => {
+    const accountTypes = [
+      {
+        type: 'Checking Account',
+        description: 'Everyday banking with easy access to your money',
+        icon: '💳',
+        path: '/open-new-account/checking'
+      },
+      {
+        type: 'Savings Account',
+        description: 'Build your savings with competitive interest rates',
+        icon: '💰',
+        path: '/open-new-account/savings'
+      },
+      {
+        type: 'Credit Account',
+        description: 'Flexible spending with rewards on every purchase',
+        icon: '💲',
+        path: '/open-new-account/credit'
+      },
+      {
+        type: 'Retirement Account',
+        description: 'Save for your future with tax advantages',
+        icon: '🏦',
+        path: '/open-new-account/retirement'
+      },
+      {
+        type: 'Investment Account',
+        description: 'Grow your wealth through market investments',
+        icon: '📈',
+        path: '/open-new-account/investment'
+      },
+      {
+        type: 'Certificate of Deposit',
+        description: 'Guaranteed returns with fixed interest rates',
+        icon: '🔒',
+        path: '/open-new-account/cd'
+      },
+      {
+        type: 'Money Market Account',
+        description: 'Competitive rates with check-writing privileges',
+        icon: '💵',
+        path: '/open-new-account/money-market'
+      },
+      {
+        type: 'Student Account',
+        description: 'Designed for students with special benefits',
+        icon: '🎓',
+        path: '/open-new-account/student'
+      }
+    ];
 
-  // If not authenticated and not loading, redirect is handled by useEffect
-  if (!isAuthenticated() && !authLoading) {
-    return null;
-  }
+    return (
+      <div className="dash002 new-account-types">
+        <h3>Account Types</h3>
+        <div className="dash002 account-type-grid">
+          {accountTypes.map((type, index) => (
+            <div 
+              key={index} 
+              className="dash002 account-type-card"
+              onClick={() => handleSecureNavigation(type.path)}
+            >
+              <div className="dash002 account-type-icon">
+                {type.icon}
+              </div>
+              <h4>{type.type}</h4>
+              <p>{type.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="dash002 dashboard-container">
@@ -469,7 +654,7 @@ const Dashboard = () => {
           <a href="#" onClick={(e) => { e.preventDefault(); handleSecureNavigation('/investments'); }}>Investments</a>
           <a href="#" onClick={(e) => { e.preventDefault(); handleSecureNavigation('/student-center'); }}>Student Center</a>
         </nav>
-      </header> 
+      </header>
 
       <main className="dash002 dashboard-content">
         {renderAccountsSection()}
