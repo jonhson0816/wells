@@ -165,9 +165,9 @@ const WellsFargoPage = () => {
     }
   }, [authError, isLoginModal]);
 
-  // Check for saved username in localStorage on component mount
+  // Check for saved username in sessionStorage on component mount
   useEffect(() => {
-    const username = localStorage.getItem('wellsFargoRememberedUsername');
+    const username = sessionStorage.getItem('wellsFargoRememberedUsername');
     if (username) {
       setSavedUsername(username);
       setFormData(prev => ({ ...prev, username }));
@@ -269,8 +269,6 @@ const WellsFargoPage = () => {
     setLoginError('');
     
     try {
-      console.log("Login attempt with username:", formData.username);
-      
       // Basic validation
       if (!formData.username.trim()) {
         setLoginError('Please enter your username.');
@@ -282,19 +280,16 @@ const WellsFargoPage = () => {
         return;
       }
       
-      console.log("Calling login function...");
       const result = await login(formData.username, formData.password);
-      console.log("Login result:", result);
       
       if (!result.success) {
         setLoginError(result.error || 'Login failed. Please try again.');
       } else {
-        console.log("Login successful");
         // Remember username if checkbox is checked
         if (rememberUsername) {
-          localStorage.setItem('wellsFargoRememberedUsername', formData.username);
+          sessionStorage.setItem('wellsFargoRememberedUsername', formData.username);
         } else {
-          localStorage.removeItem('wellsFargoRememberedUsername');
+          sessionStorage.removeItem('wellsFargoRememberedUsername');
         }
         
         // Manually close modal and redirect to dashboard to ensure navigation happens
@@ -302,7 +297,6 @@ const WellsFargoPage = () => {
         navigate('/dashboard');
       }
     } catch (error) {
-      console.error('Login error catch block:', error);
       setLoginError('An unexpected error occurred. Please try again.');
     }
   };
@@ -435,10 +429,7 @@ const WellsFargoPage = () => {
         name: `${formData.firstName} ${formData.lastName}`
       };
 
-      console.log("Submitting registration data...");
       const result = await register(userData);
-      
-      console.log("Registration result:", result);
       
       if (!result.success) {
         setRegisterError(result.error || 'Registration failed. Please try again.');
@@ -447,7 +438,6 @@ const WellsFargoPage = () => {
         closeModal();
       }
     } catch (error) {
-      console.error("Registration submission error:", error);
       setRegisterError('An unexpected error occurred. Please try again.');
     }
   };

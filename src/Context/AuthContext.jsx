@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       
       // Check if we have a token
-      const token = localStorage.getItem('wellsFargoAuthToken');
+      const token = sessionStorage.getItem('wellsFargoAuthToken');
       
       if (!token) {
         setCurrentUser(null);
@@ -29,8 +29,8 @@ export const AuthProvider = ({ children }) => {
         return;
       }
       
-      // First try to get user data from localStorage to avoid unnecessary API calls
-      const storedUser = localStorage.getItem('wellsFargoUser');
+      // First try to get user data from sessionStorage to avoid unnecessary API calls
+      const storedUser = sessionStorage.getItem('wellsFargoUser');
       if (storedUser) {
         try {
           const userData = JSON.parse(storedUser);
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
         setCurrentUser(response.data.data);
         
         // Update stored user data with fresh data from server
-        localStorage.setItem('wellsFargoUser', JSON.stringify(response.data.data));
+        sessionStorage.setItem('wellsFargoUser', JSON.stringify(response.data.data));
       } else {
         clearUserData();
       }
@@ -78,11 +78,10 @@ export const AuthProvider = ({ children }) => {
   // Clear user data function to ensure proper user isolation
   const clearUserData = () => {
     // Clear all user-related data from storage
-    localStorage.removeItem('wellsFargoUser');
-    localStorage.removeItem('wellsFargoUserData');
-    localStorage.removeItem('wellsFargoAuthToken');
-    localStorage.removeItem('wellsFargoAccounts');
+    sessionStorage.removeItem('wellsFargoUser');
     sessionStorage.removeItem('wellsFargoUserData');
+    sessionStorage.removeItem('wellsFargoAuthToken');
+    sessionStorage.removeItem('wellsFargoAccounts');
     sessionStorage.removeItem('wellsFargoSession');
     
     // Reset context state
@@ -119,8 +118,8 @@ export const AuthProvider = ({ children }) => {
       
       // Store token and user data
       const { token, user } = response.data;
-      localStorage.setItem('wellsFargoAuthToken', token);
-      localStorage.setItem('wellsFargoUser', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoAuthToken', token);
+      sessionStorage.setItem('wellsFargoUser', JSON.stringify(user));
       sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
       
       setCurrentUser(user);
@@ -150,7 +149,7 @@ export const AuthProvider = ({ children }) => {
       setCurrentUser(null);
       sessionStorage.removeItem('wellsFargoUserData');
       sessionStorage.removeItem('wellsFargoSession');
-      localStorage.removeItem('wellsFargoAuthToken');
+      sessionStorage.removeItem('wellsFargoAuthToken');
       
       // Validate required fields
       if (!userData.username || !userData.password || !userData.email || 
@@ -182,8 +181,8 @@ export const AuthProvider = ({ children }) => {
       
       // Store token and user data
       const { token, user } = response.data;
-      localStorage.setItem('wellsFargoAuthToken', token);
-      localStorage.setItem('wellsFargoUser', JSON.stringify(user));
+      sessionStorage.setItem('wellsFargoAuthToken', token);
+      sessionStorage.setItem('wellsFargoUser', JSON.stringify(user));
       sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
       sessionStorage.setItem('wellsFargoSession', 'true');
       
@@ -247,7 +246,7 @@ export const AuthProvider = ({ children }) => {
       
       // Update stored user data
       const updatedUser = response.data.data;
-      localStorage.setItem('wellsFargoUser', JSON.stringify(updatedUser));
+      sessionStorage.setItem('wellsFargoUser', JSON.stringify(updatedUser));
       sessionStorage.setItem('wellsFargoUserData', JSON.stringify(updatedUser));
       
       setCurrentUser(updatedUser);
@@ -309,8 +308,8 @@ export const AuthProvider = ({ children }) => {
   
   // Check if a user is authenticated (has valid token and user data)
   const isAuthenticated = () => {
-    const token = localStorage.getItem('wellsFargoAuthToken');
-    const userData = localStorage.getItem('wellsFargoUser');
+    const token = sessionStorage.getItem('wellsFargoAuthToken');
+    const userData = sessionStorage.getItem('wellsFargoUser');
     
     return !!(token && userData);
   };
