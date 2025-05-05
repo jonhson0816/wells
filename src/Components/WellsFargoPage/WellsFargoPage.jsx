@@ -100,7 +100,6 @@ const WellsFargoPage = () => {
   const [registerError, setRegisterError] = useState('');
   const [formStep, setFormStep] = useState(1);
   const [rememberUsername, setRememberUsername] = useState(false);
-  const [savedUsername, setSavedUsername] = useState('');
   const [passwordStrength, setPasswordStrength] = useState('');
   
   // Security verification modal state
@@ -110,7 +109,7 @@ const WellsFargoPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Use auth context
+  // Use auth context - we'll use these throughout the component
   const { 
     currentUser, 
     login, 
@@ -119,14 +118,16 @@ const WellsFargoPage = () => {
     authError, 
     updateProfile,
     resetPassword,
-    register
+    register,
+    isAuthenticated
   } = useAuth();
 
   // Only redirect to dashboard if user is logged in AND not showing modal from link click
   useEffect(() => {
     const isModalTriggeredByLink = location.state?.showLogin || location.state?.showRegister;
     
-    if (currentUser && !isModalTriggeredByLink) {
+    // Check if user is authenticated using the context method
+    if (isAuthenticated() && !isModalTriggeredByLink) {
       // If user is logged in and no modal request from link, close modal if open
       if (isModalOpen) {
         closeModal();
@@ -134,7 +135,7 @@ const WellsFargoPage = () => {
       // Redirect to dashboard 
       navigate('/dashboard');
     }
-  }, [currentUser, isModalOpen, navigate, location.state]);
+  }, [isAuthenticated, isModalOpen, navigate, location.state]);
 
   // Check for any state params (for login/register modals)
   useEffect(() => {
@@ -165,14 +166,16 @@ const WellsFargoPage = () => {
     }
   }, [authError, isLoginModal]);
 
-  // Check for saved username in sessionStorage on component mount
+  // Use the currentUser from context to pre-fill the username if we're remembering it
+  // This is now handled by our component state only - no sessionStorage
   useEffect(() => {
-    const username = sessionStorage.getItem('wellsFargoRememberedUsername');
-    if (username) {
-      setSavedUsername(username);
-      setFormData(prev => ({ ...prev, username }));
+    if (currentUser && rememberUsername) {
+      setFormData(prev => ({ 
+        ...prev, 
+        username: currentUser.email // Use email as username or another appropriate field
+      }));
     }
-  }, []);
+  }, [currentUser, rememberUsername]);
 
   // Password strength checker
   useEffect(() => {
@@ -285,14 +288,7 @@ const WellsFargoPage = () => {
       if (!result.success) {
         setLoginError(result.error || 'Login failed. Please try again.');
       } else {
-        // Remember username if checkbox is checked
-        if (rememberUsername) {
-          sessionStorage.setItem('wellsFargoRememberedUsername', formData.username);
-        } else {
-          sessionStorage.removeItem('wellsFargoRememberedUsername');
-        }
-        
-        // Manually close modal and redirect to dashboard to ensure navigation happens
+        // Close modal and redirect to dashboard to ensure navigation happens
         closeModal();
         navigate('/dashboard');
       }
