@@ -166,17 +166,10 @@ const WellsFargoPage = () => {
   }, [authError, isLoginModal]);
 
   // Check for saved username in sessionStorage on component mount
-  // useEffect(() => {
-  //   const username = sessionStorage.getItem('wellsFargoRememberedUsername');
-  //   if (username) {
-  //     setSavedUsername(username);
-  //     setFormData(prev => ({ ...prev, username }));
-  //   }
-  // }, []);
-
   useEffect(() => {
-    const username = useAuth().getRememberedUsername();
+    const username = sessionStorage.getItem('wellsFargoRememberedUsername');
     if (username) {
+      setSavedUsername(username);
       setFormData(prev => ({ ...prev, username }));
     }
   }, []);
@@ -294,12 +287,12 @@ const WellsFargoPage = () => {
       } else {
         // Remember username if checkbox is checked
         if (rememberUsername) {
-          useAuth().rememberUsername(formData.username);
+          sessionStorage.setItem('wellsFargoRememberedUsername', formData.username);
         } else {
-          useAuth().rememberUsername(null);
+          sessionStorage.removeItem('wellsFargoRememberedUsername');
         }
         
-        // Manually close modal and redirect to dashboard
+        // Manually close modal and redirect to dashboard to ensure navigation happens
         closeModal();
         navigate('/dashboard');
       }

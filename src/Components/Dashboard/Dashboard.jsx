@@ -344,7 +344,6 @@ const Dashboard = () => {
   
     fetchDashboardData();
   }, [navigate, isAuthenticated, currentUser]);
-  
 
   // Handler for navigation that requires verification
   const handleSecureNavigation = (path) => {
