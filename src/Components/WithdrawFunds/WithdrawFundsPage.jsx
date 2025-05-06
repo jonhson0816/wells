@@ -560,21 +560,46 @@ const WithdrawFundsPage = () => {
           )}
 
           <form className="withdraw-form" onSubmit={handleSubmit}>
+            {/* Account Selection Dropdown */}
             <div className="form-group">
-              <label htmlFor="account-from">From Account:</label>
-              <select 
-                id="account-from" 
-                value={accountFrom} 
-                onChange={handleAccountChange}
+              <label htmlFor="accountFrom">From which account:</label>
+              <select
+                id="accountFrom"
                 className="form-control"
+                value={accountFrom}
+                onChange={handleAccountChange}
+                disabled={loading}
+                required
               >
-                {accounts.map(account => (
-                  <option key={account.id || account._id} value={account.id || account._id}>
-                    {account.name} - {account.number} (${account.balance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })})
-                  </option>
-                ))}
+                <option value="" disabled>Select an account</option>
+                {accounts && accounts.length > 0 ? (
+                  accounts.map((account) => (
+                    <option 
+                      key={account.id || account._id} 
+                      value={account.id || account._id}
+                    >
+                      {account.name || account.type} - ${account.balance?.toFixed(2)} - {account.number}
+                    </option>
+                  ))
+                ) : (
+                  <option value="" disabled>No accounts available</option>
+                )}
               </select>
+              {!accounts || accounts.length === 0 ? (
+                <div className="text-danger mt-2">No accounts found. Please add an account first.</div>
+              ) : null}
             </div>
+
+            {/* Display selected account details */}
+            {selectedAccount && (
+              <div className="selected-account-details">
+                <p>
+                  <strong>{selectedAccount.name || selectedAccount.type}</strong><br />
+                  Available balance: <span className="balance">${selectedAccount.balance?.toFixed(2)}</span><br />
+                  Account number: {selectedAccount.number}
+                </p>
+              </div>
+            )}
 
             <div className="form-group">
               <label htmlFor="withdrawal-type">Withdrawal Type:</label>
