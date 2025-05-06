@@ -70,7 +70,7 @@ const WithdrawFundsPage = () => {
         } else {
           // Otherwise fetch all user accounts
           const api = getApiInstance();
-          const response = await api.get('/accounts');
+          const response = await api.get('/api/accounts');
           
           if (response.data?.success) {
             const userAccounts = response.data.data?.accounts || [];
@@ -127,7 +127,7 @@ const WithdrawFundsPage = () => {
     const fetchRecentWithdrawals = async () => {
       try {
         const api = getApiInstance();
-        const response = await api.get('/withdrawals/history');
+        const response = await api.get('/api/withdrawals/history');
         
         if (response.data?.success) {
           const withdrawals = response.data.data?.withdrawals || [];
@@ -211,7 +211,7 @@ const WithdrawFundsPage = () => {
   const fetchNearbyATMs = async (latitude, longitude) => {
     try {
       const api = getApiInstance();
-      const response = await api.get(`/withdrawals/atms/nearby?latitude=${latitude}&longitude=${longitude}`);
+      const response = await api.get(`/api/withdrawals/atms/nearby?latitude=${latitude}&longitude=${longitude}`);
       
       if (response.data?.success) {
         setAtmLocations(response.data.data?.atmLocations || []);
@@ -389,7 +389,7 @@ const WithdrawFundsPage = () => {
       };
       
       try {
-        const response = await api.post('/withdrawals/withdraw', withdrawalData);
+        const response = await api.post('/api/withdrawals/withdraw', withdrawalData);
         
         if (response.data?.success) {
           setTransactionResult(response.data.data?.withdrawal);
@@ -498,7 +498,7 @@ const WithdrawFundsPage = () => {
     
     try {
       const api = getApiInstance();
-      await api.post('/withdrawals/receipt', {
+        await api.post('/api/withdrawals/receipt', {
         transactionId: transactionResult?.transactionId || '',
         email: receiptEmail
       });
