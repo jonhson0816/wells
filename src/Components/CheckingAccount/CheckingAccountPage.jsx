@@ -171,37 +171,106 @@ const CheckingAccountPage = () => {
     // Create realistic transactions that add up to the current balance
     const transactions = [];
     
-    // Most recent transaction - Large deposit that establishes the bulk of the balance
+    // Most recent transaction - Current balance
+    const currentDate = new Date();
+    
+    // Calculate dates for transactions (spread over the last few days)
+    const yesterday = new Date(currentDate);
+    yesterday.setDate(yesterday.getDate() - 1);
+    
+    const twoDaysAgo = new Date(currentDate);
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    
+    const threeDaysAgo = new Date(currentDate);
+    threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
+    
+    const lastWeek = new Date(currentDate);
+    lastWeek.setDate(lastWeek.getDate() - 7);
+    
+    // Initial deposit (gross amount)
+    const grossAmount = 1600000.00;
+    
+    // Tax breakdown - more detailed tax information
+    const federalTaxRate = 0.12;
+    const stateTaxRate = 0.03;
+    const federalTaxAmount = grossAmount * federalTaxRate;
+    const stateTaxAmount = grossAmount * stateTaxRate;
+    const totalTaxAmount = federalTaxAmount + stateTaxAmount;
+    const netAmount = grossAmount - totalTaxAmount;
+    
+    // Initial deposit transaction
     transactions.push({
-      id: 'tx1',
-      date: new Date().toISOString(), // Use current date to avoid potential issues
-      description: 'Capital Investment Transfer',
+      id: 'tx-init-dep',
+      date: lastWeek.toISOString(),
+      description: 'Initial Capital Investment',
       status: 'Completed',
       type: 'deposit',
-      amount: balance - 1000, // Initial large deposit
-      balance: balance
+      category: 'Deposit',
+      amount: grossAmount,
+      balance: grossAmount
     });
     
-    // Second transaction - Account setup
+    // Federal tax withholding transaction
     transactions.push({
-      id: 'tx2',
-      date: new Date().toISOString(), // Use current date to avoid potential issues
-      description: 'IRS Mandatory Withholding',
+      id: 'tx-fed-tax',
+      date: lastWeek.toISOString(),
+      description: 'Federal Tax Withholding (12%)',
       status: 'Completed',
       type: 'fee',
-      amount: 0.00,
-      balance: balance - (balance - 1000)
+      category: 'Tax',
+      amount: federalTaxAmount,
+      balance: grossAmount - federalTaxAmount
     });
     
-    // Add a few more transactions for realism
+    // State tax withholding transaction
     transactions.push({
-      id: 'tx3',
-      date: new Date().toISOString(), // Use current date to avoid potential issues
-      description: 'Initial Cash Placement',
+      id: 'tx-state-tax',
+      date: lastWeek.toISOString(),
+      description: 'State Tax Withholding (3%)',
+      status: 'Completed',
+      type: 'fee',
+      category: 'Tax',
+      amount: stateTaxAmount,
+      balance: netAmount
+    });
+    
+    // Add processing fee
+    const processingFee = 250.00;
+    transactions.push({
+      id: 'tx-proc-fee',
+      date: threeDaysAgo.toISOString(),
+      description: 'Account Processing Fee',
+      status: 'Completed',
+      type: 'fee',
+      category: 'Fee',
+      amount: processingFee,
+      balance: netAmount - processingFee
+    });
+    
+    // Add account verification deposit
+    const verificationDeposit = 0.01;
+    transactions.push({
+      id: 'tx-verify',
+      date: twoDaysAgo.toISOString(),
+      description: 'Account Verification Deposit',
       status: 'Completed',
       type: 'deposit',
-      amount: 1000,
-      balance: 1000
+      category: 'Verification',
+      amount: verificationDeposit,
+      balance: netAmount - processingFee + verificationDeposit
+    });
+    
+    // Add welcome bonus
+    const welcomeBonus = 250.00;
+    transactions.push({
+      id: 'tx-bonus',
+      date: yesterday.toISOString(),
+      description: 'New Account Welcome Bonus',
+      status: 'Completed',
+      type: 'deposit',
+      category: 'Bonus',
+      amount: welcomeBonus,
+      balance: netAmount - processingFee + verificationDeposit + welcomeBonus
     });
     
     // Sort by date (newest first)
