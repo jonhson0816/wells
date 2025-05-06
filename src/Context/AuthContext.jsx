@@ -1,6 +1,49 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 
+// Create secure storage utility
+const SecureStorage = {
+  encrypt: (data) => {
+    if (!data) return null;
+    const stringData = typeof data === 'object' ? JSON.stringify(data) : String(data);
+    return btoa(encodeURIComponent(stringData));
+  },
+  
+  decrypt: (encryptedData) => {
+    if (!encryptedData) return null;
+    try {
+      const decrypted = decodeURIComponent(atob(encryptedData));
+      return decrypted.startsWith('{') ? JSON.parse(decrypted) : decrypted;
+    } catch (e) {
+      console.error('Decryption error:', e);
+      return null;
+    }
+  },
+  
+  setItem: (key, value) => {
+    const encryptedValue = SecureStorage.encrypt(value);
+    sessionStorage.setItem(`secure_${key}`, encryptedValue);
+  },
+  
+  getItem: (key) => {
+    const encryptedValue = sessionStorage.getItem(`secure_${key}`);
+    return SecureStorage.decrypt(encryptedValue);
+  },
+  
+  removeItem: (key) => {
+    sessionStorage.removeItem(`secure_${key}`);
+  },
+  
+  clear: () => {
+    // Only clear secure items
+    Object.keys(sessionStorage).forEach(key => {
+      if (key.startsWith('secure_')) {
+        sessionStorage.removeItem(key);
+      }
+    });
+  }
+};
+
 // Create the auth context
 export const AuthContext = createContext();
 
@@ -21,7 +64,7 @@ export const AuthProvider = ({ children }) => {
       setLoading(true);
       
       // Check if we have a token
-      const token = localStorage.getItem('wellsFargoAuthToken');
+      const token = SecureStorage.getItem('authToken');
       
       if (!token) {
         console.log("No auth token found during session check");
@@ -32,15 +75,14 @@ export const AuthProvider = ({ children }) => {
       
       console.log("Auth token found, checking for local user data");
       
-      // First try to get user data from localStorage to avoid unnecessary API calls
-      const storedUser = localStorage.getItem('wellsFargoUser');
+      // First try to get user data from secure storage to avoid unnecessary API calls
+      const storedUser = SecureStorage.getItem('userData');
       if (storedUser) {
         try {
-          const userData = JSON.parse(storedUser);
-          console.log("Found stored user data:", userData);
+          console.log("Found stored user data");
           
           // Set current user from storage first to avoid loading state
-          setCurrentUser(userData);
+          setCurrentUser(storedUser);
           
           // Then validate token with backend in the background
           await validateTokenWithBackend(token);
@@ -67,15 +109,18 @@ export const AuthProvider = ({ children }) => {
     try {
       console.log("Validating token with backend");
       
+      // Set token in API headers for request
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      
       // Validate token with backend
       const response = await api.get('/auth/me');
       
       if (response.data.success) {
-        console.log("Token validated successfully, user:", response.data.data);
+        console.log("Token validated successfully");
         setCurrentUser(response.data.data);
         
         // Update stored user data with fresh data from server
-        localStorage.setItem('wellsFargoUser', JSON.stringify(response.data.data));
+        SecureStorage.setItem('userData', response.data.data);
       } else {
         console.log("Token validation failed:", response.data);
         clearUserData();
@@ -88,7 +133,13 @@ export const AuthProvider = ({ children }) => {
 
   // Clear user data function to ensure proper user isolation
   const clearUserData = () => {
+    // Remove token from API headers
+    delete api.defaults.headers.common['Authorization'];
+    
     // Clear all user-related data from storage
+    SecureStorage.clear();
+    
+    // Also clear any legacy non-secure storage items
     localStorage.removeItem('wellsFargoUser');
     localStorage.removeItem('wellsFargoUserData');
     localStorage.removeItem('wellsFargoAuthToken');
@@ -109,8 +160,7 @@ export const AuthProvider = ({ children }) => {
       
       // Clear current session for clean login
       setCurrentUser(null);
-      sessionStorage.removeItem('wellsFargoUserData');
-      sessionStorage.removeItem('wellsFargoSession');
+      SecureStorage.clear();
       
       // Validate inputs
       if (!username || !password) {
@@ -123,19 +173,21 @@ export const AuthProvider = ({ children }) => {
         password
       });
       
-      console.log("Login response:", response.data);
+      console.log("Login response received");
       
       // Check if the response structure matches what we expect
       if (!response.data || !response.data.token || !response.data.user) {
-        console.error("Invalid response structure:", response.data);
+        console.error("Invalid response structure");
         throw new Error("Unexpected response from server");
       }
       
-      // Store token and user data
+      // Store token and user data in secure storage
       const { token, user } = response.data;
-      localStorage.setItem('wellsFargoAuthToken', token);
-      localStorage.setItem('wellsFargoUser', JSON.stringify(user));
-      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
+      SecureStorage.setItem('authToken', token);
+      SecureStorage.setItem('userData', user);
+      
+      // Set token in API headers for future requests
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       setCurrentUser(user);
       return { success: true };
@@ -158,15 +210,13 @@ export const AuthProvider = ({ children }) => {
   // Register function - FIXED
   const register = async (userData) => {
     try {
-      console.log("Starting registration with API base URL:", api.defaults.baseURL);
+      console.log("Starting registration");
       setLoading(true);
       setAuthError(null);
       
       // Clear session data for clean registration
       setCurrentUser(null);
-      sessionStorage.removeItem('wellsFargoUserData');
-      sessionStorage.removeItem('wellsFargoSession');
-      localStorage.removeItem('wellsFargoAuthToken');
+      SecureStorage.clear();
       
       // Validate required fields
       if (!userData.username || !userData.password || !userData.email || 
@@ -184,14 +234,6 @@ export const AuthProvider = ({ children }) => {
         name: `${userData.firstName} ${userData.lastName}`
       };
       
-      // Log the data being sent to confirm name is set
-      console.log("Data being sent to server:", {
-        ...formattedUserData,
-        password: "[REDACTED]",
-        ssn: "[REDACTED]",
-        securityAnswer: "[REDACTED]"
-      });
-      
       // Validate phone number format after formatting
       if (formattedUserData.phoneNumber.replace(/\D/g, '').length !== 10) {
         throw new Error("Please provide a valid 10-digit phone number");
@@ -200,25 +242,24 @@ export const AuthProvider = ({ children }) => {
       // Send registration request to backend
       const response = await api.post('/auth/register', formattedUserData);
       
-      
-      console.log("Registration response:", response.data);
+      console.log("Registration response received");
       
       if (!response.data.success) {
         throw new Error(response.data.error || "Registration failed");
       }
       
-      // Store token and user data
+      // Store token and user data in secure storage
       const { token, user } = response.data;
-      localStorage.setItem('wellsFargoAuthToken', token);
-      localStorage.setItem('wellsFargoUser', JSON.stringify(user));
-      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(user));
-      sessionStorage.setItem('wellsFargoSession', 'true');
+      SecureStorage.setItem('authToken', token);
+      SecureStorage.setItem('userData', user);
+      
+      // Set token in API headers for future requests
+      api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       
       setCurrentUser(user);
       return { success: true };
     } catch (error) {
       console.error('Registration error:', error);
-      console.log('Error response:', error.response?.data);
       const errorMessage = error.response?.data?.error || error.message || "Registration failed. Please try again.";
       setAuthError(errorMessage);
       return { success: false, error: errorMessage };
@@ -277,8 +318,7 @@ export const AuthProvider = ({ children }) => {
       
       // Update stored user data
       const updatedUser = response.data.data;
-      localStorage.setItem('wellsFargoUser', JSON.stringify(updatedUser));
-      sessionStorage.setItem('wellsFargoUserData', JSON.stringify(updatedUser));
+      SecureStorage.setItem('userData', updatedUser);
       
       setCurrentUser(updatedUser);
       return { success: true };
@@ -339,12 +379,38 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
+  // Store account data securely
+  const storeAccounts = (accounts) => {
+    if (accounts) {
+      SecureStorage.setItem('accounts', accounts);
+    }
+  };
+  
+  // Get stored accounts
+  const getAccounts = () => {
+    return SecureStorage.getItem('accounts');
+  };
+  
   // Check if a user is authenticated (has valid token and user data)
   const isAuthenticated = () => {
-    const token = localStorage.getItem('wellsFargoAuthToken');
-    const userData = localStorage.getItem('wellsFargoUser');
+    const token = SecureStorage.getItem('authToken');
+    const userData = SecureStorage.getItem('userData');
     
     return !!(token && userData);
+  };
+  
+  // Modified remember username function to use secure storage
+  const rememberUsername = (username) => {
+    if (username) {
+      SecureStorage.setItem('rememberedUsername', username);
+    } else {
+      SecureStorage.removeItem('rememberedUsername');
+    }
+  };
+  
+  // Get remembered username
+  const getRememberedUsername = () => {
+    return SecureStorage.getItem('rememberedUsername');
   };
   
   // Provide the auth context values
@@ -358,7 +424,11 @@ export const AuthProvider = ({ children }) => {
     register,
     updateProfile,
     resetPassword,
-    clearUserData
+    clearUserData,
+    storeAccounts,
+    getAccounts,
+    rememberUsername,
+    getRememberedUsername
   };
   
   return (
