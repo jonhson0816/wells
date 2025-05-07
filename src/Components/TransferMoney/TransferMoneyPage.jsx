@@ -66,13 +66,6 @@ const TransferMoneyPage = () => {
   const [transferFee, setTransferFee] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   
-  // Fetch user accounts and other data on component mount
-  useEffect(() => {
-    fetchUserAccounts();
-    fetchSavedRecipients();
-    fetchBanks();
-  }, []);
-
   // Helper function to get token from local storage
   const getAuthToken = () => {
     // Check for token with the Wells Fargo specific key
@@ -226,26 +219,28 @@ const TransferMoneyPage = () => {
   };
 
   // Fetch banks from API
-  useEffect(() => {
-    // Function to fetch all banks
-    const fetchBanks = async () => {
-      try {
-        setIsLoading(true);
-        const response = await fetch('/api/transfers/banks');
-        const data = await response.json();
-        
-        if (data.success) {
-          setBanks(data.data);
-        } else {
-          console.error('Failed to fetch banks:', data.error);
-        }
-      } catch (error) {
-        console.error('Error fetching banks:', error);
-      } finally {
-        setIsLoading(false);
+  const fetchBanks = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch('/api/transfers/banks');
+      const data = await response.json();
+      
+      if (data.success) {
+        setBanks(data.data);
+      } else {
+        console.error('Failed to fetch banks:', data.error);
       }
-    };
-  
+    } catch (error) {
+      console.error('Error fetching banks:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Fetch user accounts and other data on component mount
+  useEffect(() => {
+    fetchUserAccounts();
+    fetchSavedRecipients();
     fetchBanks();
   }, []);
 
