@@ -226,18 +226,28 @@ const TransferMoneyPage = () => {
   };
 
   // Fetch banks from API
-  const fetchBanks = async () => {
-    try {
-      const response = await axios.get('/api/transfers/banks');
-      // Make sure banks is always an array
-      const banksData = response.data && response.data.data ? response.data.data : [];
-      setBanks(Array.isArray(banksData) ? banksData : []);
-    } catch (error) {
-      console.error('Error fetching banks:', error);
-      // Set an empty array as fallback
-      setBanks([]);
-    }
-  };
+  useEffect(() => {
+    // Function to fetch all banks
+    const fetchBanks = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('/api/transfers/banks');
+        const data = await response.json();
+        
+        if (data.success) {
+          setBanks(data.data);
+        } else {
+          console.error('Failed to fetch banks:', data.error);
+        }
+      } catch (error) {
+        console.error('Error fetching banks:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+  
+    fetchBanks();
+  }, []);
 
   // Search for banks
   const searchBanks = (query) => {
@@ -1099,7 +1109,7 @@ const TransferMoneyPage = () => {
                     >
                       <option value="">Select a bank</option>
                       {banks.map(bank => (
-                        <option key={bank.id} value={bank.name}>
+                        <option key={bank._id || bank.id} value={bank.name}>
                           {bank.name}
                         </option>
                       ))}
