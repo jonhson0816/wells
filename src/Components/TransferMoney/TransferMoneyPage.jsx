@@ -117,14 +117,15 @@ const TransferMoneyPage = () => {
         navigate('/login');
         return;
       }
-
+  
       const response = await axios.get('/api/transfers/accounts', {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-
-      const accounts = response.data.data.accounts;
+  
+      // Fix: Check the response structure and handle it properly
+      const accounts = response.data.accounts || response.data.data || [];
       setUserAccounts(accounts);
       
       // Set default from account if accounts exist
