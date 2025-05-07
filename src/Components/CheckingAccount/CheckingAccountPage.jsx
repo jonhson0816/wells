@@ -548,14 +548,18 @@ const CheckingAccountPage = () => {
         
         if (response.data.success) {
           // Update the account balance and transactions
+          const newBalance = response.data.data.newBalance;
           setAccount({
             ...account,
-            balance: response.data.data.newBalance,
-            availableBalance: response.data.data.newBalance
+            balance: newBalance,
+            availableBalance: newBalance
           });
           
           // Add the new transaction to the transactions list
           setTransactions([response.data.data.transaction, ...transactions]);
+          
+          // Update the account in localStorage for Dashboard to access
+          updateAccountInLocalStorage(account.id, newBalance);
           
           alert(`Successfully deposited $${amount}`);
           setIsDepositModalOpen(false);
@@ -567,7 +571,9 @@ const CheckingAccountPage = () => {
         }
       } catch (apiError) {
         console.log('API error, using mock response:', apiError);
-        const mockResponse = await mockApiResponse('Deposit processed successfully');
+        
+        // Calculate new balance
+        const newBalance = account.balance + parseFloat(depositAmount);
         
         // Create a mock transaction
         const newTransaction = {
@@ -577,18 +583,21 @@ const CheckingAccountPage = () => {
           status: 'Completed',
           type: 'deposit',
           amount: parseFloat(depositAmount),
-          balance: account.balance + parseFloat(depositAmount)
+          balance: newBalance
         };
         
-        // Update the account balance
+        // Update the account balance in state
         setAccount({
           ...account,
-          balance: account.balance + parseFloat(depositAmount),
-          availableBalance: account.balance + parseFloat(depositAmount)
+          balance: newBalance,
+          availableBalance: newBalance
         });
         
         // Add the new transaction to the transactions list
         setTransactions([newTransaction, ...transactions]);
+        
+        // Update the account in localStorage for Dashboard to access
+        updateAccountInLocalStorage(account.id, newBalance);
         
         alert(`Successfully deposited $${depositAmount}`);
         setIsDepositModalOpen(false);
@@ -604,6 +613,35 @@ const CheckingAccountPage = () => {
         alert(err.response?.data?.error || 'Error processing deposit');
       }
       console.error('Error depositing money:', err);
+    }
+  };
+  
+  // function to update the account in localStorage
+  const updateAccountInLocalStorage = (accountId, newBalance) => {
+    try {
+      // Get current accounts from localStorage
+      const storedAccounts = localStorage.getItem('wellsFargoAccounts');
+      if (storedAccounts) {
+        const accounts = JSON.parse(storedAccounts);
+        
+        // Find and update the specific account
+        const updatedAccounts = accounts.map(acc => {
+          if (acc.id === accountId) {
+            return {
+              ...acc,
+              balance: newBalance,
+              availableBalance: newBalance
+            };
+          }
+          return acc;
+        });
+        
+        // Store the updated accounts back to localStorage
+        localStorage.setItem('wellsFargoAccounts', JSON.stringify(updatedAccounts));
+        console.log('Account updated in localStorage with new balance:', newBalance);
+      }
+    } catch (error) {
+      console.error('Error updating account in localStorage:', error);
     }
   };
 
