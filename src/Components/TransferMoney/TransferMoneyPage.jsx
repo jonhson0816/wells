@@ -3,6 +3,59 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './TransferMoneyPage.css';
 
+
+const US_BANKS = [
+  { id: 'chase', name: 'JPMorgan Chase Bank', routingNumber: '021000021' },
+  { id: 'bofa', name: 'Bank of America', routingNumber: '026009593' },
+  { id: 'wells', name: 'Wells Fargo Bank', routingNumber: '121000248' },
+  { id: 'citi', name: 'Citibank', routingNumber: '021000089' },
+  { id: 'usbank', name: 'U.S. Bank', routingNumber: '123103729' },
+  { id: 'pnc', name: 'PNC Bank', routingNumber: '043000096' },
+  { id: 'truist', name: 'Truist Bank', routingNumber: '061000104' },
+  { id: 'td', name: 'TD Bank', routingNumber: '031101266' },
+  { id: 'capital', name: 'Capital One', routingNumber: '051405515' },
+  { id: 'goldman', name: 'Goldman Sachs Bank', routingNumber: '121140399' },
+  { id: 'hsbc', name: 'HSBC Bank', routingNumber: '022000020' },
+  { id: 'regions', name: 'Regions Bank', routingNumber: '062000019' },
+  { id: 'keybank', name: 'KeyBank', routingNumber: '041001039' },
+  { id: 'fitrh', name: 'Fifth Third Bank', routingNumber: '042000314' },
+  { id: 'citizens', name: 'Citizens Bank', routingNumber: '011500120' },
+  { id: 'bmo', name: 'BMO Harris Bank', routingNumber: '071000288' },
+  { id: 'compass', name: 'BBVA Compass', routingNumber: '062001186' },
+  { id: 'huntington', name: 'Huntington National Bank', routingNumber: '044000024' },
+  { id: 'santander', name: 'Santander Bank', routingNumber: '231372691' },
+  { id: 'ally', name: 'Ally Bank', routingNumber: '124003116' },
+  { id: 'usaa', name: 'USAA Federal Savings Bank', routingNumber: '314074269' },
+  { id: 'discover', name: 'Discover Bank', routingNumber: '031100649' },
+  { id: 'navy', name: 'Navy Federal Credit Union', routingNumber: '256074974' },
+  { id: 'first', name: 'First Republic Bank', routingNumber: '321081669' },
+  { id: 'first_nt', name: 'First National Bank', routingNumber: '043318092' },
+  { id: 'comerica', name: 'Comerica Bank', routingNumber: '072000096' },
+  { id: 'synovus', name: 'Synovus Bank', routingNumber: '061100606' },
+  { id: 'bank_of_west', name: 'Bank of the West', routingNumber: '121100782' },
+  { id: 'frost', name: 'Frost Bank', routingNumber: '114000093' },
+  { id: 'zions', name: 'Zions Bank', routingNumber: '124000054' },
+  { id: 'union', name: 'Union Bank', routingNumber: '122000496' },
+  { id: 'peoples', name: 'People\'s United Bank', routingNumber: '221172186' },
+  { id: 'first_horizon', name: 'First Horizon Bank', routingNumber: '084000026' },
+  { id: 'valley', name: 'Valley National Bank', routingNumber: '021201383' },
+  { id: 'associated', name: 'Associated Bank', routingNumber: '075900575' },
+  { id: 'first_hawaiian', name: 'First Hawaiian Bank', routingNumber: '121301015' },
+  { id: 'firstbank', name: 'FirstBank', routingNumber: '107005047' },
+  { id: 'eastern', name: 'Eastern Bank', routingNumber: '011301798' },
+  { id: 'webster', name: 'Webster Bank', routingNumber: '211170101' },
+  { id: 'umb', name: 'UMB Bank', routingNumber: '101000695' },
+  { id: 'cathay', name: 'Cathay Bank', routingNumber: '122016066' },
+  { id: 'bankunited', name: 'BankUnited', routingNumber: '267090594' },
+  { id: 'old_national', name: 'Old National Bank', routingNumber: '086300012' },
+  { id: 'prosperity', name: 'Prosperity Bank', routingNumber: '113122655' },
+  { id: 'bok', name: 'BOK Financial', routingNumber: '103900036' },
+  { id: 'first_interstate', name: 'First Interstate Bank', routingNumber: '092901683' },
+  { id: 'hancock', name: 'Hancock Whitney Bank', routingNumber: '065400153' },
+  { id: 'iberia', name: 'IBERIABANK', routingNumber: '265270413' },
+  { id: 'fulton', name: 'Fulton Bank', routingNumber: '031301422' }
+];
+
 const TransferMoneyPage = () => {
   const navigate = useNavigate();
   
@@ -1089,27 +1142,29 @@ const TransferMoneyPage = () => {
                   {/* Bank Dropdown Replacement */}
                   <div className="tran008-form-group">
                     <label htmlFor="bankName">Bank Name</label>
-                    <select
-                      id="bankName"
-                      value={externalAccount.bankName}
-                      onChange={(e) => {
-                        const selectedBank = banks.find(bank => bank.name === e.target.value);
-                        setExternalAccount({
-                          ...externalAccount,
-                          bankName: e.target.value,
-                          routingNumber: selectedBank ? selectedBank.routingNumber : ''
-                        });
-                      }}
-                      className={errors.bankName ? 'tran008-input-error' : ''}
-                    >
-                      <option value="">Select a bank</option>
-                      {banks.map(bank => (
-                        <option key={bank._id || bank.id} value={bank.name}>
-                          {bank.name}
-                        </option>
-                      ))}
-                    </select>
-                    {errors.bankName && <div className="tran008-error-message">{errors.bankName}</div>}
+                    <div className="tran008-bank-select-container">
+                      <select
+                        id="bankName"
+                        value={externalAccount.bankName}
+                        onChange={(e) => {
+                          const selectedBank = US_BANKS.find(bank => bank.name === e.target.value);
+                          setExternalAccount({
+                            ...externalAccount,
+                            bankName: e.target.value,
+                            routingNumber: selectedBank ? selectedBank.routingNumber : ''
+                          });
+                        }}
+                        className={errors.bankName ? 'tran008-input-error' : ''}
+                      >
+                        <option value="">Select a bank</option>
+                        {US_BANKS.map(bank => (
+                          <option key={bank.id} value={bank.name}>
+                            {bank.name}
+                          </option>
+                        ))}
+                      </select>
+                      {errors.bankName && <div className="tran008-error-message">{errors.bankName}</div>}
+                    </div>
                   </div>
                   
                   <div className="tran008-form-group">
