@@ -70,19 +70,60 @@ const WithdrawFundsPage = () => {
         } else {
           // Otherwise fetch all user accounts
           const api = getApiInstance();
-          const response = await api.get('/api/accounts');
-          
-          if (response.data?.success) {
-            const userAccounts = response.data.data?.accounts || [];
-            setAccounts(userAccounts);
+          try {
+            const response = await api.get('/api/accounts');
             
-            // Set default account (first non-credit account if available)
-            if (userAccounts.length > 0) {
-              const defaultAccount = userAccounts.find(acc => acc && !acc.type?.toLowerCase().includes('credit')) || userAccounts[0];
-              if (defaultAccount) {
-                setAccountFrom(defaultAccount.id || defaultAccount._id);
-                setSelectedAccount(defaultAccount);
+            if (response.data?.success) {
+              const userAccounts = response.data.data?.accounts || [];
+              
+              if (userAccounts.length > 0) {
+                setAccounts(userAccounts);
+                
+                // Set default account (first non-credit account if available)
+                const defaultAccount = userAccounts.find(acc => acc && !acc.type?.toLowerCase().includes('credit')) || userAccounts[0];
+                if (defaultAccount) {
+                  setAccountFrom(defaultAccount.id || defaultAccount._id);
+                  setSelectedAccount(defaultAccount);
+                }
+              } else {
+                // Load accounts from local storage as fallback
+                const storedAccounts = localStorage.getItem('wellsFargoAccounts');
+                if (storedAccounts) {
+                  const parsedAccounts = JSON.parse(storedAccounts);
+                  if (parsedAccounts && parsedAccounts.length > 0) {
+                    setAccounts(parsedAccounts);
+                    const defaultAccount = parsedAccounts.find(acc => acc && !acc.type?.toLowerCase().includes('credit')) || parsedAccounts[0];
+                    if (defaultAccount) {
+                      setAccountFrom(defaultAccount.id || defaultAccount._id);
+                      setSelectedAccount(defaultAccount);
+                    }
+                  }
+                } else {
+                  initializeWithMockData();
+                }
               }
+            } else {
+              // Initialize with mock data if API returns no success
+              initializeWithMockData();
+            }
+          } catch (apiError) {
+            console.error('API request failed:', apiError);
+            // Try to get accounts from local storage if API fails
+            const storedAccounts = localStorage.getItem('wellsFargoAccounts');
+            if (storedAccounts) {
+              const parsedAccounts = JSON.parse(storedAccounts);
+              if (parsedAccounts && parsedAccounts.length > 0) {
+                setAccounts(parsedAccounts);
+                const defaultAccount = parsedAccounts.find(acc => acc && !acc.type?.toLowerCase().includes('credit')) || parsedAccounts[0];
+                if (defaultAccount) {
+                  setAccountFrom(defaultAccount.id || defaultAccount._id);
+                  setSelectedAccount(defaultAccount);
+                }
+              } else {
+                initializeWithMockData();
+              }
+            } else {
+              initializeWithMockData();
             }
           }
         }
@@ -93,34 +134,41 @@ const WithdrawFundsPage = () => {
         setErrorMessage('Failed to load your accounts. Please try again later.');
         setLoading(false);
         
-        // Initialize with mock data for development if API fails
-        const mockAccounts = [
-          {
-            id: 'checking123',
-            _id: 'checking123',
-            name: 'Everyday Checking',
-            number: 'xxxx4567',
-            type: 'checking',
-            balance: 2546.78
-          },
-          {
-            id: 'savings456',
-            _id: 'savings456',
-            name: 'Way2Save Savings',
-            number: 'xxxx8901',
-            type: 'savings',
-            balance: 15782.45
-          }
-        ];
-        
-        setAccounts(mockAccounts);
-        setAccountFrom(mockAccounts[0].id);
-        setSelectedAccount(mockAccounts[0]);
+        // Initialize with mock data as a final fallback
+        initializeWithMockData();
       }
     };
-
+  
+    // Helper function to initialize with mock data
+    const initializeWithMockData = () => {
+      const mockAccounts = [
+        {
+          id: 'checking123',
+          _id: 'checking123',
+          name: 'Everyday Checking',
+          number: 'xxxx4567',
+          type: 'checking',
+          balance: 2546.78
+        },
+        {
+          id: 'savings456',
+          _id: 'savings456',
+          name: 'Way2Save Savings',
+          number: 'xxxx8901',
+          type: 'savings',
+          balance: 15782.45
+        }
+      ];
+      
+      setAccounts(mockAccounts);
+      setAccountFrom(mockAccounts[0].id);
+      setSelectedAccount(mockAccounts[0]);
+    };
+  
     fetchAccounts();
   }, [location.state]);
+
+  
 
   // Fetch user's recent withdrawals
   useEffect(() => {
@@ -561,34 +609,34 @@ const WithdrawFundsPage = () => {
 
           <form className="withdraw-form" onSubmit={handleSubmit}>
             {/* Account Selection Dropdown */}
-            <div className="form-group">
-              <label htmlFor="accountFrom">From which account:</label>
-              <select
-                id="accountFrom"
-                className="form-control"
-                value={accountFrom}
-                onChange={handleAccountChange}
-                disabled={loading}
-                required
-              >
-                <option value="" disabled>Select an account</option>
-                {accounts && accounts.length > 0 ? (
-                  accounts.map((account) => (
-                    <option 
-                      key={account.id || account._id} 
-                      value={account.id || account._id}
-                    >
-                      {account.name || account.type} - ${account.balance?.toFixed(2)} - {account.number}
-                    </option>
-                  ))
-                ) : (
-                  <option value="" disabled>No accounts available</option>
-                )}
-              </select>
-              {!accounts || accounts.length === 0 ? (
-                <div className="text-danger mt-2">No accounts found. Please add an account first.</div>
-              ) : null}
-            </div>
+              <div className="form-group">
+                <label htmlFor="accountFrom">From which account:</label>
+                <select
+                  id="accountFrom"
+                  className="form-control"
+                  value={accountFrom}
+                  onChange={handleAccountChange}
+                  disabled={loading}
+                  required
+                >
+                  <option value="">Select an account</option>
+                  {accounts && accounts.length > 0 ? (
+                    accounts.map((account) => (
+                      <option 
+                        key={account.id || account._id} 
+                        value={account.id || account._id}
+                      >
+                        {account.name || account.type} - ${(account.balance || 0).toFixed(2)} - {account.number || account.accountNumber}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="" disabled>No accounts available</option>
+                  )}
+                </select>
+                {!accounts || accounts.length === 0 ? (
+                  <div className="text-danger mt-2">No accounts found. Please add an account first.</div>
+                ) : null}
+              </div>
 
             {/* Display selected account details */}
             {selectedAccount && (
