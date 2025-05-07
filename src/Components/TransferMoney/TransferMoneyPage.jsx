@@ -109,74 +109,76 @@ const TransferMoneyPage = () => {
   };
 
   // Fetch user accounts from API
-  // Fix for the fetchUserAccounts function
-const fetchUserAccounts = async () => {
-  try {
-    const token = getAuthToken();
-    if (!token) {
-      console.error('No authentication token found');
-      navigate('/login');
-      return;
-    }
+  const fetchUserAccounts = async () => {
+    try {
+      const token = getAuthToken();
+      if (!token) {
+        console.error('No authentication token found');
+        navigate('/login');
+        return;
+      }
 
-    const response = await axios.get('/api/transfers/accounts', {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+      const response = await axios.get('/api/transfers/accounts', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
-    // Fix: Check the response structure and handle it properly
-    let accounts = [];
-    if (response && response.data) {
-      accounts = response.data.accounts || 
-                response.data.data?.accounts || 
-                response.data.data || 
-                [];
-    }
-    
-    // Ensure accounts is always an array
-    accounts = Array.isArray(accounts) ? accounts : [];
-    
-    setUserAccounts(accounts);
-    
-    // Set default from account if accounts exist
-    if (accounts.length > 0) {
-      setFromAccount(accounts[0]._id);
-      // Set default to account if at least 2 accounts exist
-      if (accounts.length > 1) {
-        setToAccount(accounts[1]._id);
+      // Fix: Check the response structure and handle it properly
+      let accounts = [];
+      if (response && response.data) {
+        if (response.data.data && response.data.data.accounts) {
+          accounts = response.data.data.accounts;
+        } else if (response.data.accounts) {
+          accounts = response.data.accounts;
+        } else if (Array.isArray(response.data.data)) {
+          accounts = response.data.data;
+        }
       }
-    }
-  } catch (error) {
-    console.error('Error fetching accounts:', error);
-    
-    if (error.response && error.response.status === 401) {
-      navigate('/login');
-    }
-    
-    // Use mock data for demonstration if needed
-    const mockAccounts = [
-      {
-        _id: 'acc1',
-        accountNumber: '12345678901',
-        accountType: 'Checking',
-        accountName: 'Primary Checking',
-        balance: 5430.42
-      },
-      {
-        _id: 'acc2',
-        accountNumber: '12345678902',
-        accountType: 'Savings',
-        accountName: 'High-Yield Savings',
-        balance: 12500.00
+      
+      // Ensure accounts is always an array
+      accounts = Array.isArray(accounts) ? accounts : [];
+      
+      setUserAccounts(accounts);
+      
+      // Set default from account if accounts exist
+      if (accounts.length > 0) {
+        setFromAccount(accounts[0]._id);
+        // Set default to account if at least 2 accounts exist
+        if (accounts.length > 1) {
+          setToAccount(accounts[1]._id);
+        }
       }
-    ];
-    
-    setUserAccounts(mockAccounts);
-    setFromAccount('acc1');
-    setToAccount('acc2');
-  }
-};
+    } catch (error) {
+      console.error('Error fetching accounts:', error);
+      
+      if (error.response && error.response.status === 401) {
+        navigate('/login');
+      }
+      
+      // Use mock data for demonstration if needed
+      const mockAccounts = [
+        {
+          _id: 'acc1',
+          accountNumber: '12345678901',
+          accountType: 'Checking',
+          accountName: 'Primary Checking',
+          balance: 5430.42
+        },
+        {
+          _id: 'acc2',
+          accountNumber: '12345678902',
+          accountType: 'Savings',
+          accountName: 'High-Yield Savings',
+          balance: 12500.00
+        }
+      ];
+      
+      setUserAccounts(mockAccounts);
+      setFromAccount('acc1');
+      setToAccount('acc2');
+    }
+  };
 
   // Fetch saved recipients from API
   const fetchSavedRecipients = async () => {
@@ -193,7 +195,9 @@ const fetchUserAccounts = async () => {
         }
       });
 
-      setSavedRecipients(response.data.data);
+      // Make sure we handle the response data properly
+      const recipients = response.data && response.data.data ? response.data.data : [];
+      setSavedRecipients(Array.isArray(recipients) ? recipients : []);
     } catch (error) {
       console.error('Error fetching saved recipients:', error);
       
@@ -225,21 +229,25 @@ const fetchUserAccounts = async () => {
   const fetchBanks = async () => {
     try {
       const response = await axios.get('/api/transfers/banks');
-      setBanks(response.data.data);
+      // Make sure banks is always an array
+      const banksData = response.data && response.data.data ? response.data.data : [];
+      setBanks(Array.isArray(banksData) ? banksData : []);
     } catch (error) {
       console.error('Error fetching banks:', error);
+      // Set an empty array as fallback
+      setBanks([]);
     }
   };
 
   // Search for banks
   const searchBanks = (query) => {
-    if (query.length < 3) {
+    if (!query || query.length < 3 || !Array.isArray(banks)) {
       setBankSearchResults([]);
       return;
     }
     
     const filteredBanks = banks.filter(bank => 
-      bank.name.toLowerCase().includes(query.toLowerCase())
+      bank && bank.name && bank.name.toLowerCase().includes(query.toLowerCase())
     );
     
     setBankSearchResults(filteredBanks);
@@ -256,6 +264,8 @@ const fetchUserAccounts = async () => {
 
   // Select a bank from search results
   const selectBank = (bank) => {
+    if (!bank) return;
+    
     if (transferType === 'external') {
       setExternalAccount({
         ...externalAccount,
@@ -274,26 +284,28 @@ const fetchUserAccounts = async () => {
 
   // Select a saved recipient
   const selectSavedRecipient = (recipient) => {
+    if (!recipient) return;
+    
     if (transferType === 'external') {
       setExternalAccount({
-        bankName: recipient.bankName,
-        routingNumber: recipient.routingNumber,
-        accountNumber: recipient.accountNumber.replace('****', ''),
-        accountType: recipient.accountType.toLowerCase(),
-        accountHolderName: recipient.accountHolderName,
+        bankName: recipient.bankName || '',
+        routingNumber: recipient.routingNumber || '',
+        accountNumber: (recipient.accountNumber || '').replace('****', ''),
+        accountType: recipient.accountType ? recipient.accountType.toLowerCase() : 'checking',
+        accountHolderName: recipient.accountHolderName || '',
         saveRecipient: false,
-        recipientNickname: recipient.nickname
+        recipientNickname: recipient.nickname || ''
       });
     } else if (transferType === 'wire') {
       setWireTransfer({
-        bankName: recipient.bankName,
-        routingNumber: recipient.routingNumber,
+        bankName: recipient.bankName || '',
+        routingNumber: recipient.routingNumber || '',
         swiftCode: recipient.swiftCode || '',
-        accountNumber: recipient.accountNumber.replace('****', ''),
-        accountHolderName: recipient.accountHolderName,
+        accountNumber: (recipient.accountNumber || '').replace('****', ''),
+        accountHolderName: recipient.accountHolderName || '',
         accountHolderAddress: recipient.accountHolderAddress || wireTransfer.accountHolderAddress,
         saveRecipient: false,
-        recipientNickname: recipient.nickname
+        recipientNickname: recipient.nickname || ''
       });
     }
   };
