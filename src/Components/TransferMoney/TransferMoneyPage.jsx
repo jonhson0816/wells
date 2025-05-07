@@ -109,63 +109,74 @@ const TransferMoneyPage = () => {
   };
 
   // Fetch user accounts from API
-  const fetchUserAccounts = async () => {
-    try {
-      const token = getAuthToken();
-      if (!token) {
-        console.error('No authentication token found');
-        navigate('/login');
-        return;
-      }
-  
-      const response = await axios.get('/api/transfers/accounts', {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-  
-      // Fix: Check the response structure and handle it properly
-      const accounts = response.data.accounts || response.data.data || [];
-      setUserAccounts(accounts);
-      
-      // Set default from account if accounts exist
-      if (accounts.length > 0) {
-        setFromAccount(accounts[0]._id);
-        // Set default to account if at least 2 accounts exist
-        if (accounts.length > 1) {
-          setToAccount(accounts[1]._id);
-        }
-      }
-    } catch (error) {
-      console.error('Error fetching accounts:', error);
-      
-      if (error.response && error.response.status === 401) {
-        navigate('/login');
-      }
-      
-      // Use mock data for demonstration if needed
-      const mockAccounts = [
-        {
-          _id: 'acc1',
-          accountNumber: '12345678901',
-          accountType: 'Checking',
-          accountName: 'Primary Checking',
-          balance: 5430.42
-        },
-        {
-          _id: 'acc2',
-          accountNumber: '12345678902',
-          accountType: 'Savings',
-          accountName: 'High-Yield Savings',
-          balance: 12500.00
-        }
-      ];
-      
-      setUserAccounts(mockAccounts);
-      setFromAccount('acc1');
-      setToAccount('acc2');
+  // Fix for the fetchUserAccounts function
+const fetchUserAccounts = async () => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      console.error('No authentication token found');
+      navigate('/login');
+      return;
     }
-  };
+
+    const response = await axios.get('/api/transfers/accounts', {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    // Fix: Check the response structure and handle it properly
+    let accounts = [];
+    if (response && response.data) {
+      accounts = response.data.accounts || 
+                response.data.data?.accounts || 
+                response.data.data || 
+                [];
+    }
+    
+    // Ensure accounts is always an array
+    accounts = Array.isArray(accounts) ? accounts : [];
+    
+    setUserAccounts(accounts);
+    
+    // Set default from account if accounts exist
+    if (accounts.length > 0) {
+      setFromAccount(accounts[0]._id);
+      // Set default to account if at least 2 accounts exist
+      if (accounts.length > 1) {
+        setToAccount(accounts[1]._id);
+      }
+    }
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    
+    if (error.response && error.response.status === 401) {
+      navigate('/login');
+    }
+    
+    // Use mock data for demonstration if needed
+    const mockAccounts = [
+      {
+        _id: 'acc1',
+        accountNumber: '12345678901',
+        accountType: 'Checking',
+        accountName: 'Primary Checking',
+        balance: 5430.42
+      },
+      {
+        _id: 'acc2',
+        accountNumber: '12345678902',
+        accountType: 'Savings',
+        accountName: 'High-Yield Savings',
+        balance: 12500.00
+      }
+    ];
+    
+    setUserAccounts(mockAccounts);
+    setFromAccount('acc1');
+    setToAccount('acc2');
+  }
+};
 
   // Fetch saved recipients from API
   const fetchSavedRecipients = async () => {
