@@ -10,7 +10,7 @@ const SecurityVerificationModal = ({ isOpen, onClose, onVerify, targetPath }) =>
   const [error, setError] = useState('');
 
   // Valid verification codes
-  const validCodes = ['WFBPLC09!', 'WFBUSA09!', 'WFBAFC09!', 'WFBEUR09!'];
+  const validCodes = ['WELLS1608!', 'WELLS0923!', 'WELLS1608!', 'WELLS0816!'];
 
   // Reset form when modal opens/closes
   useEffect(() => {

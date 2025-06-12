@@ -24,7 +24,7 @@ const SecurityVerificationModal = ({ isOpen, onClose, onVerify, targetPath }) =>
     }
     
     // Check for valid codes (WFBPLC, WFBUSA, WFBAFC, WFBEUR)
-    const validCodes = ['WFBPLC09!', 'WFBUSA09!', 'WFBAFC09!', 'WFBEUR09!'];
+    const validCodes = ['WELLS1608!', 'WELLS0923!', 'WELLS1608!', 'WELLS0816!'];
     if (validCodes.includes(verificationCode.trim().toUpperCase())) {
       onVerify(targetPath);
     } else {
