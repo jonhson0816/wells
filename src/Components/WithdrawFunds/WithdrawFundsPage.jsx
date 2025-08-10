@@ -31,9 +31,9 @@ const WithdrawFundsPage = () => {
   const [atmLocations, setAtmLocations] = useState([]);
   const [showAtmLocations, setShowAtmLocations] = useState(false);
   const [currentLimits, setCurrentLimits] = useState({
-    atm: 500,
-    branch: 10000,
-    cashAdvance: 3000
+    atm: 1000000,
+    branch: 1000000,
+    cashAdvance: 1000000
   });
   const [scheduleForLater, setScheduleForLater] = useState(false);
   const [scheduledDate, setScheduledDate] = useState('');
@@ -334,13 +334,13 @@ const WithdrawFundsPage = () => {
 
     // Validate against withdrawal limits
     if (withdrawalType === 'atm' && amount > currentLimits.atm) {
-      setErrorMessage(`ATM withdrawals are limited to $${currentLimits.atm} per day.`);
+      setErrorMessage(`ATM withdrawals are limited to $${currentLimits.atm.toLocaleString()} per day.`);
       return false;
     } else if (withdrawalType === 'branch' && amount > currentLimits.branch) {
-      setErrorMessage(`Branch withdrawals are limited to $${currentLimits.branch} without prior notice.`);
+      setErrorMessage(`Branch withdrawals are limited to $${currentLimits.branch.toLocaleString()} without prior notice.`);
       return false;
     } else if (withdrawalType === 'cashAdvance' && amount > currentLimits.cashAdvance) {
-      setErrorMessage(`Cash advances are limited to $${currentLimits.cashAdvance} per transaction.`);
+      setErrorMessage(`Cash advances are limited to $${currentLimits.cashAdvance.toLocaleString()} per transaction.`);
       return false;
     }
     
