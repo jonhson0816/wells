@@ -138,10 +138,18 @@ const CheckingAccountPage = () => {
       : `${baseUrl}/checking/${accountId}${endpoint}`;
   };
 
-  // IMPROVED: Get account data from localStorage and also get stored transactions
+  // FIXED: Improved localStorage management with consistent keys
+  const getStorageKey = (type, accountId) => {
+    const baseKey = 'wellsFargo';
+    if (type === 'accounts') return `${baseKey}Accounts`;
+    if (type === 'transactions') return `${baseKey}Transactions_${accountId}`;
+    return `${baseKey}${type}`;
+  };
+
+  // FIXED: Get account data from localStorage with better error handling
   const getAccountDataFromLocalStorage = () => {
     try {
-      const accountsData = localStorage.getItem('wellsFargoAccounts');
+      const accountsData = localStorage.getItem(getStorageKey('accounts'));
       if (accountsData) {
         const accounts = JSON.parse(accountsData);
         // Find the specific checking account by ID or get the first checking account if id is primary
@@ -152,12 +160,17 @@ const CheckingAccountPage = () => {
           matchedAccount = accounts.find(acc => acc.id === accountId);
         }
 
-        // IMPROVED: Also get stored transactions for this account
+        // Get stored transactions for this account
         if (matchedAccount) {
-          const transactionsKey = `wellsFargoTransactions_${matchedAccount.id}`;
+          const transactionsKey = getStorageKey('transactions', matchedAccount.id);
           const storedTransactions = localStorage.getItem(transactionsKey);
           if (storedTransactions) {
-            matchedAccount.storedTransactions = JSON.parse(storedTransactions);
+            try {
+              matchedAccount.storedTransactions = JSON.parse(storedTransactions);
+            } catch (parseError) {
+              console.error('Error parsing stored transactions:', parseError);
+              matchedAccount.storedTransactions = [];
+            }
           }
         }
         
@@ -169,20 +182,69 @@ const CheckingAccountPage = () => {
     return null;
   };
 
-  // IMPROVED: Save transactions to localStorage whenever they change
+  // FIXED: Save transactions to localStorage with better error handling and consistency
   const saveTransactionsToLocalStorage = (accountId, transactions) => {
     try {
-      const transactionsKey = `wellsFargoTransactions_${accountId}`;
+      const transactionsKey = getStorageKey('transactions', accountId);
       localStorage.setItem(transactionsKey, JSON.stringify(transactions));
       console.log('Transactions saved to localStorage for account:', accountId);
+      
+      // FIXED: Also trigger a storage event for cross-tab synchronization
+      window.dispatchEvent(new StorageEvent('storage', {
+        key: transactionsKey,
+        newValue: JSON.stringify(transactions),
+        oldValue: localStorage.getItem(transactionsKey)
+      }));
     } catch (error) {
       console.error('Error saving transactions to localStorage:', error);
     }
   };
 
-  // Generate consistent transactions based on account balance
+  // FIXED: Update account in localStorage with better synchronization
+  const updateAccountInLocalStorage = (accountId, newBalance) => {
+    try {
+      // Get current accounts from localStorage
+      const storedAccounts = localStorage.getItem(getStorageKey('accounts'));
+      if (storedAccounts) {
+        const accounts = JSON.parse(storedAccounts);
+        
+        // Find and update the specific account
+        const updatedAccounts = accounts.map(acc => {
+          if (acc.id === accountId || (isPrimaryAccount() && acc.type.toLowerCase().includes('checking'))) {
+            return {
+              ...acc,
+              balance: newBalance,
+              availableBalance: newBalance,
+              lastUpdated: new Date().toISOString()
+            };
+          }
+          return acc;
+        });
+        
+        // Store the updated accounts back to localStorage
+        localStorage.setItem(getStorageKey('accounts'), JSON.stringify(updatedAccounts));
+        console.log('Account updated in localStorage with new balance:', newBalance);
+        
+        // FIXED: Trigger multiple events for better synchronization
+        window.dispatchEvent(new CustomEvent('wellsFargoAccountsUpdated', { 
+          detail: { accountId, newBalance, accounts: updatedAccounts }
+        }));
+        
+        // FIXED: Also dispatch a storage event for cross-component sync
+        window.dispatchEvent(new StorageEvent('storage', {
+          key: getStorageKey('accounts'),
+          newValue: JSON.stringify(updatedAccounts),
+          oldValue: storedAccounts
+        }));
+      }
+    } catch (error) {
+      console.error('Error updating account in localStorage:', error);
+    }
+  };
+
+  // FIXED: Generate consistent transactions with better persistence
   const generateConsistentTransactions = (account) => {
-    // IMPROVED: Check if account has stored transactions first
+    // Check if account has stored transactions first
     if (account.storedTransactions && account.storedTransactions.length > 0) {
       console.log('Using stored transactions from localStorage');
       return account.storedTransactions;
@@ -305,7 +367,14 @@ const CheckingAccountPage = () => {
     });
     
     // Sort by date (newest first)
-    return transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sortedTransactions = transactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // FIXED: Immediately save these initial transactions to localStorage
+    if (account.id) {
+      saveTransactionsToLocalStorage(account.id, sortedTransactions);
+    }
+    
+    return sortedTransactions;
   };
 
   // Generate mock transactions
@@ -317,7 +386,7 @@ const CheckingAccountPage = () => {
     return generateConsistentTransactions(account);
   };
 
-  // Fetch account data with fallback to localStorage data, then mock data on error
+  // FIXED: Fetch account data with better localStorage integration
   const fetchAccountData = async () => {
     try {
       setIsLoading(true);
@@ -341,12 +410,26 @@ const CheckingAccountPage = () => {
         console.log('API Response:', response);
         
         if (response.data.success) {
-          setAccount(response.data.data);
+          const accountData = response.data.data;
+          setAccount(accountData);
+          
           // If transactions came with the account data, set them too
-          if (response.data.data.transactions) {
-            setTransactions(response.data.data.transactions);
-            // IMPROVED: Save transactions to localStorage
-            saveTransactionsToLocalStorage(response.data.data.id, response.data.data.transactions);
+          if (accountData.transactions) {
+            setTransactions(accountData.transactions);
+            saveTransactionsToLocalStorage(accountData.id, accountData.transactions);
+          } else {
+            // Load transactions from localStorage if not in API response
+            const storedTransactionsKey = getStorageKey('transactions', accountData.id);
+            const storedTransactions = localStorage.getItem(storedTransactionsKey);
+            if (storedTransactions) {
+              try {
+                const parsedTransactions = JSON.parse(storedTransactions);
+                setTransactions(parsedTransactions);
+              } catch (error) {
+                console.error('Error parsing stored transactions:', error);
+                setTransactions([]);
+              }
+            }
           }
         } else {
           throw new Error(response.data.error || 'Failed to load account data');
@@ -361,12 +444,13 @@ const CheckingAccountPage = () => {
           console.log('Found account in localStorage:', localStorageAccount);
           setAccount(localStorageAccount);
           
-          // Generate mock transactions based on the account balance, but use stored ones if available
-          const mockTransactions = generateMockTransactions(localStorageAccount);
-          setTransactions(mockTransactions);
-          // IMPROVED: Save initial transactions to localStorage if not already stored
-          if (!localStorageAccount.storedTransactions) {
-            saveTransactionsToLocalStorage(localStorageAccount.id, mockTransactions);
+          // FIXED: Always use stored transactions if available
+          if (localStorageAccount.storedTransactions && localStorageAccount.storedTransactions.length > 0) {
+            setTransactions(localStorageAccount.storedTransactions);
+          } else {
+            // Generate mock transactions based on the account balance
+            const mockTransactions = generateMockTransactions(localStorageAccount);
+            setTransactions(mockTransactions);
           }
         } else {
           console.error('No localStorage data found, using fallback mock data');
@@ -398,8 +482,6 @@ const CheckingAccountPage = () => {
           // Generate fallback mock transactions
           const mockTransactions = generateConsistentTransactions(mockAccount);
           setTransactions(mockTransactions);
-          // IMPROVED: Save fallback transactions to localStorage
-          saveTransactionsToLocalStorage(mockAccount.id, mockTransactions);
         }
       }
     } catch (err) {
@@ -420,7 +502,6 @@ const CheckingAccountPage = () => {
     }
   };
 
-
   const formatAccountNumber = (accountNumber) => {
     // If the account number is already formatted (contains non-digit characters)
     if (typeof accountNumber === 'string' && accountNumber.match(/[^0-9]/)) {
@@ -436,7 +517,7 @@ const CheckingAccountPage = () => {
     return accountNumber;
   };
 
-  // Fetch transactions with filters with fallback to filtered mock data
+  // FIXED: Fetch transactions with better localStorage fallback
   const fetchTransactions = async () => {
     try {
       setIsLoading(true);
@@ -465,7 +546,7 @@ const CheckingAccountPage = () => {
         
         if (response.data.success) {
           setTransactions(response.data.data);
-          // IMPROVED: Save updated transactions to localStorage
+          // Save updated transactions to localStorage
           if (account?.id) {
             saveTransactionsToLocalStorage(account.id, response.data.data);
           }
@@ -474,20 +555,24 @@ const CheckingAccountPage = () => {
         }
       } catch (apiError) {
         console.error('API Error, filtering stored transactions:', apiError);
-        // IMPROVED: Filter from stored transactions in localStorage instead of current state
-        const storedAccount = getAccountDataFromLocalStorage();
-        let allTransactions = transactions;
-        
-        if (storedAccount && storedAccount.storedTransactions) {
-          allTransactions = storedAccount.storedTransactions;
+        // Filter from stored transactions in localStorage
+        if (account?.id) {
+          const transactionsKey = getStorageKey('transactions', account.id);
+          const storedTransactions = localStorage.getItem(transactionsKey);
+          
+          if (storedTransactions) {
+            try {
+              const allTransactions = JSON.parse(storedTransactions);
+              const filteredTransactions = allTransactions.filter(tx => {
+                if (filter === 'all') return true;
+                return tx.type === filter;
+              });
+              setTransactions(filteredTransactions);
+            } catch (error) {
+              console.error('Error parsing stored transactions for filtering:', error);
+            }
+          }
         }
-        
-        const filteredTransactions = allTransactions.filter(tx => {
-          if (filter === 'all') return true;
-          return tx.type === filter;
-        });
-        
-        setTransactions(filteredTransactions);
       }
     } catch (err) {
       if (err.response && err.response.status === 401) {
@@ -563,7 +648,7 @@ const CheckingAccountPage = () => {
     }
   };
 
-  // IMPROVED: Handle deposit with better localStorage sync
+  // FIXED: Handle deposit with improved persistence and synchronization
   const handleDeposit = async () => {
     try {
       const token = getAuthToken();
@@ -611,7 +696,7 @@ const CheckingAccountPage = () => {
           const newTransactionsList = [response.data.data.transaction, ...transactions];
           setTransactions(newTransactionsList);
           
-          // IMPROVED: Update both account and transactions in localStorage
+          // Update both account and transactions in localStorage
           updateAccountInLocalStorage(account.id, newBalance);
           saveTransactionsToLocalStorage(account.id, newTransactionsList);
           
@@ -649,13 +734,14 @@ const CheckingAccountPage = () => {
         };
         setAccount(updatedAccount);
         
-        // Add the new transaction to the transactions list
+        // FIXED: Recalculate balances for all transactions
         const newTransactionsList = [newTransaction, ...transactions];
-        setTransactions(newTransactionsList);
+        const updatedTransactionsList = recalculateTransactionBalances(newTransactionsList, newBalance);
+        setTransactions(updatedTransactionsList);
         
-        // IMPROVED: Update both account and transactions in localStorage
+        // Update both account and transactions in localStorage
         updateAccountInLocalStorage(account.id, newBalance);
-        saveTransactionsToLocalStorage(account.id, newTransactionsList);
+        saveTransactionsToLocalStorage(account.id, updatedTransactionsList);
         
         alert(`Successfully deposited $${depositAmount}`);
         setIsDepositModalOpen(false);
@@ -673,40 +759,31 @@ const CheckingAccountPage = () => {
       console.error('Error depositing money:', err);
     }
   };
-  
-  // IMPROVED: Update the account in localStorage with better synchronization
-  const updateAccountInLocalStorage = (accountId, newBalance) => {
-    try {
-      // Get current accounts from localStorage
-      const storedAccounts = localStorage.getItem('wellsFargoAccounts');
-      if (storedAccounts) {
-        const accounts = JSON.parse(storedAccounts);
-        
-        // Find and update the specific account
-        const updatedAccounts = accounts.map(acc => {
-          if (acc.id === accountId || (isPrimaryAccount() && acc.type.toLowerCase().includes('checking'))) {
-            return {
-              ...acc,
-              balance: newBalance,
-              availableBalance: newBalance,
-              lastUpdated: new Date().toISOString()
-            };
-          }
-          return acc;
-        });
-        
-        // Store the updated accounts back to localStorage
-        localStorage.setItem('wellsFargoAccounts', JSON.stringify(updatedAccounts));
-        console.log('Account updated in localStorage with new balance:', newBalance);
-        
-        // IMPROVED: Trigger a custom event to notify other components
-        window.dispatchEvent(new CustomEvent('wellsFargoAccountsUpdated', { 
-          detail: { accountId, newBalance, accounts: updatedAccounts }
-        }));
+
+  // FIXED: Add function to recalculate balances for transaction consistency
+  const recalculateTransactionBalances = (transactionsList, currentBalance) => {
+    // Sort transactions by date (newest first)
+    const sortedTransactions = [...transactionsList].sort((a, b) => new Date(b.date) - new Date(a.date));
+    
+    // Update the balance for each transaction working backwards
+    let runningBalance = currentBalance;
+    const updatedTransactions = sortedTransactions.map((tx, index) => {
+      if (index === 0) {
+        // Most recent transaction gets the current balance
+        return { ...tx, balance: runningBalance };
+      } else {
+        // Previous transactions get calculated balances
+        const previousTx = sortedTransactions[index - 1];
+        if (previousTx.type === 'deposit') {
+          runningBalance -= previousTx.amount;
+        } else {
+          runningBalance += previousTx.amount;
+        }
+        return { ...tx, balance: runningBalance };
       }
-    } catch (error) {
-      console.error('Error updating account in localStorage:', error);
-    }
+    });
+    
+    return updatedTransactions;
   };
 
   // Handle login redirection
@@ -731,8 +808,32 @@ const CheckingAccountPage = () => {
     fetchAccountData();
   }, [accountId]); // Re-fetch when accountId changes
 
-  // IMPROVED: Listen for account updates from other components
+  // FIXED: Listen for localStorage changes across tabs/components
   useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === getStorageKey('accounts') && account?.id) {
+        console.log('Accounts updated in localStorage, refreshing data');
+        // Refresh account data when accounts are updated in localStorage
+        const updatedAccount = getAccountDataFromLocalStorage();
+        if (updatedAccount) {
+          setAccount(updatedAccount);
+        }
+      } else if (event.key === getStorageKey('transactions', account?.id)) {
+        console.log('Transactions updated in localStorage, refreshing data');
+        // Refresh transactions when they are updated in localStorage
+        try {
+          const updatedTransactions = JSON.parse(event.newValue || '[]');
+          setTransactions(updatedTransactions);
+        } catch (error) {
+          console.error('Error parsing updated transactions:', error);
+        }
+      }
+    };
+
+    // Listen for storage events
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also listen for our custom events
     const handleAccountsUpdate = (event) => {
       const { accountId: updatedAccountId, newBalance, accounts } = event.detail;
       
@@ -746,6 +847,7 @@ const CheckingAccountPage = () => {
     window.addEventListener('wellsFargoAccountsUpdated', handleAccountsUpdate);
     
     return () => {
+      window.removeEventListener('storage', handleStorageChange);
       window.removeEventListener('wellsFargoAccountsUpdated', handleAccountsUpdate);
     };
   }, [account?.id]);
@@ -767,49 +869,91 @@ const CheckingAccountPage = () => {
     setDateRange('30days');
   }, [accountId]);
 
-  // IMPROVED: Handle withdraw with better localStorage sync
+  // FIXED: Handle withdraw with improved persistence and synchronization
   const handleWithdraw = async () => {
-  try {
-    const token = getAuthToken();
-    if (!token) {
-      alert('Authentication required. Please log in.');
-      handleLoginRedirect();
-      return;
-    }
-    
-    const amount = parseFloat(withdrawAmount);
-    if (isNaN(amount) || amount <= 0) {
-      alert('Please enter a valid positive amount.');
-      return;
-    }
-
-    if (!approvalCode) {
-      alert('Transaction Approval Code is required to complete this withdrawal.');
-      return;
-    }
-
-    // Check if sufficient balance
-    if (amount > account.balance) {
-      alert('Insufficient funds for this withdrawal.');
-      return;
-    }
-    
-    const apiEndpoint = getApiEndpoint('/withdraw');
-    
     try {
-      const response = await axios.post(
-        apiEndpoint,
-        {
-          amount: amount,
-          description: withdrawDescription || 'Withdrawal',
-          approvalCode: approvalCode
-        },
-        apiConfig()
-      );
+      const token = getAuthToken();
+      if (!token) {
+        alert('Authentication required. Please log in.');
+        handleLoginRedirect();
+        return;
+      }
       
-      if (response.data.success) {
-        // Update the account balance and transactions
-        const newBalance = response.data.data.newBalance;
+      const amount = parseFloat(withdrawAmount);
+      if (isNaN(amount) || amount <= 0) {
+        alert('Please enter a valid positive amount.');
+        return;
+      }
+
+      if (!approvalCode) {
+        alert('Transaction Approval Code is required to complete this withdrawal.');
+        return;
+      }
+
+      // Check if sufficient balance
+      if (amount > account.balance) {
+        alert('Insufficient funds for this withdrawal.');
+        return;
+      }
+      
+      const apiEndpoint = getApiEndpoint('/withdraw');
+      
+      try {
+        const response = await axios.post(
+          apiEndpoint,
+          {
+            amount: amount,
+            description: withdrawDescription || 'Withdrawal',
+            approvalCode: approvalCode
+          },
+          apiConfig()
+        );
+        
+        if (response.data.success) {
+          // Update the account balance and transactions
+          const newBalance = response.data.data.newBalance;
+          const updatedAccount = {
+            ...account,
+            balance: newBalance,
+            availableBalance: newBalance
+          };
+          setAccount(updatedAccount);
+          
+          // Add the new transaction to the transactions list
+          const newTransactionsList = [response.data.data.transaction, ...transactions];
+          setTransactions(newTransactionsList);
+          
+          // Update both account and transactions in localStorage
+          updateAccountInLocalStorage(account.id, newBalance);
+          saveTransactionsToLocalStorage(account.id, newTransactionsList);
+          
+          alert(`Successfully withdrew ${amount}`);
+          setIsWithdrawModalOpen(false);
+          setWithdrawAmount('');
+          setWithdrawDescription('');
+          setApprovalCode('');
+        } else {
+          throw new Error(response.data.error || 'Failed to process withdrawal');
+        }
+      } catch (apiError) {
+        console.log('API error, using mock response:', apiError);
+        
+        // Calculate new balance (subtract withdrawal amount)
+        const newBalance = account.balance - parseFloat(withdrawAmount);
+        
+        // Create a mock transaction
+        const newTransaction = {
+          id: 'tx' + Date.now() + Math.floor(Math.random() * 1000),
+          date: new Date().toISOString(),
+          description: withdrawDescription || 'Withdrawal',
+          status: 'Completed',
+          type: 'withdrawal',
+          category: 'Withdrawal',
+          amount: parseFloat(withdrawAmount),
+          balance: newBalance
+        };
+        
+        // Update the account balance in state
         const updatedAccount = {
           ...account,
           balance: newBalance,
@@ -817,119 +961,78 @@ const CheckingAccountPage = () => {
         };
         setAccount(updatedAccount);
         
-        // Add the new transaction to the transactions list
-        const newTransactionsList = [response.data.data.transaction, ...transactions];
-        setTransactions(newTransactionsList);
+        // FIXED: Recalculate balances for all transactions
+        const newTransactionsList = [newTransaction, ...transactions];
+        const updatedTransactionsList = recalculateTransactionBalances(newTransactionsList, newBalance);
+        setTransactions(updatedTransactionsList);
         
-        // IMPROVED: Update both account and transactions in localStorage
+        // Update both account and transactions in localStorage
         updateAccountInLocalStorage(account.id, newBalance);
-        saveTransactionsToLocalStorage(account.id, newTransactionsList);
+        saveTransactionsToLocalStorage(account.id, updatedTransactionsList);
         
-        alert(`Successfully withdrew $${amount}`);
+        alert(`Successfully withdrew ${withdrawAmount}`);
         setIsWithdrawModalOpen(false);
         setWithdrawAmount('');
         setWithdrawDescription('');
         setApprovalCode('');
-      } else {
-        throw new Error(response.data.error || 'Failed to process withdrawal');
       }
-    } catch (apiError) {
-      console.log('API error, using mock response:', apiError);
-      
-      // Calculate new balance (subtract withdrawal amount)
-      const newBalance = account.balance - parseFloat(withdrawAmount);
-      
-      // Create a mock transaction
-      const newTransaction = {
-        id: 'tx' + Date.now() + Math.floor(Math.random() * 1000),
-        date: new Date().toISOString(),
-        description: withdrawDescription || 'Withdrawal',
-        status: 'Completed',
-        type: 'withdrawal',
-        category: 'Withdrawal',
-        amount: parseFloat(withdrawAmount),
-        balance: newBalance
-      };
-      
-      // Update the account balance in state
-      const updatedAccount = {
-        ...account,
-        balance: newBalance,
-        availableBalance: newBalance
-      };
-      setAccount(updatedAccount);
-      
-      // Add the new transaction to the transactions list
-      const newTransactionsList = [newTransaction, ...transactions];
-      setTransactions(newTransactionsList);
-      
-      // IMPROVED: Update both account and transactions in localStorage
-      updateAccountInLocalStorage(account.id, newBalance);
-      saveTransactionsToLocalStorage(account.id, newTransactionsList);
-      
-      alert(`Successfully withdrew ${withdrawAmount}`);
-      setIsWithdrawModalOpen(false);
-      setWithdrawAmount('');
-      setWithdrawDescription('');
-      setApprovalCode('');
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        alert('Your session has expired. Please log in again.');
+        handleLoginRedirect();
+      } else {
+        alert(err.response?.data?.error || 'Error processing withdrawal');
+      }
+      console.error('Error withdrawing money:', err);
     }
-  } catch (err) {
-    if (err.response && err.response.status === 401) {
-      alert('Your session has expired. Please log in again.');
-      handleLoginRedirect();
-    } else {
-      alert(err.response?.data?.error || 'Error processing withdrawal');
-    }
-    console.error('Error withdrawing money:', err);
-  }
-};
+  };
 
   // Handle quick actions
   const handleQuickAction = (action) => {
-  // First check if user is authenticated
-  const token = getAuthToken();
-  if (!token) {
-    alert('Authentication required. Please log in.');
-    handleLoginRedirect();
-    return;
-  }
-  
-  // For all actions, we'll open the appropriate modal or navigate
-  switch (action) {
-    case 'transfer':
-      handleSecureNavigation('/transfer-money');
-      break;
-    case 'pay':
-      handleSecureNavigation('/pay-bills');
-      break;
-    case 'deposit':
-      // Open deposit modal directly instead of navigating
-      setIsDepositModalOpen(true);
-      break;
-    case 'withdraw':
-      // Open withdraw modal directly instead of navigating
-      setIsWithdrawModalOpen(true);
-      break;
-    case 'statement':
-      handleSecureNavigation('/account-statements');
-      break;
-    case 'checks':
-      handleSecureNavigation('/order-checks');
-      break;
-    case 'autopay':
-      handleSecureNavigation('/setup-autopay');
-      break;
-    case 'alerts':
-      handleSecureNavigation('/account-alerts');
-      break;
-    case 'dispute':
-      handleSecureNavigation('/dispute-transaction');
-      break;
-    default:
-      console.log(`Action not implemented: ${action}`);
-      break;
-  }
-};
+    // First check if user is authenticated
+    const token = getAuthToken();
+    if (!token) {
+      alert('Authentication required. Please log in.');
+      handleLoginRedirect();
+      return;
+    }
+    
+    // For all actions, we'll open the appropriate modal or navigate
+    switch (action) {
+      case 'transfer':
+        handleSecureNavigation('/transfer-money');
+        break;
+      case 'pay':
+        handleSecureNavigation('/pay-bills');
+        break;
+      case 'deposit':
+        // Open deposit modal directly instead of navigating
+        setIsDepositModalOpen(true);
+        break;
+      case 'withdraw':
+        // Open withdraw modal directly instead of navigating
+        setIsWithdrawModalOpen(true);
+        break;
+      case 'statement':
+        handleSecureNavigation('/account-statements');
+        break;
+      case 'checks':
+        handleSecureNavigation('/order-checks');
+        break;
+      case 'autopay':
+        handleSecureNavigation('/setup-autopay');
+        break;
+      case 'alerts':
+        handleSecureNavigation('/account-alerts');
+        break;
+      case 'dispute':
+        handleSecureNavigation('/dispute-transaction');
+        break;
+      default:
+        console.log(`Action not implemented: ${action}`);
+        break;
+    }
+  };
 
   const goToDashboard = () => {
     navigate('/dashboard');
@@ -1384,7 +1487,6 @@ const CheckingAccountPage = () => {
           </div>
         </div>
       )}
-
 
       {/* Withdraw Modal */}
       {isWithdrawModalOpen && (

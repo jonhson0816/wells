@@ -106,6 +106,10 @@ const WellsFargoPage = () => {
   // Security verification modal state
   const [securityModalOpen, setSecurityModalOpen] = useState(false);
 
+  // ADDED: State for dashboard data to track account balances
+  const [dashboardAccounts, setDashboardAccounts] = useState([]);
+  const [dashboardLoading, setDashboardLoading] = useState(false);
+
   // Navigation hooks
   const navigate = useNavigate();
   const location = useLocation();
@@ -121,6 +125,71 @@ const WellsFargoPage = () => {
     resetPassword,
     register
   } = useAuth();
+
+  // ADDED: Helper functions for localStorage management (consistent with CheckingAccountPage)
+  const getStorageKey = (type, accountId = null) => {
+    const baseKey = 'wellsFargo';
+    if (type === 'accounts') return `${baseKey}Accounts`;
+    if (type === 'transactions') return `${baseKey}Transactions_${accountId}`;
+    return `${baseKey}${type}`;
+  };
+
+  // ADDED: Function to get accounts from localStorage
+  const getAccountsFromLocalStorage = () => {
+    try {
+      const accountsData = localStorage.getItem(getStorageKey('accounts'));
+      if (accountsData) {
+        return JSON.parse(accountsData);
+      }
+    } catch (error) {
+      console.error('Error getting accounts from localStorage:', error);
+    }
+    return [];
+  };
+
+  // ADDED: Function to refresh dashboard data from localStorage
+  const refreshDashboardData = () => {
+    if (currentUser) {
+      console.log('Refreshing dashboard data from localStorage');
+      const accounts = getAccountsFromLocalStorage();
+      setDashboardAccounts(accounts);
+    }
+  };
+
+  // ADDED: Listen for localStorage changes and account updates
+  useEffect(() => {
+    const handleStorageChange = (event) => {
+      if (event.key === getStorageKey('accounts')) {
+        console.log('Accounts updated in localStorage, refreshing dashboard');
+        refreshDashboardData();
+      }
+    };
+
+    const handleAccountsUpdate = (event) => {
+      console.log('Custom accounts update event received:', event.detail);
+      refreshDashboardData();
+    };
+
+    // Listen for storage events
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Listen for custom events from CheckingAccountPage
+    window.addEventListener('wellsFargoAccountsUpdated', handleAccountsUpdate);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('wellsFargoAccountsUpdated', handleAccountsUpdate);
+    };
+  }, [currentUser]);
+
+  // ADDED: Initial load of dashboard data when user is logged in
+  useEffect(() => {
+    if (currentUser) {
+      refreshDashboardData();
+    } else {
+      setDashboardAccounts([]);
+    }
+  }, [currentUser]);
 
   // Only redirect to dashboard if user is logged in AND not showing modal from link click
   useEffect(() => {
@@ -470,6 +539,8 @@ const WellsFargoPage = () => {
   const handleLogout = async () => {
     try {
       await logout();
+      // Clear dashboard data when logging out
+      setDashboardAccounts([]);
       // Navigate to landing page after logout (handled in useEffect when currentUser becomes null)
     } catch (error) {
       console.error('Logout failed:', error);
@@ -511,6 +582,19 @@ const WellsFargoPage = () => {
     setFormData(prev => ({ ...prev, phoneNumber: formattedValue }));
   };
 
+  // ADDED: Format currency helper
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  };
+
+  // ADDED: Get primary checking account for quick display
+  const getPrimaryCheckingAccount = () => {
+    return dashboardAccounts.find(acc => acc.type.toLowerCase().includes('checking')) || null;
+  };
+
   return (
     <div className="reg001-wells-fargo-landing">
       <div className="reg001-background-wrapper">
@@ -541,12 +625,45 @@ const WellsFargoPage = () => {
 
         <main className="reg001-landing-content">
           {currentUser ? (
-            // Logged-in user view
+            // Logged-in user view - UPDATED to show real account balances
             <div className="reg001-dashboard">
               <div className="reg001-welcome-section">
                 <h1>Welcome back, {currentUser.firstName}!</h1>
                 <p>Your Wells Fargo Dashboard</p>
               </div>
+              
+              {/* UPDATED: Show real account information */}
+              {dashboardAccounts.length > 0 && (
+                <div className="reg001-account-overview">
+                  <h2>Account Overview</h2>
+                  <div className="reg001-accounts-grid">
+                    {dashboardAccounts.map((account) => (
+                      <div key={account.id} className="reg001-account-card">
+                        <div className="reg001-account-header">
+                          <h3>{account.type}</h3>
+                          <span className="reg001-account-number">
+                            ...{account.accountNumber.slice(-4)}
+                          </span>
+                        </div>
+                        <div className="reg001-account-balance">
+                          <span className="reg001-balance-label">Current Balance</span>
+                          <span className="reg001-balance-amount">
+                            {formatCurrency(account.balance)}
+                          </span>
+                        </div>
+                        <div className="reg001-account-actions">
+                          <button 
+                            className="reg001-account-btn"
+                            onClick={() => navigate(`/checking/${account.id}`)}
+                          >
+                            View Details
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               
               <div className="reg001-dashboard-content">
                 <div className="reg001-account-summary">
@@ -581,6 +698,15 @@ const WellsFargoPage = () => {
                     >
                       Mobile Deposit
                     </button>
+                    {/* UPDATED: Direct link to primary checking account */}
+                    {getPrimaryCheckingAccount() && (
+                      <button 
+                        className="reg001-action-btn"
+                        onClick={() => navigate(`/checking/${getPrimaryCheckingAccount().id}`)}
+                      >
+                        Manage Checking
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>
