@@ -138,7 +138,7 @@ const CheckingAccountPage = () => {
       : `${baseUrl}/checking/${accountId}${endpoint}`;
   };
 
-  // Try to get account data from localStorage first (as stored by Dashboard)
+  // IMPROVED: Get account data from localStorage and also get stored transactions
   const getAccountDataFromLocalStorage = () => {
     try {
       const accountsData = localStorage.getItem('wellsFargoAccounts');
@@ -151,6 +151,16 @@ const CheckingAccountPage = () => {
         } else {
           matchedAccount = accounts.find(acc => acc.id === accountId);
         }
+
+        // IMPROVED: Also get stored transactions for this account
+        if (matchedAccount) {
+          const transactionsKey = `wellsFargoTransactions_${matchedAccount.id}`;
+          const storedTransactions = localStorage.getItem(transactionsKey);
+          if (storedTransactions) {
+            matchedAccount.storedTransactions = JSON.parse(storedTransactions);
+          }
+        }
+        
         return matchedAccount;
       }
     } catch (error) {
@@ -159,8 +169,25 @@ const CheckingAccountPage = () => {
     return null;
   };
 
+  // IMPROVED: Save transactions to localStorage whenever they change
+  const saveTransactionsToLocalStorage = (accountId, transactions) => {
+    try {
+      const transactionsKey = `wellsFargoTransactions_${accountId}`;
+      localStorage.setItem(transactionsKey, JSON.stringify(transactions));
+      console.log('Transactions saved to localStorage for account:', accountId);
+    } catch (error) {
+      console.error('Error saving transactions to localStorage:', error);
+    }
+  };
+
   // Generate consistent transactions based on account balance
   const generateConsistentTransactions = (account) => {
+    // IMPROVED: Check if account has stored transactions first
+    if (account.storedTransactions && account.storedTransactions.length > 0) {
+      console.log('Using stored transactions from localStorage');
+      return account.storedTransactions;
+    }
+
     // Ensure we have a valid date object
     let accountOpenDate = account.openedDate ? new Date(account.openedDate) : new Date();
     
@@ -318,6 +345,8 @@ const CheckingAccountPage = () => {
           // If transactions came with the account data, set them too
           if (response.data.data.transactions) {
             setTransactions(response.data.data.transactions);
+            // IMPROVED: Save transactions to localStorage
+            saveTransactionsToLocalStorage(response.data.data.id, response.data.data.transactions);
           }
         } else {
           throw new Error(response.data.error || 'Failed to load account data');
@@ -332,9 +361,13 @@ const CheckingAccountPage = () => {
           console.log('Found account in localStorage:', localStorageAccount);
           setAccount(localStorageAccount);
           
-          // Generate mock transactions based on the account balance
+          // Generate mock transactions based on the account balance, but use stored ones if available
           const mockTransactions = generateMockTransactions(localStorageAccount);
           setTransactions(mockTransactions);
+          // IMPROVED: Save initial transactions to localStorage if not already stored
+          if (!localStorageAccount.storedTransactions) {
+            saveTransactionsToLocalStorage(localStorageAccount.id, mockTransactions);
+          }
         } else {
           console.error('No localStorage data found, using fallback mock data');
           // Fall back to mock data with the $600,000 balance
@@ -365,6 +398,8 @@ const CheckingAccountPage = () => {
           // Generate fallback mock transactions
           const mockTransactions = generateConsistentTransactions(mockAccount);
           setTransactions(mockTransactions);
+          // IMPROVED: Save fallback transactions to localStorage
+          saveTransactionsToLocalStorage(mockAccount.id, mockTransactions);
         }
       }
     } catch (err) {
@@ -430,13 +465,24 @@ const CheckingAccountPage = () => {
         
         if (response.data.success) {
           setTransactions(response.data.data);
+          // IMPROVED: Save updated transactions to localStorage
+          if (account?.id) {
+            saveTransactionsToLocalStorage(account.id, response.data.data);
+          }
         } else {
           throw new Error(response.data.error || 'Failed to load transactions');
         }
       } catch (apiError) {
-        console.error('API Error, filtering mock transactions:', apiError);
-        // Filter the existing transactions based on selected filter
-        const filteredTransactions = transactions.filter(tx => {
+        console.error('API Error, filtering stored transactions:', apiError);
+        // IMPROVED: Filter from stored transactions in localStorage instead of current state
+        const storedAccount = getAccountDataFromLocalStorage();
+        let allTransactions = transactions;
+        
+        if (storedAccount && storedAccount.storedTransactions) {
+          allTransactions = storedAccount.storedTransactions;
+        }
+        
+        const filteredTransactions = allTransactions.filter(tx => {
           if (filter === 'all') return true;
           return tx.type === filter;
         });
@@ -517,6 +563,7 @@ const CheckingAccountPage = () => {
     }
   };
 
+  // IMPROVED: Handle deposit with better localStorage sync
   const handleDeposit = async () => {
     try {
       const token = getAuthToken();
@@ -553,17 +600,20 @@ const CheckingAccountPage = () => {
         if (response.data.success) {
           // Update the account balance and transactions
           const newBalance = response.data.data.newBalance;
-          setAccount({
+          const updatedAccount = {
             ...account,
             balance: newBalance,
             availableBalance: newBalance
-          });
+          };
+          setAccount(updatedAccount);
           
           // Add the new transaction to the transactions list
-          setTransactions([response.data.data.transaction, ...transactions]);
+          const newTransactionsList = [response.data.data.transaction, ...transactions];
+          setTransactions(newTransactionsList);
           
-          // Update the account in localStorage for Dashboard to access
+          // IMPROVED: Update both account and transactions in localStorage
           updateAccountInLocalStorage(account.id, newBalance);
+          saveTransactionsToLocalStorage(account.id, newTransactionsList);
           
           alert(`Successfully deposited $${amount}`);
           setIsDepositModalOpen(false);
@@ -581,27 +631,31 @@ const CheckingAccountPage = () => {
         
         // Create a mock transaction
         const newTransaction = {
-          id: 'tx' + Math.floor(Math.random() * 10000),
+          id: 'tx' + Date.now() + Math.floor(Math.random() * 1000),
           date: new Date().toISOString(),
           description: depositDescription || 'Deposit',
           status: 'Completed',
           type: 'deposit',
+          category: 'Deposit',
           amount: parseFloat(depositAmount),
           balance: newBalance
         };
         
         // Update the account balance in state
-        setAccount({
+        const updatedAccount = {
           ...account,
           balance: newBalance,
           availableBalance: newBalance
-        });
+        };
+        setAccount(updatedAccount);
         
         // Add the new transaction to the transactions list
-        setTransactions([newTransaction, ...transactions]);
+        const newTransactionsList = [newTransaction, ...transactions];
+        setTransactions(newTransactionsList);
         
-        // Update the account in localStorage for Dashboard to access
+        // IMPROVED: Update both account and transactions in localStorage
         updateAccountInLocalStorage(account.id, newBalance);
+        saveTransactionsToLocalStorage(account.id, newTransactionsList);
         
         alert(`Successfully deposited $${depositAmount}`);
         setIsDepositModalOpen(false);
@@ -620,7 +674,7 @@ const CheckingAccountPage = () => {
     }
   };
   
-  // function to update the account in localStorage
+  // IMPROVED: Update the account in localStorage with better synchronization
   const updateAccountInLocalStorage = (accountId, newBalance) => {
     try {
       // Get current accounts from localStorage
@@ -630,11 +684,12 @@ const CheckingAccountPage = () => {
         
         // Find and update the specific account
         const updatedAccounts = accounts.map(acc => {
-          if (acc.id === accountId) {
+          if (acc.id === accountId || (isPrimaryAccount() && acc.type.toLowerCase().includes('checking'))) {
             return {
               ...acc,
               balance: newBalance,
-              availableBalance: newBalance
+              availableBalance: newBalance,
+              lastUpdated: new Date().toISOString()
             };
           }
           return acc;
@@ -643,6 +698,11 @@ const CheckingAccountPage = () => {
         // Store the updated accounts back to localStorage
         localStorage.setItem('wellsFargoAccounts', JSON.stringify(updatedAccounts));
         console.log('Account updated in localStorage with new balance:', newBalance);
+        
+        // IMPROVED: Trigger a custom event to notify other components
+        window.dispatchEvent(new CustomEvent('wellsFargoAccountsUpdated', { 
+          detail: { accountId, newBalance, accounts: updatedAccounts }
+        }));
       }
     } catch (error) {
       console.error('Error updating account in localStorage:', error);
@@ -671,6 +731,25 @@ const CheckingAccountPage = () => {
     fetchAccountData();
   }, [accountId]); // Re-fetch when accountId changes
 
+  // IMPROVED: Listen for account updates from other components
+  useEffect(() => {
+    const handleAccountsUpdate = (event) => {
+      const { accountId: updatedAccountId, newBalance, accounts } = event.detail;
+      
+      // If this is our account that was updated, refresh our local state
+      if (updatedAccountId === account?.id || (isPrimaryAccount() && accounts.find(acc => acc.type.toLowerCase().includes('checking')))) {
+        console.log('Account updated externally, refreshing local state');
+        fetchAccountData(); // Re-fetch to get latest data
+      }
+    };
+
+    window.addEventListener('wellsFargoAccountsUpdated', handleAccountsUpdate);
+    
+    return () => {
+      window.removeEventListener('wellsFargoAccountsUpdated', handleAccountsUpdate);
+    };
+  }, [account?.id]);
+
   // Fetch transactions when filters change and we have account data
   useEffect(() => {
     if (account) {
@@ -688,7 +767,7 @@ const CheckingAccountPage = () => {
     setDateRange('30days');
   }, [accountId]);
 
-
+  // IMPROVED: Handle withdraw with better localStorage sync
   const handleWithdraw = async () => {
   try {
     const token = getAuthToken();
@@ -731,17 +810,20 @@ const CheckingAccountPage = () => {
       if (response.data.success) {
         // Update the account balance and transactions
         const newBalance = response.data.data.newBalance;
-        setAccount({
+        const updatedAccount = {
           ...account,
           balance: newBalance,
           availableBalance: newBalance
-        });
+        };
+        setAccount(updatedAccount);
         
         // Add the new transaction to the transactions list
-        setTransactions([response.data.data.transaction, ...transactions]);
+        const newTransactionsList = [response.data.data.transaction, ...transactions];
+        setTransactions(newTransactionsList);
         
-        // Update the account in localStorage for Dashboard to access
+        // IMPROVED: Update both account and transactions in localStorage
         updateAccountInLocalStorage(account.id, newBalance);
+        saveTransactionsToLocalStorage(account.id, newTransactionsList);
         
         alert(`Successfully withdrew $${amount}`);
         setIsWithdrawModalOpen(false);
@@ -759,29 +841,33 @@ const CheckingAccountPage = () => {
       
       // Create a mock transaction
       const newTransaction = {
-        id: 'tx' + Math.floor(Math.random() * 10000),
+        id: 'tx' + Date.now() + Math.floor(Math.random() * 1000),
         date: new Date().toISOString(),
         description: withdrawDescription || 'Withdrawal',
         status: 'Completed',
         type: 'withdrawal',
+        category: 'Withdrawal',
         amount: parseFloat(withdrawAmount),
         balance: newBalance
       };
       
       // Update the account balance in state
-      setAccount({
+      const updatedAccount = {
         ...account,
         balance: newBalance,
         availableBalance: newBalance
-      });
+      };
+      setAccount(updatedAccount);
       
       // Add the new transaction to the transactions list
-      setTransactions([newTransaction, ...transactions]);
+      const newTransactionsList = [newTransaction, ...transactions];
+      setTransactions(newTransactionsList);
       
-      // Update the account in localStorage for Dashboard to access
+      // IMPROVED: Update both account and transactions in localStorage
       updateAccountInLocalStorage(account.id, newBalance);
+      saveTransactionsToLocalStorage(account.id, newTransactionsList);
       
-      alert(`Successfully withdrew $${withdrawAmount}`);
+      alert(`Successfully withdrew ${withdrawAmount}`);
       setIsWithdrawModalOpen(false);
       setWithdrawAmount('');
       setWithdrawDescription('');
