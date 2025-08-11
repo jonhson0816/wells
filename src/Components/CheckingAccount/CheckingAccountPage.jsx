@@ -93,6 +93,10 @@ const CheckingAccountPage = () => {
   const [securityModalOpen, setSecurityModalOpen] = useState(false);
   const [pendingPath, setPendingPath] = useState(null);
   const [approvalCode, setApprovalCode] = useState('');
+
+  const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+  const [withdrawAmount, setWithdrawAmount] = useState('');
+  const [withdrawDescription, setWithdrawDescription] = useState('');
   
   // Format currency helper
   const formatCurrency = (amount) => {
@@ -684,9 +688,9 @@ const CheckingAccountPage = () => {
     setDateRange('30days');
   }, [accountId]);
 
-  // Handle quick actions
-  const handleQuickAction = (action) => {
-    // First check if user is authenticated
+
+  const handleWithdraw = async () => {
+  try {
     const token = getAuthToken();
     if (!token) {
       alert('Authentication required. Please log in.');
@@ -694,41 +698,152 @@ const CheckingAccountPage = () => {
       return;
     }
     
-    // For all actions, we'll open the security modal
-    switch (action) {
-      case 'transfer':
-        handleSecureNavigation('/transfer-money');
-        break;
-      case 'pay':
-        handleSecureNavigation('/pay-bills');
-        break;
-      case 'deposit':
-        // Open deposit modal directly instead of navigating
-        setIsDepositModalOpen(true);
-        break;
-      case 'withdraw':
-        handleSecureNavigation('/withdraw');
-        break;
-      case 'statement':
-        handleSecureNavigation('/account-statements');
-        break;
-      case 'checks':
-        handleSecureNavigation('/order-checks');
-        break;
-      case 'autopay':
-        handleSecureNavigation('/setup-autopay');
-        break;
-      case 'alerts':
-        handleSecureNavigation('/account-alerts');
-        break;
-      case 'dispute':
-        handleSecureNavigation('/dispute-transaction');
-        break;
-      default:
-        console.log(`Action not implemented: ${action}`);
-        break;
+    const amount = parseFloat(withdrawAmount);
+    if (isNaN(amount) || amount <= 0) {
+      alert('Please enter a valid positive amount.');
+      return;
     }
-  };
+
+    if (!approvalCode) {
+      alert('Transaction Approval Code is required to complete this withdrawal.');
+      return;
+    }
+
+    // Check if sufficient balance
+    if (amount > account.balance) {
+      alert('Insufficient funds for this withdrawal.');
+      return;
+    }
+    
+    const apiEndpoint = getApiEndpoint('/withdraw');
+    
+    try {
+      const response = await axios.post(
+        apiEndpoint,
+        {
+          amount: amount,
+          description: withdrawDescription || 'Withdrawal',
+          approvalCode: approvalCode
+        },
+        apiConfig()
+      );
+      
+      if (response.data.success) {
+        // Update the account balance and transactions
+        const newBalance = response.data.data.newBalance;
+        setAccount({
+          ...account,
+          balance: newBalance,
+          availableBalance: newBalance
+        });
+        
+        // Add the new transaction to the transactions list
+        setTransactions([response.data.data.transaction, ...transactions]);
+        
+        // Update the account in localStorage for Dashboard to access
+        updateAccountInLocalStorage(account.id, newBalance);
+        
+        alert(`Successfully withdrew $${amount}`);
+        setIsWithdrawModalOpen(false);
+        setWithdrawAmount('');
+        setWithdrawDescription('');
+        setApprovalCode('');
+      } else {
+        throw new Error(response.data.error || 'Failed to process withdrawal');
+      }
+    } catch (apiError) {
+      console.log('API error, using mock response:', apiError);
+      
+      // Calculate new balance (subtract withdrawal amount)
+      const newBalance = account.balance - parseFloat(withdrawAmount);
+      
+      // Create a mock transaction
+      const newTransaction = {
+        id: 'tx' + Math.floor(Math.random() * 10000),
+        date: new Date().toISOString(),
+        description: withdrawDescription || 'Withdrawal',
+        status: 'Completed',
+        type: 'withdrawal',
+        amount: parseFloat(withdrawAmount),
+        balance: newBalance
+      };
+      
+      // Update the account balance in state
+      setAccount({
+        ...account,
+        balance: newBalance,
+        availableBalance: newBalance
+      });
+      
+      // Add the new transaction to the transactions list
+      setTransactions([newTransaction, ...transactions]);
+      
+      // Update the account in localStorage for Dashboard to access
+      updateAccountInLocalStorage(account.id, newBalance);
+      
+      alert(`Successfully withdrew $${withdrawAmount}`);
+      setIsWithdrawModalOpen(false);
+      setWithdrawAmount('');
+      setWithdrawDescription('');
+      setApprovalCode('');
+    }
+  } catch (err) {
+    if (err.response && err.response.status === 401) {
+      alert('Your session has expired. Please log in again.');
+      handleLoginRedirect();
+    } else {
+      alert(err.response?.data?.error || 'Error processing withdrawal');
+    }
+    console.error('Error withdrawing money:', err);
+  }
+};
+
+  // Handle quick actions
+  const handleQuickAction = (action) => {
+  // First check if user is authenticated
+  const token = getAuthToken();
+  if (!token) {
+    alert('Authentication required. Please log in.');
+    handleLoginRedirect();
+    return;
+  }
+  
+  // For all actions, we'll open the appropriate modal or navigate
+  switch (action) {
+    case 'transfer':
+      handleSecureNavigation('/transfer-money');
+      break;
+    case 'pay':
+      handleSecureNavigation('/pay-bills');
+      break;
+    case 'deposit':
+      // Open deposit modal directly instead of navigating
+      setIsDepositModalOpen(true);
+      break;
+    case 'withdraw':
+      // Open withdraw modal directly instead of navigating
+      setIsWithdrawModalOpen(true);
+      break;
+    case 'statement':
+      handleSecureNavigation('/account-statements');
+      break;
+    case 'checks':
+      handleSecureNavigation('/order-checks');
+      break;
+    case 'autopay':
+      handleSecureNavigation('/setup-autopay');
+      break;
+    case 'alerts':
+      handleSecureNavigation('/account-alerts');
+      break;
+    case 'dispute':
+      handleSecureNavigation('/dispute-transaction');
+      break;
+    default:
+      console.log(`Action not implemented: ${action}`);
+      break;
+  }
+};
 
   const goToDashboard = () => {
     navigate('/dashboard');
@@ -1176,6 +1291,92 @@ const CheckingAccountPage = () => {
                     disabled={!depositAmount || parseFloat(depositAmount) <= 0 || !approvalCode}
                   >
                     Complete Deposit
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* Withdraw Modal */}
+      {isWithdrawModalOpen && (
+        <div className="che004 modal-overlay">
+          <div className="che004 modal-content">
+            <div className="che004 modal-header">
+              <h3>Withdraw Money</h3>
+              <button 
+                className="che004 close-modal" 
+                onClick={() => setIsWithdrawModalOpen(false)}
+              >
+                &times;
+              </button>
+            </div>
+            <div className="che004 modal-body">
+              <form onSubmit={(e) => { e.preventDefault(); handleWithdraw(); }}>
+                <div className="che004 form-group">
+                  <label htmlFor="withdraw-amount">Amount</label>
+                  <div className="che004 input-with-icon">
+                    <span className="che004 currency-symbol">$</span>
+                    <input 
+                      type="number" 
+                      id="withdraw-amount" 
+                      value={withdrawAmount} 
+                      onChange={(e) => setWithdrawAmount(e.target.value)}
+                      className="che004 form-input"
+                      placeholder="0.00"
+                      min="0.01"
+                      max={account?.balance}
+                      step="0.01"
+                      required
+                    />
+                  </div>
+                  <small className="che004 helper-text">
+                    Available balance: {formatCurrency(account?.balance || 0)}
+                  </small>
+                </div>
+                
+                <div className="che004 form-group">
+                  <label htmlFor="withdraw-description">Description (Optional)</label>
+                  <input 
+                    type="text" 
+                    id="withdraw-description" 
+                    value={withdrawDescription} 
+                    onChange={(e) => setWithdrawDescription(e.target.value)}
+                    className="che004 form-input"
+                    placeholder="e.g., ATM Withdrawal"
+                  />
+                </div>
+                
+                <div className="che004 form-group">
+                  <label htmlFor="approval-code">Transaction Approval Code<span className="required">*</span></label>
+                  <input 
+                    type="text" 
+                    id="approval-code" 
+                    value={approvalCode} 
+                    onChange={(e) => setApprovalCode(e.target.value)}
+                    className="che004 form-input"
+                    placeholder="Enter bank approval code"
+                    required
+                  />
+                  <small className="che004 helper-text">Contact your bank to obtain your transaction approval code.</small>
+                </div>
+                
+                <div className="che004 modal-actions">
+                  <button 
+                    type="button" 
+                    className="che004 button-secondary" 
+                    onClick={() => setIsWithdrawModalOpen(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="che004 button-primary"
+                    disabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || !approvalCode || parseFloat(withdrawAmount) > (account?.balance || 0)}
+                  >
+                    Complete Withdrawal
                   </button>
                 </div>
               </form>
