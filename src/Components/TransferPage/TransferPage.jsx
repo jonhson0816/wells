@@ -140,50 +140,51 @@ const TransferPage = ({ accounts, onTransferComplete }) => {
   };
 
   // Helper function to make API calls with fallback
-  const makeAPICall = async (endpoint, method = 'GET', data = null, token = null) => {
-    let lastError = null;
+const makeAPICall = async (endpoint, method = 'GET', data = null, token = null) => {
+  let lastError = null;
 
-    for (let i = 0; i < API_URLS.length; i++) {
-      try {
-        console.log(`Attempting API call to: ${API_URLS[i]}${endpoint}`);
-        
-        const config = {
-          method: method,
-          url: `${API_URLS[i]}${endpoint}`,
-          timeout: 10000,
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        };
-
-        if (token) {
-          config.headers['Authorization'] = `Bearer ${token}`;
+  for (let i = 0; i < API_URLS.length; i++) {
+    try {
+      console.log(`Attempting API call to: ${API_URLS[i]}${endpoint}`);
+      
+      const config = {
+        method: method,
+        url: `${API_URLS[i]}${endpoint}`,
+        timeout: 15000, // Increased timeout
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
         }
+      };
 
-        if (data) {
-          config.data = data;
-        }
-
-        const response = await axios(config);
-        console.log(`API call successful with: ${API_URLS[i]}`);
-        return response;
-        
-      } catch (error) {
-        console.log(`Failed with API ${API_URLS[i]}:`, error.message);
-        lastError = error;
-        
-        // If this was the last URL, throw the error
-        if (i === API_URLS.length - 1) {
-          throw lastError;
-        }
-        
-        // Otherwise, continue to next URL
-        continue;
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
       }
-    }
 
-    throw lastError || new Error('All API endpoints failed');
-  };
+      if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+        config.data = data;
+      }
+
+      const response = await axios(config);
+      console.log(`API call successful with: ${API_URLS[i]}`);
+      return response;
+        
+    } catch (error) {
+      console.log(`Failed with API ${API_URLS[i]}:`, error.message);
+      lastError = error;
+      
+      // If this was the last URL, throw the error
+      if (i === API_URLS.length - 1) {
+        throw lastError;
+      }
+      
+      // Otherwise, continue to next URL
+      continue;
+    }
+  }
+
+  throw lastError || new Error('All API endpoints failed');
+};
 
   // Validation function
   const validateTransfer = () => {
