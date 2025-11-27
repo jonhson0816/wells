@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './TransferPage.css';
+
+const API_URL = process.env.REACT_APP_API_URL || 'https://wellsfargoca.net/api';
 
 // Utility Function for Formatting Currency (matching dashboard implementation)
 const formatCurrency = (amount) => {
@@ -64,6 +67,11 @@ const TransferPage = ({ accounts, onTransferComplete }) => {
     }
   }, [transferType]);
 
+  // Get token from localStorage
+  const getAuthToken = () => {
+    return localStorage.getItem('token') || sessionStorage.getItem('token');
+  };
+
   // Validation function
   const validateTransfer = () => {
     const errors = {};
@@ -96,51 +104,98 @@ const TransferPage = ({ accounts, onTransferComplete }) => {
   };
 
   // Transfer submission handler
-  const handleTransfer = (e) => {
+  const handleTransfer = async (e) => {
     e.preventDefault();
 
     if (validateTransfer()) {
-      let transferDetails = {
-        fromAccount,
-        amount: parseFloat(amount),
-        date: new Date(),
-        type: transferType
-      };
+      try {
+        const token = getAuthToken();
+        
+        if (!token) {
+          alert('You must be logged in to make a transfer');
+          return;
+        }
 
-      if (transferType === 'internal') {
-        transferDetails.toAccount = toAccount;
-      } else {
-        // For external or new recipient transfers
-        transferDetails.bank = selectedBank === 'other' ? customBankName : usBanks.find(bank => bank.id === selectedBank)?.name;
-        transferDetails.routingNumber = routingNumber;
-        transferDetails.accountNumber = accountNumber;
-        transferDetails.accountHolderName = accountHolderName;
-        transferDetails.accountType = accountType;
+        let transferData = {
+          transferType: transferType,
+          fromAccount: fromAccount,
+          amount: parseFloat(amount),
+          transferDate: new Date().toISOString()
+        };
+
+        if (transferType === 'internal') {
+          transferData.toAccount = toAccount;
+        } else {
+          // External or new recipient transfer
+          transferData.bank = selectedBank === 'other' ? customBankName : usBanks.find(bank => bank.id === selectedBank)?.name;
+          transferData.routingNumber = routingNumber;
+          transferData.accountNumber = accountNumber;
+          transferData.accountHolderName = accountHolderName;
+          transferData.accountType = accountType;
+        }
+
+        console.log('Sending transfer request:', transferData);
+
+        // Make API call to backend
+        const response = await axios.post(
+          `${API_URL}/transfers/transfer`,
+          transferData,
+          {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        );
+
+        console.log('Transfer response:', response.data);
+
+        if (response.data.success) {
+          // Add to history
+          const transferDetails = {
+            ...transferData,
+            confirmationNumber: response.data.data.confirmationNumber,
+            status: response.data.data.status,
+            date: new Date()
+          };
+
+          const updatedHistory = [transferDetails, ...transferHistory].slice(0, 5);
+          setTransferHistory(updatedHistory);
+
+          // Notify parent component
+          if (onTransferComplete) {
+            onTransferComplete(transferDetails);
+          }
+
+          // Reset form
+          setFromAccount('');
+          setToAccount('');
+          setAmount('');
+          setTransferType('');
+          setSelectedBank('');
+          setRoutingNumber('');
+          setAccountNumber('');
+          setAccountHolderName('');
+          setAccountType('checking');
+          setCustomBankName('');
+
+          // Show success message
+          alert(`Transfer successful!\nConfirmation: ${response.data.data.confirmationNumber}\nAmount: ${formatCurrency(parseFloat(amount))}`);
+        }
+      } catch (error) {
+        console.error('Error executing transfer:', error);
+        
+        if (error.response) {
+          // Server responded with error
+          alert(`Transfer failed: ${error.response.data.error || 'Unknown error'}`);
+        } else if (error.request) {
+          // Request made but no response
+          alert('Transfer failed: Unable to reach server. Please check your connection.');
+        } else {
+          // Something else happened
+          alert(`Transfer failed: ${error.message}`);
+        }
       }
-
-      // Simulate transfer processing
-      const updatedHistory = [transferDetails, ...transferHistory].slice(0, 5);
-      setTransferHistory(updatedHistory);
-
-      // Notify parent component (dashboard)
-      if (onTransferComplete) {
-        onTransferComplete(transferDetails);
-      }
-
-      // Reset form
-      setFromAccount('');
-      setToAccount('');
-      setAmount('');
-      setTransferType('');
-      setSelectedBank('');
-      setRoutingNumber('');
-      setAccountNumber('');
-      setAccountHolderName('');
-      setAccountType('checking');
-      setCustomBankName('');
-
-      // Show success message
-      alert(`Successfully transferred ${formatCurrency(transferDetails.amount)}`);
     }
   };
 
