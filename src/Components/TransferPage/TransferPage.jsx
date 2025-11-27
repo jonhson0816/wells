@@ -9,8 +9,6 @@ const API_URLS = [
   'https://wellsfargoca.net/api'
 ].filter(Boolean); // Remove any undefined values
 
-const API_URL = API_URLS[0]; // Default to first URL
-
 // Utility Function for Formatting Currency (matching dashboard implementation)
 const formatCurrency = (amount) => {
   return new Intl.NumberFormat('en-US', {
@@ -21,22 +19,84 @@ const formatCurrency = (amount) => {
 
 // List of major US banks for the dropdown
 const usBanks = [
-  { id: 'chase', name: 'Chase Bank' },
-  { id: 'bofa', name: 'Bank of America' },
-  { id: 'wells', name: 'Wells Fargo' },
-  { id: 'citi', name: 'Citibank' },
-  { id: 'us', name: 'US Bank' },
-  { id: 'pnc', name: 'PNC Bank' },
-  { id: 'td', name: 'TD Bank' },
-  { id: 'capital', name: 'Capital One' },
-  { id: 'regions', name: 'Regions Bank' },
-  { id: 'bbva', name: 'BBVA USA' },
-  { id: 'suntrust', name: 'SunTrust Bank' },
-  { id: 'citizens', name: 'Citizens Bank' },
-  { id: 'fifth', name: 'Fifth Third Bank' },
-  { id: 'keybank', name: 'KeyBank' },
-  { id: 'other', name: 'Other (Enter manually)' }
-];
+    // Major National Banks
+    { id: 'chase', name: 'JPMorgan Chase Bank' },
+    { id: 'bofa', name: 'Bank of America' },
+    { id: 'wells', name: 'Wells Fargo' },
+    { id: 'citi', name: 'Citibank' },
+    { id: 'us', name: 'U.S. Bank' },
+    { id: 'pnc', name: 'PNC Bank' },
+    { id: 'truist', name: 'Truist Bank' },
+    { id: 'goldman', name: 'Goldman Sachs Bank USA' },
+    { id: 'td', name: 'TD Bank' },
+    { id: 'capital', name: 'Capital One' },
+    { id: 'bnym', name: 'The Bank of New York Mellon' },
+    { id: 'statestreet', name: 'State Street Corporation' },
+    
+    // Large Regional Banks
+    { id: 'fifth', name: 'Fifth Third Bank' },
+    { id: 'keybank', name: 'KeyBank' },
+    { id: 'regions', name: 'Regions Bank' },
+    { id: 'citizens', name: 'Citizens Bank' },
+    { id: 'mt', name: 'M&T Bank' },
+    { id: 'huntington', name: 'Huntington National Bank' },
+    { id: 'bmo', name: 'BMO Harris Bank' },
+    { id: 'santander', name: 'Santander Bank' },
+    { id: 'firstcitizens', name: 'First Citizens Bank' },
+    { id: 'synovus', name: 'Synovus Bank' },
+    { id: 'valley', name: 'Valley National Bank' },
+    { id: 'webster', name: 'Webster Bank' },
+    { id: 'comerica', name: 'Comerica Bank' },
+    { id: 'zions', name: 'Zions Bancorporation' },
+    { id: 'firsthorizon', name: 'First Horizon Bank' },
+    { id: 'bok', name: 'BOK Financial' },
+    { id: 'eastwest', name: 'East West Bank' },
+    { id: 'frost', name: 'Frost Bank' },
+    { id: 'umpqua', name: 'Umpqua Bank' },
+    { id: 'popular', name: 'Popular Bank' },
+    { id: 'firstnational', name: 'First National Bank' },
+    { id: 'umb', name: 'UMB Bank' },
+    { id: 'associated', name: 'Associated Bank' },
+    { id: 'hancock', name: 'Hancock Whitney Bank' },
+    { id: 'investors', name: 'Investors Bank' },
+    { id: 'fulton', name: 'Fulton Bank' },
+    { id: 'pinnacle', name: 'Pinnacle Bank' },
+    { id: 'arvest', name: 'Arvest Bank' },
+    { id: 'firstrepublic', name: 'First Republic Bank' },
+    { id: 'city', name: 'City National Bank' },
+    
+    // Online/Digital Banks
+    { id: 'ally', name: 'Ally Bank' },
+    { id: 'marcus', name: 'Marcus by Goldman Sachs' },
+    { id: 'discover', name: 'Discover Bank' },
+    { id: 'chime', name: 'Chime' },
+    { id: 'sofi', name: 'SoFi Bank' },
+    { id: 'varo', name: 'Varo Bank' },
+    { id: 'current', name: 'Current' },
+    { id: 'aspiration', name: 'Aspiration' },
+    
+    // Credit Unions (Major)
+    { id: 'navy', name: 'Navy Federal Credit Union' },
+    { id: 'stateemployees', name: 'State Employees Credit Union' },
+    { id: 'pentagon', name: 'Pentagon Federal Credit Union' },
+    { id: 'schoolsfirst', name: 'SchoolsFirst Federal Credit Union' },
+    { id: 'golden1', name: 'Golden 1 Credit Union' },
+    
+    // Investment Banks
+    { id: 'morganstanley', name: 'Morgan Stanley Bank' },
+    { id: 'schwab', name: 'Charles Schwab Bank' },
+    { id: 'americanexpress', name: 'American Express National Bank' },
+    
+    // Other Notable Banks
+    { id: 'barclays', name: 'Barclays Bank Delaware' },
+    { id: 'hsbc', name: 'HSBC Bank USA' },
+    { id: 'mufg', name: 'MUFG Union Bank' },
+    { id: 'bbt', name: 'BB&T (now Truist)' },
+    { id: 'suntrust', name: 'SunTrust (now Truist)' },
+    { id: 'bbva', name: 'BBVA USA (now PNC)' },
+    
+    { id: 'other', name: 'Other (Enter manually)' }
+  ];
 
 const TransferPage = ({ accounts, onTransferComplete }) => {
   // State for transfer details
@@ -77,6 +137,52 @@ const TransferPage = ({ accounts, onTransferComplete }) => {
   // Get token from localStorage
   const getAuthToken = () => {
     return localStorage.getItem('token') || sessionStorage.getItem('token');
+  };
+
+  // Helper function to make API calls with fallback
+  const makeAPICall = async (endpoint, method = 'GET', data = null, token = null) => {
+    let lastError = null;
+
+    for (let i = 0; i < API_URLS.length; i++) {
+      try {
+        console.log(`Attempting API call to: ${API_URLS[i]}${endpoint}`);
+        
+        const config = {
+          method: method,
+          url: `${API_URLS[i]}${endpoint}`,
+          timeout: 10000,
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+
+        if (token) {
+          config.headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        if (data) {
+          config.data = data;
+        }
+
+        const response = await axios(config);
+        console.log(`API call successful with: ${API_URLS[i]}`);
+        return response;
+        
+      } catch (error) {
+        console.log(`Failed with API ${API_URLS[i]}:`, error.message);
+        lastError = error;
+        
+        // If this was the last URL, throw the error
+        if (i === API_URLS.length - 1) {
+          throw lastError;
+        }
+        
+        // Otherwise, continue to next URL
+        continue;
+      }
+    }
+
+    throw lastError || new Error('All API endpoints failed');
   };
 
   // Validation function
@@ -150,47 +256,8 @@ const TransferPage = ({ accounts, onTransferComplete }) => {
 
         console.log('Sending transfer request:', transferData);
 
-        // Try multiple API endpoints with fallback
-        let response = null;
-        let lastError = null;
-
-        for (let i = 0; i < API_URLS.length; i++) {
-          try {
-            console.log(`Attempting transfer with API: ${API_URLS[i]}`);
-            
-            response = await axios.post(
-              `${API_URLS[i]}/transfers/transfer`,
-              transferData,
-              {
-                headers: {
-                  'Authorization': `Bearer ${token}`,
-                  'Content-Type': 'application/json'
-                },
-                timeout: 10000 // 10 second timeout
-              }
-            );
-            
-            // If successful, break out of loop
-            console.log(`Transfer successful with API: ${API_URLS[i]}`);
-            break;
-            
-          } catch (error) {
-            console.log(`Failed with API ${API_URLS[i]}:`, error.message);
-            lastError = error;
-            
-            // If this was the last URL, throw the error
-            if (i === API_URLS.length - 1) {
-              throw lastError;
-            }
-            
-            // Otherwise, continue to next URL
-            continue;
-          }
-        }
-
-        if (!response) {
-          throw lastError || new Error('All API endpoints failed');
-        }
+        // Use the helper function to make API call with fallback
+        const response = await makeAPICall('/transfers/transfer', 'POST', transferData, token);
 
         console.log('Transfer response:', response.data);
 
