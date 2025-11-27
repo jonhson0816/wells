@@ -3,11 +3,26 @@ import axios from 'axios';
 import './TransferPage.css';
 
 // Multiple API endpoints for fallback
+// FIX: Check if using Vite or Create React App
+const getApiUrl = () => {
+  // For Vite (import.meta.env)
+  if (typeof import.meta !== 'undefined' && import.meta.env) {
+    return import.meta.env.VITE_API_URL;
+  }
+  // For Create React App (process.env)
+  if (typeof process !== 'undefined' && process.env) {
+    return process.env.REACT_APP_API_URL;
+  }
+  return null;
+};
+
 const API_URLS = [
-  process.env.REACT_APP_API_URL,
+  getApiUrl(),
   'https://wellsapi.onrender.com/api',
   'https://wellsfargoca.net/api'
-].filter(Boolean); // Remove any undefined values
+].filter(url => url && url !== 'undefined' && url !== 'null');
+
+console.log('🔗 API URLs configured:', API_URLS);
 
 // Utility Function for Formatting Currency (matching dashboard implementation)
 const formatCurrency = (amount) => {
@@ -124,7 +139,7 @@ const TransferPage = ({ accounts, onTransferComplete }) => {
 
   // Reset external bank fields when transfer type changes
   useEffect(() => {
-    if (transferType !== 'external') {
+    if (transferType !== 'external' && transferType !== 'new-recipient') {
       setSelectedBank('');
       setRoutingNumber('');
       setAccountNumber('');
@@ -140,51 +155,51 @@ const TransferPage = ({ accounts, onTransferComplete }) => {
   };
 
   // Helper function to make API calls with fallback
-const makeAPICall = async (endpoint, method = 'GET', data = null, token = null) => {
-  let lastError = null;
+  const makeAPICall = async (endpoint, method = 'GET', data = null, token = null) => {
+    let lastError = null;
 
-  for (let i = 0; i < API_URLS.length; i++) {
-    try {
-      console.log(`Attempting API call to: ${API_URLS[i]}${endpoint}`);
-      
-      const config = {
-        method: method,
-        url: `${API_URLS[i]}${endpoint}`,
-        timeout: 15000, // Increased timeout
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        }
-      };
-
-      if (token) {
-        config.headers['Authorization'] = `Bearer ${token}`;
-      }
-
-      if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
-        config.data = data;
-      }
-
-      const response = await axios(config);
-      console.log(`API call successful with: ${API_URLS[i]}`);
-      return response;
+    for (let i = 0; i < API_URLS.length; i++) {
+      try {
+        console.log(`Attempting API call to: ${API_URLS[i]}${endpoint}`);
         
-    } catch (error) {
-      console.log(`Failed with API ${API_URLS[i]}:`, error.message);
-      lastError = error;
-      
-      // If this was the last URL, throw the error
-      if (i === API_URLS.length - 1) {
-        throw lastError;
-      }
-      
-      // Otherwise, continue to next URL
-      continue;
-    }
-  }
+        const config = {
+          method: method,
+          url: `${API_URLS[i]}${endpoint}`,
+          timeout: 15000,
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          }
+        };
 
-  throw lastError || new Error('All API endpoints failed');
-};
+        if (token) {
+          config.headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+          config.data = data;
+        }
+
+        const response = await axios(config);
+        console.log(`✅ API call successful with: ${API_URLS[i]}`);
+        return response;
+          
+      } catch (error) {
+        console.log(`❌ Failed with API ${API_URLS[i]}:`, error.message);
+        lastError = error;
+        
+        // If this was the last URL, throw the error
+        if (i === API_URLS.length - 1) {
+          throw lastError;
+        }
+        
+        // Otherwise, continue to next URL
+        continue;
+      }
+    }
+
+    throw lastError || new Error('All API endpoints failed');
+  };
 
   // Validation function
   const validateTransfer = () => {
