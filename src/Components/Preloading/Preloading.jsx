@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import './Preloading.css'; // Make sure to create this CSS file
+import './Preloading.css';
 
 const WellsFargoPreloader = () => {
   const [loading, setLoading] = useState(true);
@@ -13,25 +13,38 @@ const WellsFargoPreloader = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Don't render anything if not loading
+  if (!loading) return null;
+
   return (
     <div className={`preloader-container ${loading ? 'visible' : 'hidden'}`}>
-      <div className="loader-wrapper">
-        {/* Circular loader animation */}
-        <div className="circular-track">
-          <div className="circular-loader"></div>
+      <div className="preloader-content">
+        <div className="loader-wrapper">
+          {/* Circular loader animation */}
+          <div className="circular-track">
+            <div className="circular-loader"></div>
+          </div>
+          
+          {/* Wells Fargo logo centered in the circle */}
+          <div className="logo-circle">
+            <img 
+              src="/Images/wells fargo.jpeg" 
+              alt="Wells Fargo Logo" 
+              className="wells-fargo-logo" 
+            />
+          </div>
         </div>
         
-        {/* Wells Fargo logo centered in the circle */}
-        <div className="logo-circle">
-          <img 
-            src="/Images/wells fargo.jpeg" 
-            alt="Wells Fargo Logo" 
-            className="wells-fargo-logo" 
-          />
+        <h1 className="wf-title">Wells Fargo</h1>
+        <p className="loading-text">Loading your account information...</p>
+        
+        {/* Progress dots animation */}
+        <div className="loading-dots">
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
         </div>
       </div>
-      <h1 className="wf-title">Wells Fargo</h1>
-      <p className="loading-text">Loading your account information...</p>
     </div>
   );
 };
