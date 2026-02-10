@@ -14,7 +14,7 @@ export default defineConfig(({ command, mode }) => {
       port: 3000,
       proxy: {
         '/api': {
-          target: 'https://wellsapi.onrender.com',
+          target: 'https://wellsapi-1.onrender.com',
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, '')
         }

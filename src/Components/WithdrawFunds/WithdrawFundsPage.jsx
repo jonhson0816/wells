@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 const WithdrawFundsPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com';
+  const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi-1.onrender.com';
   
   // Get account from navigation state or fetch accounts if not provided
   const [accounts, setAccounts] = useState([]);

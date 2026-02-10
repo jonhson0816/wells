@@ -6,7 +6,7 @@ import axios from 'axios';
 import './DisputeTransactionPage.css';
 
 // API base URL - hardcoded fallback instead of using process.env
-const API_URL = 'https://wellsapi.onrender.com';
+const API_URL = 'https://wellsapi-1.onrender.com';
 
 const DisputeTransactionPage = ({ userAccountId, wellsFargoAuthToken }) => {
     console.log("Token received:", wellsFargoAuthToken);

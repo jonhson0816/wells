@@ -87,7 +87,7 @@ const AutoPay = () => {
     // Extract just the token part if it's stored with a prefix
     const actualToken = token.includes(':') ? token.split(':')[1].trim() : token;
     
-    const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi.onrender.com';
+    const API_URL = import.meta.env?.VITE_API_URL || 'https://wellsapi-1.onrender.com';
     
     return axios.create({
       baseURL: API_URL,

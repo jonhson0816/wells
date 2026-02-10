@@ -4,7 +4,7 @@ import axios from 'axios';
 // Use relative URL in development for proxy
 const API_URL = import.meta.env.MODE === 'development' 
   ? '/api' // Local development using Vite proxy
-  : 'https://wellsapi.onrender.com/api'; // Production URL
+  : 'https://wellsapi-1.onrender.com/api'; // Production URL
 
 console.log('API URL configured as:', API_URL);
 

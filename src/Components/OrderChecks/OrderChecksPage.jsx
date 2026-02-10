@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 import './OrderChecksPage.css';
 
-const API_URL = 'https://wellsapi.onrender.com';
+const API_URL = 'https://wellsapi-1.onrender.com';
 
 const OrderChecksPage = ({ userAccounts = [] }) => {
   const navigate = useNavigate();

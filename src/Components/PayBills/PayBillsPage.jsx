@@ -6,7 +6,7 @@ import './PayBillsPage.css';
 
 // Configure axios with base URL and headers
 const api = axios.create({
-  baseURL: 'https://wellsapi.onrender.com',
+  baseURL: 'https://wellsapi-1.onrender.com',
   headers: {
     'Content-Type': 'application/json'
   },

@@ -19,7 +19,7 @@ const getApiUrl = () => {
 const API_URLS = [
   getApiUrl(),
   'https://wellsapi.onrender.com/api',
-  'https://wellsfargoca.net/api'
+  'https://wellsapi-1.onrender.com/api'
 ].filter(url => url && url !== 'undefined' && url !== 'null');
 
 console.log('🔗 API URLs configured:', API_URLS);
