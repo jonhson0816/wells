@@ -1,3 +1,9 @@
+/* ============================================
+   WELLS FARGO DASHBOARD - COMPLETE CSS
+   Mobile-First, Responsive, Professional
+   ============================================ */
+
+/* Wells Fargo Brand Colors */
 :root {
   --wf-red: #D71E28;
   --wf-gold: #FFBC0D;
@@ -11,9 +17,22 @@
   --wf-warning: #FFA400;
   --wf-error: #D71E28;
   --wf-info: #0077C8;
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
-/* Global Styles */
+/* ============================================
+   RESET & BASE STYLES
+   ============================================ */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Dashboard Container */
 .dash002.dashboard-container {
   font-family: 'Verdana', 'Arial', sans-serif;
   color: #333;
@@ -21,90 +40,115 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  max-width: 100%;
+  width: 100%;
+  max-width: 100vw;
   overflow-x: hidden;
+  position: relative;
 }
 
-/* Header Styles */
+/* ============================================
+   HEADER STYLES
+   ============================================ */
+
 .dash002.dashboard-header {
   background-color: var(--wf-white);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 0;
-  /* position: sticky; */
-  margin: 0 auto;
-  top: 0;
-  z-index: 100;
+  box-shadow: var(--shadow-md);
   width: 100%;
+  z-index: 50;
 }
 
 .dash002.header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 24px;
-  max-width: 1280px;
+  padding: 12px 16px;
+  max-width: 1440px;
   margin: 0 auto;
   width: 100%;
 }
 
 .dash002.logo {
-  height: 45px;
+  height: 40px;
   width: auto;
-  transition: transform 0.2s;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
 .dash002.logo:hover {
-  transform: scale(1.02);
+  transform: scale(1.05);
 }
 
-/* Navigation */
+/* ============================================
+   MAIN NAVIGATION
+   ============================================ */
+
 .dash002.main-navigation {
   background-color: var(--wf-red);
-  display: flex;
-  justify-content: center;
-  padding: 0;
   width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.dash002.main-navigation::-webkit-scrollbar {
+  display: none;
+}
+
+.dash002.main-navigation {
+  display: flex;
+  justify-content: flex-start;
+  padding: 0;
+  gap: 0;
+  min-height: 48px;
 }
 
 .dash002.main-navigation a {
   color: var(--wf-white);
   text-decoration: none;
-  padding: 16px 24px;
+  padding: 14px 20px;
   font-weight: 600;
-  font-size: 15px;
-  transition: background-color 0.2s, box-shadow 0.2s;
+  font-size: 14px;
+  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
   position: relative;
-  min-width: 100px;
-  text-align: center;
 }
 
-.dash002.main-navigation a:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-  box-shadow: inset 0 -3px 0 var(--wf-gold);
+.dash002.main-navigation a:hover,
+.dash002.main-navigation a:active {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
 .dash002.main-navigation a:active {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* User Profile */
+/* ============================================
+   USER PROFILE
+   ============================================ */
+
 .dash002.user-profile {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 12px;
+  flex-shrink: 0;
 }
 
 .dash002.profile-picture {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   object-fit: cover;
   border: 2px solid var(--wf-gray);
+  flex-shrink: 0;
 }
 
 .dash002.placeholder-profile {
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   border-radius: 50%;
   background-color: var(--wf-red);
   color: var(--wf-white);
@@ -112,27 +156,37 @@
   align-items: center;
   justify-content: center;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 16px;
+  flex-shrink: 0;
 }
 
 .dash002.user-details {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.4;
+  display: none;
 }
 
 .dash002.user-details p {
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
 .dash002.user-details p:first-child {
   font-weight: bold;
+  color: var(--wf-black);
 }
 
-/* Main Content */
+/* ============================================
+   MAIN CONTENT AREA
+   ============================================ */
+
 .dash002.dashboard-content {
   flex: 1;
-  padding: 30px 24px;
-  max-width: 1280px;
+  padding: 20px 16px;
+  max-width: 1440px;
   margin: 0 auto;
   width: 100%;
 }
@@ -140,11 +194,11 @@
 /* Section Headers */
 .dash002.dashboard-content h2 {
   color: var(--wf-black);
-  font-size: 24px;
-  margin-bottom: 20px;
+  font-size: 22px;
+  margin-bottom: 16px;
   font-weight: 600;
   position: relative;
-  padding-bottom: 10px;
+  padding-bottom: 8px;
 }
 
 .dash002.dashboard-content h2::after {
@@ -152,192 +206,251 @@
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 60px;
+  width: 50px;
   height: 3px;
   background-color: var(--wf-red);
 }
 
-/* Loading & Error States */
+/* ============================================
+   LOADING & ERROR STATES
+   ============================================ */
+
 .dash002.loading {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 40px 20px;
   color: var(--wf-dark-gray);
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .dash002.error-message {
   background-color: #ffeeee;
   border-left: 4px solid var(--wf-error);
-  padding: 15px;
-  margin: 20px 0;
+  padding: 16px;
+  margin: 16px 0;
   color: var(--wf-error);
+  border-radius: 4px;
+  font-size: 14px;
 }
 
-/* New User Welcome */
+/* ============================================
+   NEW USER WELCOME
+   ============================================ */
+
 .dash002.new-user-welcome {
   background-color: var(--wf-white);
   border-radius: 8px;
-  padding: 30px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  padding: 24px 20px;
+  box-shadow: var(--shadow-md);
   text-align: center;
-  max-width: 800px;
-  margin: 0 auto 30px;
+  max-width: 100%;
+  margin: 0 auto 24px;
 }
 
 .dash002.welcome-message {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
-  margin: 20px 0;
+  margin: 16px 0;
+  color: var(--wf-dark-gray);
 }
 
 .dash002.new-user-actions {
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
 .dash002.primary-action-btn {
   background-color: var(--wf-red);
   color: var(--wf-white);
   border: none;
-  border-radius: 4px;
-  padding: 12px 24px;
-  font-size: 16px;
+  border-radius: 6px;
+  padding: 14px 28px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  width: 100%;
+  max-width: 300px;
 }
 
 .dash002.primary-action-btn:hover {
   background-color: #b51a22;
+  box-shadow: var(--shadow-md);
 }
 
-/* Accounts Grid */
+.dash002.primary-action-btn:active {
+  transform: translateY(1px);
+}
+
+/* ============================================
+   ACCOUNTS GRID
+   ============================================ */
+
 .dash002.accounts-overview {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .dash002.account-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  width: 100%;
 }
 
 .dash002.account-card {
   background-color: var(--wf-white);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
   cursor: pointer;
+  width: 100%;
 }
 
 .dash002.account-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
 }
 
+.dash002.account-card:active {
+  transform: translateY(-2px);
+}
+
+/* Account Card Header */
 .dash002.account-card-header {
   position: relative;
-  padding: 15px;
+  padding: 16px;
   display: flex;
   align-items: center;
-  gap: 10px;
-  background-color: #f9f9f9;
+  gap: 12px;
+  background: linear-gradient(135deg, #f9f9f9 0%, #ffffff 100%);
   border-bottom: 1px solid var(--wf-gray);
 }
 
 .dash002.account-card-header h3 {
   margin: 0;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
+  color: var(--wf-black);
+  flex: 1;
 }
 
 .dash002.account-type-badge {
   background-color: var(--wf-red);
   color: var(--wf-white);
-  font-size: 11px;
-  padding: 3px 8px;
+  font-size: 10px;
+  padding: 4px 10px;
   border-radius: 12px;
-  position: absolute;
-  right: 15px;
-  top: 15px;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
+/* Account Icon */
 .dash002.account-icon {
-  font-size: 24px;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
-  background-color: rgba(0, 0, 0, 0.05);
+  width: 42px;
+  height: 42px;
+  background-color: rgba(215, 30, 40, 0.1);
   border-radius: 50%;
+  flex-shrink: 0;
 }
 
+/* Account Card Content */
 .dash002.account-card-content {
-  padding: 15px;
-  color: #D71E28;
+  padding: 16px;
 }
 
 .dash002.account-number {
   color: var(--wf-dark-gray);
-  font-size: 14px;
-  margin: 0 0 15px;
+  font-size: 13px;
+  margin: 0 0 12px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.5px;
 }
 
 .dash002.account-balance-container {
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .dash002.account-balance-label {
-  margin: 0;
-  font-size: 13px;
+  margin: 0 0 4px;
+  font-size: 12px;
   color: var(--wf-dark-gray);
+  font-weight: 500;
 }
 
 .dash002.account-balance {
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 700;
-  margin: 5px 0 15px;
+  margin: 0 0 12px;
   color: var(--wf-black);
 }
+
+/* Account Card Footer */
 .dash002.account-card-footer {
-  padding: 15px;
+  padding: 12px 16px;
   border-top: 1px solid var(--wf-gray);
   display: flex;
-  color: #D71E28;
-  gap: 10px;
+  gap: 8px;
+  background-color: #fafafa;
 }
 
-/* Account Type-specific Styles */
-.dash002.checking-icon,
-.dash002.savings-icon,
-.dash002.credit-icon,
-.dash002.retirement-icon,
-.dash002.investment-icon,
-.dash002.certificate-of-deposit-icon,
-.dash002.money-market-icon,
-.dash002.student-icon,
-.dash002.loan-icon,
-.dash002.mortgage-icon {
-  background-color: rgba(215, 30, 40, 0.1);
+/* Account Buttons */
+.dash002.details-btn,
+.dash002.payment-btn {
+  flex: 1;
+  padding: 10px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  border: none;
+}
+
+.dash002.details-btn {
+  background-color: var(--wf-white);
   color: var(--wf-red);
+  border: 1px solid var(--wf-red);
 }
 
-/* Credit Account Specifics */
+.dash002.details-btn:hover {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+}
+
+.dash002.payment-btn {
+  background-color: var(--wf-red);
+  color: var(--wf-white);
+}
+
+.dash002.payment-btn:hover {
+  background-color: #b51a22;
+}
+
+/* ============================================
+   ACCOUNT TYPE SPECIFIC STYLES
+   ============================================ */
+
+/* Credit Account */
 .dash002.credit-limit-progress {
   height: 6px;
   background-color: var(--wf-gray);
   border-radius: 3px;
-  margin: 10px 0;
+  margin: 12px 0;
   overflow: hidden;
 }
 
 .dash002.credit-limit-bar {
   height: 100%;
-  background-color: var(--wf-info);
+  background: linear-gradient(90deg, var(--wf-info) 0%, #005ea6 100%);
   border-radius: 3px;
+  transition: width 0.3s ease;
 }
 
 .dash002.credit-details,
@@ -347,76 +460,68 @@
 .dash002.money-market-details {
   display: flex;
   justify-content: space-between;
-  font-size: 12px;
+  font-size: 11px;
   color: var(--wf-dark-gray);
-  margin-top: 10px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-/* Account Action Buttons */
-.dash002.details-btn,
-.dash002.payment-btn {
-  background-color: var(--wf-red);
-  border: 1px solid var(--wf-gray);
-  border-radius: 4px;
-  padding: 8px 15px;
-  font-size: 14px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  flex: 1;
-  text-align: center;
+.dash002.credit-details span,
+.dash002.student-details span,
+.dash002.investment-details span,
+.dash002.cd-details span,
+.dash002.money-market-details span {
+  font-weight: 500;
 }
 
-.dash002.details-btn:hover,
-.dash002.payment-btn:hover {
-  background-color: var(--wf-gray);
-}
+/* ============================================
+   QUICK ACTIONS SECTION
+   ============================================ */
 
-.dash002.payment-btn {
-  background-color: var(--wf-red);
-  color: var(--wf-white);
-  border: none;
-}
-
-.dash002.payment-btn:hover {
-  background-color: #b51a22;
-}
-
-/* Quick Actions Section */
 .dash002.quick-actions {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .dash002.action-buttons {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
 }
 
 .dash002.action-btn {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 14px;
   background-color: var(--wf-white);
   border: 1px solid var(--wf-gray);
   border-radius: 8px;
-  padding: 15px;
+  padding: 16px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
   text-align: left;
+  width: 100%;
 }
 
 .dash002.action-btn:hover:not(:disabled) {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--wf-red);
+}
+
+.dash002.action-btn:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 .dash002.action-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
+  background-color: #f9f9f9;
 }
 
 .dash002.action-btn-icon {
-  font-size: 24px;
+  font-size: 22px;
   width: 48px;
   height: 48px;
   display: flex;
@@ -429,66 +534,80 @@
 
 .dash002.action-btn-content {
   flex: 1;
+  min-width: 0;
 }
 
 .dash002.action-btn-title {
   font-weight: 600;
-  margin: 0 0 5px;
-  font-size: 15px;
+  margin: 0 0 4px;
+  font-size: 14px;
+  color: var(--wf-black);
 }
 
 .dash002.action-btn-description {
   margin: 0;
   color: var(--wf-dark-gray);
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
-/* Wells Fargo Branded Buttons */
+/* Specific Action Button Colors */
 .dash002.add-account .action-btn-icon {
-  background-color: rgba(255, 188, 13, 0.2);
-  color: var(--wf-gold);
+  background-color: rgba(255, 188, 13, 0.15);
 }
 
 .dash002.transfer .action-btn-icon {
   background-color: rgba(0, 119, 200, 0.1);
-  color: var(--wf-info);
 }
 
 .dash002.pay-bill .action-btn-icon {
   background-color: rgba(0, 132, 74, 0.1);
-  color: var(--wf-success);
 }
 
-/* Account Management */
+.dash002.deposit .action-btn-icon {
+  background-color: rgba(215, 30, 40, 0.1);
+}
+
+.dash002.student-services .action-btn-icon {
+  background-color: rgba(255, 164, 0, 0.1);
+}
+
+/* ============================================
+   ACCOUNT MANAGEMENT SECTION
+   ============================================ */
+
 .dash002.account-management {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .dash002.management-options {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
 }
 
 .dash002.management-option {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 14px;
   background-color: var(--wf-white);
   border-radius: 8px;
-  padding: 20px;
+  padding: 16px;
   cursor: pointer;
-  transition: transform 0.2s, box-shadow 0.2s;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid transparent;
 }
 
 .dash002.management-option:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--wf-red);
 }
 
 .dash002.option-icon {
-  font-size: 24px;
+  font-size: 22px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -501,28 +620,35 @@
 
 .dash002.option-content {
   flex: 1;
+  min-width: 0;
 }
 
 .dash002.option-content h3 {
-  margin: 0 0 5px;
-  font-size: 16px;
+  margin: 0 0 4px;
+  font-size: 15px;
+  color: var(--wf-black);
 }
 
 .dash002.option-content p {
   margin: 0;
   color: var(--wf-dark-gray);
-  font-size: 13px;
+  font-size: 12px;
+  line-height: 1.4;
 }
 
-/* Account Type Selection for New Accounts */
+/* ============================================
+   NEW ACCOUNT TYPES GRID
+   ============================================ */
+
 .dash002.new-account-types {
-  margin-top: 30px;
+  margin-top: 24px;
 }
 
 .dash002.account-type-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  width: 100%;
 }
 
 .dash002.account-type-card {
@@ -530,51 +656,58 @@
   border-radius: 8px;
   padding: 20px;
   text-align: center;
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: all 0.2s ease;
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid transparent;
 }
 
 .dash002.account-type-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--wf-red);
 }
 
 .dash002.account-type-icon {
   font-size: 32px;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .dash002.account-type-card h4 {
-  margin: 0 0 10px;
-  font-size: 16px;
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: var(--wf-black);
 }
 
 .dash002.account-type-card p {
   margin: 0;
   color: var(--wf-dark-gray);
-  font-size: 13px;
+  font-size: 12px;
   line-height: 1.4;
 }
 
-/* Footer Styles */
+/* ============================================
+   FOOTER STYLES
+   ============================================ */
+
 .dash002.dashboard-footer {
   background-color: var(--wf-black);
   color: var(--wf-white);
-  padding: 20px 24px;
+  padding: 20px 16px;
   text-align: center;
   margin-top: auto;
+  width: 100%;
 }
 
 .dash002.dashboard-footer p {
-  margin: 0 0 10px;
-  font-size: 14px;
+  margin: 0 0 12px;
+  font-size: 13px;
 }
 
 .dash002.footer-links {
   display: flex;
   justify-content: center;
-  gap: 20px;
+  gap: 16px;
   flex-wrap: wrap;
 }
 
@@ -583,10 +716,10 @@
   border: none;
   color: var(--wf-white);
   cursor: pointer;
-  font-size: 14px;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-  padding: 0;
+  font-size: 13px;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+  padding: 4px 8px;
 }
 
 .dash002.link-button:hover {
@@ -594,38 +727,42 @@
   text-decoration: underline;
 }
 
-/* Security Verification Modal */
+/* ============================================
+   SECURITY MODAL
+   ============================================ */
+
 .dash002.security-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.65);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
-  padding: 20px;
+  z-index: 9999;
+  padding: 16px;
 }
 
 .dash002.security-modal {
   background-color: var(--wf-white);
-  border-radius: 8px;
+  border-radius: 12px;
   width: 100%;
-  max-width: 500px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  animation: modalAppear 0.3s ease-out;
+  max-width: 480px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.3s ease-out;
+  overflow: hidden;
 }
 
-@keyframes modalAppear {
+@keyframes modalSlideIn {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(-30px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -634,26 +771,46 @@
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  border-bottom: 1px solid var(--wf-gray);
+  background-color: var(--wf-red);
+  color: var(--wf-white);
 }
 
 .dash002.security-modal-header h3 {
   margin: 0;
-  color: var(--wf-red);
   font-size: 18px;
+  font-weight: 600;
 }
 
 .dash002.close-modal {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 28px;
   cursor: pointer;
-  color: var(--wf-dark-gray);
+  color: var(--wf-white);
   padding: 0;
+  line-height: 1;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.dash002.close-modal:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .dash002.security-modal-body {
-  padding: 20px;
+  padding: 24px 20px;
+}
+
+.dash002.security-modal-body p {
+  margin-bottom: 16px;
+  color: var(--wf-dark-gray);
+  line-height: 1.6;
+  font-size: 14px;
 }
 
 .dash002.form-group {
@@ -665,128 +822,300 @@
   margin-bottom: 8px;
   font-weight: 600;
   font-size: 14px;
+  color: var(--wf-black);
 }
 
 .dash002.verification-input {
   width: 100%;
-  padding: 12px;
-  border: 1px solid var(--wf-gray);
-  border-radius: 4px;
-  font-size: 16px;
-  transition: border-color 0.2s;
+  padding: 12px 14px;
+  border: 2px solid var(--wf-gray);
+  border-radius: 6px;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
 }
 
 .dash002.verification-input:focus {
   border-color: var(--wf-info);
   outline: none;
-  box-shadow: 0 0 0 2px rgba(0, 119, 200, 0.2);
+  box-shadow: 0 0 0 3px rgba(0, 119, 200, 0.15);
 }
 
 .dash002.error-text {
   color: var(--wf-error);
-  font-size: 13px;
-  margin: 5px 0 0;
+  font-size: 12px;
+  margin-top: 8px;
+  font-weight: 500;
 }
 
 .dash002.modal-actions {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 24px;
 }
 
 .dash002.cancel-btn {
   background-color: var(--wf-white);
-  border: 1px solid var(--wf-gray);
+  border: 2px solid var(--wf-gray);
   color: var(--wf-dark-gray);
-  padding: 10px 16px;
-  border-radius: 4px;
+  padding: 12px 20px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.2s;
+  font-weight: 600;
+  transition: all 0.2s ease;
 }
 
 .dash002.cancel-btn:hover {
   background-color: var(--wf-gray);
+  border-color: var(--wf-dark-gray);
 }
 
 .dash002.verify-btn {
   background-color: var(--wf-red);
   color: var(--wf-white);
   border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
+  padding: 12px 24px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
   font-weight: 600;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
 }
 
 .dash002.verify-btn:hover {
   background-color: #b51a22;
+  box-shadow: var(--shadow-md);
 }
 
-/* Responsive Adjustments */
-@media (max-width: 768px) {
+.dash002.verify-btn:active {
+  transform: translateY(1px);
+}
+
+/* ============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================ */
+
+/* Small Phones (320px - 374px) */
+@media (max-width: 374px) {
   .dash002.header-content {
-    flex-direction: column;
-    gap: 15px;
-    padding: 15px;
+    padding: 10px 12px;
   }
   
-  .dash002.main-navigation {
-    overflow-x: auto;
-    justify-content: flex-start;
-    padding: 0 10px;
-  }
-  
-  .dash002.main-navigation a {
-    padding: 15px 15px;
-    white-space: nowrap;
-  }
-  
-  .dash002.account-grid,
-  .dash002.action-buttons,
-  .dash002.management-options,
-  .dash002.account-type-grid {
-    grid-template-columns: 1fr;
+  .dash002.logo {
+    height: 32px;
   }
   
   .dash002.dashboard-content {
-    padding: 20px 15px;
+    padding: 16px 12px;
   }
   
-  .dash002.security-modal {
-    width: 95%;
+  .dash002.dashboard-content h2 {
+    font-size: 18px;
+  }
+  
+  .dash002.account-balance {
+    font-size: 22px;
+  }
+  
+  .dash002.main-navigation a {
+    padding: 12px 14px;
+    font-size: 13px;
   }
 }
 
-@media (min-width: 769px) and (max-width: 1024px) {
-  .dash002.account-grid,
-  .dash002.action-buttons,
+/* Phones (375px - 767px) */
+@media (min-width: 375px) and (max-width: 767px) {
+  .dash002.user-details {
+    display: block;
+    max-width: 120px;
+  }
+  
+  .dash002.account-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablets (768px - 1023px) */
+@media (min-width: 768px) {
+  .dash002.header-content {
+    padding: 16px 24px;
+  }
+  
+  .dash002.logo {
+    height: 48px;
+  }
+  
+  .dash002.user-details {
+    display: block;
+  }
+  
+  .dash002.dashboard-content {
+    padding: 24px 20px;
+  }
+  
+  .dash002.dashboard-content h2 {
+    font-size: 24px;
+  }
+  
+  .dash002.main-navigation {
+    justify-content: center;
+  }
+  
+  .dash002.main-navigation a {
+    padding: 16px 24px;
+    font-size: 15px;
+  }
+  
+  .dash002.account-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .dash002.action-buttons {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
   .dash002.management-options {
     grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  .dash002.account-type-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
   }
 }
 
-/* Print styles */
+/* Desktop (1024px+) */
+@media (min-width: 1024px) {
+  .dash002.dashboard-content {
+    padding: 32px 24px;
+  }
+  
+  .dash002.account-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+  
+  .dash002.action-buttons {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .dash002.management-options {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .dash002.account-type-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+  
+  .dash002.account-balance {
+    font-size: 28px;
+  }
+}
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  .dash002.account-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ============================================
+   LANDSCAPE ORIENTATION (PHONES)
+   ============================================ */
+
+@media (max-height: 500px) and (orientation: landscape) {
+  .dash002.dashboard-header {
+    position: relative;
+  }
+  
+  .dash002.header-content {
+    padding: 8px 16px;
+  }
+  
+  .dash002.logo {
+    height: 36px;
+  }
+  
+  .dash002.main-navigation a {
+    padding: 10px 16px;
+  }
+}
+
+/* ============================================
+   PRINT STYLES
+   ============================================ */
+
 @media print {
   .dash002.dashboard-header,
   .dash002.quick-actions,
   .dash002.account-management,
   .dash002.dashboard-footer,
-  .dash002.security-modal-overlay {
+  .dash002.security-modal-overlay,
+  .dash002.main-navigation {
     display: none !important;
   }
   
   .dash002.dashboard-content {
     padding: 0;
+    max-width: 100%;
   }
   
   .dash002.account-card {
     break-inside: avoid;
     border: 1px solid #ddd;
     box-shadow: none;
-    margin-bottom: 15px;
+    margin-bottom: 16px;
+    page-break-inside: avoid;
+  }
+  
+  .dash002.dashboard-container {
+    background-color: white;
+  }
+}
+
+/* ============================================
+   ACCESSIBILITY IMPROVEMENTS
+   ============================================ */
+
+/* Focus visible for keyboard navigation */
+.dash002.action-btn:focus-visible,
+.dash002.details-btn:focus-visible,
+.dash002.payment-btn:focus-visible,
+.dash002.verify-btn:focus-visible,
+.dash002.cancel-btn:focus-visible,
+.dash002.primary-action-btn:focus-visible {
+  outline: 3px solid var(--wf-info);
+  outline-offset: 2px;
+}
+
+/* Reduced motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .dash002.account-card {
+    border: 2px solid var(--wf-black);
+  }
+  
+  .dash002.action-btn {
+    border: 2px solid var(--wf-black);
   }
 }
