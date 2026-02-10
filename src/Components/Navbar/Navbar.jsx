@@ -258,25 +258,9 @@ const getUserInitials = () => {
     return phoneNumber;
   };
 
-  // If auth is still loading, show a simplified navbar with loading indicator
+  // If auth is still loading, don't show navbar - preloader handles it
   if (loading) {
-    return (
-      <nav className="wells-fargo-navbar">
-        <div className="navbar-container">
-          <div className="navbar-logo">
-            <div className="dash002 header-content">
-              <img
-                src="/Images/wells fargo.jpeg"
-                alt="Wells Fargo Logo"
-                className="dash002 logo"
-              />
-            </div>
-            <span className="navbar-title">Wells Fargo</span>
-          </div>
-          <div className="loading-indicator">Loading...</div>
-        </div>
-      </nav>
-    );
+    return null;
   }
 
   // Determine authentication status using both current user and localStorage check
